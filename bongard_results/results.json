@@ -1,0 +1,32 @@
+{
+  "tensorflow_version": "2.21.0",
+  "training_episodes": 1000,
+  "queries_per_condition": 480,
+  "training_seconds": 16.25946179998573,
+  "pixel_baseline": {
+    "circle": 0.6,
+    "filled": 0.6625,
+    "two_objects": 1.0
+  },
+  "untrained_cnn": {
+    "circle": 0.64375,
+    "filled": 0.6625,
+    "two_objects": 1.0
+  },
+  "trained_cnn": {
+    "circle": 0.98125,
+    "filled": 1.0,
+    "two_objects": 0.96875
+  },
+  "shifted_pixel_baseline": {
+    "circle": 0.5125,
+    "filled": 0.5875,
+    "two_objects": 0.9625
+  },
+  "shifted_trained_cnn": {
+    "circle": 0.55,
+    "filled": 0.96875,
+    "two_objects": 0.89375
+  },
+  "scope": "Generated practice images; three familiar rules. Not official Bongard results."
+}
