@@ -1,0 +1,9 @@
+# Baseline provenance
+
+The prior TensorFlow files were absent from the initial empty checkout. On 2026-10-12, the user selected `philotiona/logicapture` as the GitHub destination. Its existing main commit `af0639f` contains `bongard_tensorflow.py`, `data_sample.py`, and the `bongard_results` model, JSON and figures. Those original files and their history are preserved unchanged alongside the new application.
+
+The brief's historical familiar-style mean accuracies were 75.42% for pixels, 76.88% for an untrained CNN and 98.13% for a trained CNN. Its combined rotation/noise means were 68.75% for pixels and 78.54% for the trained CNN. **These are reported historical values, not independently reproduced results.** The restored repository's `bongard_results/results.json` is a different saved run: its trained-CNN means are 98.33% in the familiar style and 80.42% under the combined shift. Both sources are retained separately; neither is blended into the new comparison.
+
+`src/baselines/tensorflow_prototypical.py` implements a separate two-convolution Keras encoder with 16-dimensional embeddings and episodic prototype loss. It trains only with `--neural`, saving actual weights and losses. Architecture, parameters, episodes, seed and held-out results are recorded by the new experiment runner. Symbolic and neural systems in that pilot receive the same support/query problems. The restored historical run uses its own generator and protocol.
+
+The object-region CNN under `src/vision/attribute_cnn.py` is a separate perception model, not the whole-image few-shot baseline. Its independent synthetic object validation and saved weights are under `data/models`. The symbolic foundation had 40 passing tests before object-CNN implementation began, following the user's ordering requirement. Its probability distributions are preserved for a future soft-symbolic evaluator; current reasoning is hard and uses argmax attributes.

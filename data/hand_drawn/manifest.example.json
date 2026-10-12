@@ -1,0 +1,14 @@
+{
+  "description": "Example schema only. Replace paths with real individually cropped drawings.",
+  "problems": [
+    {
+      "id": "person01_circle_daylight",
+      "artist": "anonymous_01",
+      "lighting": "daylight",
+      "group_a": ["circle_daylight/A1.png", "circle_daylight/A2.png"],
+      "group_b": ["circle_daylight/B1.png", "circle_daylight/B2.png"],
+      "target": {"op": "exists", "predicates": [{"op": "shape", "value": "circle", "children": []}], "children": [], "n": 0, "relation": ""},
+      "annotations": {}
+    }
+  ]
+}

@@ -1,0 +1,670 @@
+{
+  "scope": "Four seeds \u00d7 three interpretations of four filled triangles; oracle answers, not a human study.",
+  "protocol": "Single-drawing queries; after six negative answers, up to four independent drawings may be queried with ANY semantics. Both question and drawing counts are recorded.",
+  "recovered": 12,
+  "runs": 12,
+  "results": [
+    {
+      "seed": 1,
+      "target": "There are exactly 4 filled triangles",
+      "program": {
+        "op": "exactly",
+        "predicates": [
+          {
+            "op": "and",
+            "value": "",
+            "children": [
+              {
+                "op": "shape",
+                "value": "triangle",
+                "children": []
+              },
+              {
+                "op": "filled",
+                "value": "",
+                "children": []
+              }
+            ]
+          }
+        ],
+        "children": [],
+        "n": 4,
+        "relation": ""
+      },
+      "questions": 15,
+      "drawings_seen": 30,
+      "batch_questions": 5,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 11,
+      "trace": [
+        2162,
+        1812,
+        1630,
+        1491,
+        1418,
+        1338,
+        1208,
+        1104,
+        1068,
+        1054,
+        36,
+        17,
+        5,
+        2,
+        1
+      ]
+    },
+    {
+      "seed": 1,
+      "target": "There are at least 4 filled triangles",
+      "program": {
+        "op": "atleast",
+        "predicates": [
+          {
+            "op": "and",
+            "value": "",
+            "children": [
+              {
+                "op": "shape",
+                "value": "triangle",
+                "children": []
+              },
+              {
+                "op": "filled",
+                "value": "",
+                "children": []
+              }
+            ]
+          }
+        ],
+        "children": [],
+        "n": 4,
+        "relation": ""
+      },
+      "questions": 8,
+      "drawings_seen": 8,
+      "batch_questions": 0,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 4,
+      "trace": [
+        2162,
+        1812,
+        1630,
+        139,
+        46,
+        9,
+        3,
+        1
+      ]
+    },
+    {
+      "seed": 1,
+      "target": "There are exactly 4 objects, all filled triangles",
+      "program": {
+        "op": "and",
+        "predicates": [],
+        "children": [
+          {
+            "op": "exactly",
+            "predicates": [
+              {
+                "op": "any",
+                "value": "",
+                "children": []
+              }
+            ],
+            "children": [],
+            "n": 4,
+            "relation": ""
+          },
+          {
+            "op": "forall",
+            "predicates": [
+              {
+                "op": "and",
+                "value": "",
+                "children": [
+                  {
+                    "op": "shape",
+                    "value": "triangle",
+                    "children": []
+                  },
+                  {
+                    "op": "filled",
+                    "value": "",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "children": [],
+            "n": 0,
+            "relation": ""
+          }
+        ],
+        "n": 0,
+        "relation": ""
+      },
+      "questions": 15,
+      "drawings_seen": 30,
+      "batch_questions": 5,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 11,
+      "trace": [
+        2162,
+        1812,
+        1630,
+        1491,
+        1418,
+        1338,
+        1208,
+        1104,
+        1068,
+        1054,
+        36,
+        17,
+        5,
+        2,
+        1
+      ]
+    },
+    {
+      "seed": 7,
+      "target": "There are exactly 4 filled triangles",
+      "program": {
+        "op": "exactly",
+        "predicates": [
+          {
+            "op": "and",
+            "value": "",
+            "children": [
+              {
+                "op": "shape",
+                "value": "triangle",
+                "children": []
+              },
+              {
+                "op": "filled",
+                "value": "",
+                "children": []
+              }
+            ]
+          }
+        ],
+        "children": [],
+        "n": 4,
+        "relation": ""
+      },
+      "questions": 15,
+      "drawings_seen": 27,
+      "batch_questions": 4,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 10,
+      "trace": [
+        2054,
+        1687,
+        1518,
+        1414,
+        1387,
+        1283,
+        1141,
+        1087,
+        1056,
+        28,
+        24,
+        14,
+        6,
+        2,
+        1
+      ]
+    },
+    {
+      "seed": 7,
+      "target": "There are at least 4 filled triangles",
+      "program": {
+        "op": "atleast",
+        "predicates": [
+          {
+            "op": "and",
+            "value": "",
+            "children": [
+              {
+                "op": "shape",
+                "value": "triangle",
+                "children": []
+              },
+              {
+                "op": "filled",
+                "value": "",
+                "children": []
+              }
+            ]
+          }
+        ],
+        "children": [],
+        "n": 4,
+        "relation": ""
+      },
+      "questions": 9,
+      "drawings_seen": 9,
+      "batch_questions": 0,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 4,
+      "trace": [
+        2054,
+        1687,
+        1518,
+        104,
+        43,
+        35,
+        29,
+        6,
+        1
+      ]
+    },
+    {
+      "seed": 7,
+      "target": "There are exactly 4 objects, all filled triangles",
+      "program": {
+        "op": "and",
+        "predicates": [],
+        "children": [
+          {
+            "op": "exactly",
+            "predicates": [
+              {
+                "op": "any",
+                "value": "",
+                "children": []
+              }
+            ],
+            "children": [],
+            "n": 4,
+            "relation": ""
+          },
+          {
+            "op": "forall",
+            "predicates": [
+              {
+                "op": "and",
+                "value": "",
+                "children": [
+                  {
+                    "op": "shape",
+                    "value": "triangle",
+                    "children": []
+                  },
+                  {
+                    "op": "filled",
+                    "value": "",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "children": [],
+            "n": 0,
+            "relation": ""
+          }
+        ],
+        "n": 0,
+        "relation": ""
+      },
+      "questions": 15,
+      "drawings_seen": 27,
+      "batch_questions": 4,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 10,
+      "trace": [
+        2054,
+        1687,
+        1518,
+        1414,
+        1387,
+        1283,
+        1141,
+        1087,
+        1056,
+        28,
+        24,
+        14,
+        6,
+        2,
+        1
+      ]
+    },
+    {
+      "seed": 42,
+      "target": "There are exactly 4 filled triangles",
+      "program": {
+        "op": "exactly",
+        "predicates": [
+          {
+            "op": "and",
+            "value": "",
+            "children": [
+              {
+                "op": "shape",
+                "value": "triangle",
+                "children": []
+              },
+              {
+                "op": "filled",
+                "value": "",
+                "children": []
+              }
+            ]
+          }
+        ],
+        "children": [],
+        "n": 4,
+        "relation": ""
+      },
+      "questions": 9,
+      "drawings_seen": 9,
+      "batch_questions": 0,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 5,
+      "trace": [
+        2108,
+        1746,
+        1554,
+        1444,
+        28,
+        14,
+        11,
+        2,
+        1
+      ]
+    },
+    {
+      "seed": 42,
+      "target": "There are at least 4 filled triangles",
+      "program": {
+        "op": "atleast",
+        "predicates": [
+          {
+            "op": "and",
+            "value": "",
+            "children": [
+              {
+                "op": "shape",
+                "value": "triangle",
+                "children": []
+              },
+              {
+                "op": "filled",
+                "value": "",
+                "children": []
+              }
+            ]
+          }
+        ],
+        "children": [],
+        "n": 4,
+        "relation": ""
+      },
+      "questions": 9,
+      "drawings_seen": 9,
+      "batch_questions": 0,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 5,
+      "trace": [
+        2108,
+        1746,
+        1554,
+        1444,
+        28,
+        14,
+        11,
+        2,
+        1
+      ]
+    },
+    {
+      "seed": 42,
+      "target": "There are exactly 4 objects, all filled triangles",
+      "program": {
+        "op": "and",
+        "predicates": [],
+        "children": [
+          {
+            "op": "exactly",
+            "predicates": [
+              {
+                "op": "any",
+                "value": "",
+                "children": []
+              }
+            ],
+            "children": [],
+            "n": 4,
+            "relation": ""
+          },
+          {
+            "op": "forall",
+            "predicates": [
+              {
+                "op": "and",
+                "value": "",
+                "children": [
+                  {
+                    "op": "shape",
+                    "value": "triangle",
+                    "children": []
+                  },
+                  {
+                    "op": "filled",
+                    "value": "",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "children": [],
+            "n": 0,
+            "relation": ""
+          }
+        ],
+        "n": 0,
+        "relation": ""
+      },
+      "questions": 18,
+      "drawings_seen": 45,
+      "batch_questions": 9,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 15,
+      "trace": [
+        2108,
+        1746,
+        1554,
+        1444,
+        1416,
+        1371,
+        1183,
+        1111,
+        1067,
+        1051,
+        1004,
+        989,
+        979,
+        926,
+        4,
+        3,
+        2,
+        1
+      ]
+    },
+    {
+      "seed": 121,
+      "target": "There are exactly 4 filled triangles",
+      "program": {
+        "op": "exactly",
+        "predicates": [
+          {
+            "op": "and",
+            "value": "",
+            "children": [
+              {
+                "op": "shape",
+                "value": "triangle",
+                "children": []
+              },
+              {
+                "op": "filled",
+                "value": "",
+                "children": []
+              }
+            ]
+          }
+        ],
+        "children": [],
+        "n": 4,
+        "relation": ""
+      },
+      "questions": 13,
+      "drawings_seen": 25,
+      "batch_questions": 4,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 10,
+      "trace": [
+        2162,
+        1809,
+        1631,
+        1524,
+        1469,
+        1336,
+        1184,
+        1131,
+        1034,
+        19,
+        6,
+        2,
+        1
+      ]
+    },
+    {
+      "seed": 121,
+      "target": "There are at least 4 filled triangles",
+      "program": {
+        "op": "atleast",
+        "predicates": [
+          {
+            "op": "and",
+            "value": "",
+            "children": [
+              {
+                "op": "shape",
+                "value": "triangle",
+                "children": []
+              },
+              {
+                "op": "filled",
+                "value": "",
+                "children": []
+              }
+            ]
+          }
+        ],
+        "children": [],
+        "n": 4,
+        "relation": ""
+      },
+      "questions": 7,
+      "drawings_seen": 7,
+      "batch_questions": 0,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 3,
+      "trace": [
+        2162,
+        1809,
+        178,
+        84,
+        10,
+        3,
+        1
+      ]
+    },
+    {
+      "seed": 121,
+      "target": "There are exactly 4 objects, all filled triangles",
+      "program": {
+        "op": "and",
+        "predicates": [],
+        "children": [
+          {
+            "op": "exactly",
+            "predicates": [
+              {
+                "op": "any",
+                "value": "",
+                "children": []
+              }
+            ],
+            "children": [],
+            "n": 4,
+            "relation": ""
+          },
+          {
+            "op": "forall",
+            "predicates": [
+              {
+                "op": "and",
+                "value": "",
+                "children": [
+                  {
+                    "op": "shape",
+                    "value": "triangle",
+                    "children": []
+                  },
+                  {
+                    "op": "filled",
+                    "value": "",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "children": [],
+            "n": 0,
+            "relation": ""
+          }
+        ],
+        "n": 0,
+        "relation": ""
+      },
+      "questions": 13,
+      "drawings_seen": 25,
+      "batch_questions": 4,
+      "exact_recovery": true,
+      "remaining": 1,
+      "first_positive_question": 10,
+      "trace": [
+        2162,
+        1809,
+        1631,
+        1524,
+        1469,
+        1336,
+        1184,
+        1131,
+        1034,
+        19,
+        6,
+        2,
+        1
+      ]
+    }
+  ]
+}

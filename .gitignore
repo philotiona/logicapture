@@ -1,0 +1,12 @@
+.venv/
+.uv-cache/
+.tmp/
+.pytest_cache/
+pytest-cache-files-*/
+__pycache__/
+.pytest_cache/
+*.pyc
+outputs/*
+!outputs/.gitkeep
+.streamlit/secrets.toml
+*.egg-info/

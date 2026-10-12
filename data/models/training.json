@@ -1,0 +1,39 @@
+{
+  "seed": 71,
+  "epochs": 12,
+  "train_objects": 720,
+  "test_objects": 176,
+  "shape_classes": [
+    "circle",
+    "triangle",
+    "quadrilateral",
+    "polygon"
+  ],
+  "fill_classes": [
+    "outline",
+    "filled"
+  ],
+  "shape_accuracy": 0.9886363636363636,
+  "fill_accuracy": 1.0,
+  "losses": [
+    1.6338134330251943,
+    0.976524513700734,
+    0.52414728636327,
+    0.28981724899748096,
+    0.14783621320258017,
+    0.08152451949275058,
+    0.0473350657393103,
+    0.030087166425326595,
+    0.021205462029446728,
+    0.018251173137484686,
+    0.013334267853718737,
+    0.010716406041351349
+  ],
+  "parameters": 113558,
+  "limitations": [
+    "Independent synthetic isolated-object test only; not real handwriting.",
+    "Softmax scores are uncalibrated probabilities.",
+    "Segmentation errors remain an OpenCV limitation.",
+    "The polygon training class contains regular pentagons, not arbitrary topology."
+  ]
+}
