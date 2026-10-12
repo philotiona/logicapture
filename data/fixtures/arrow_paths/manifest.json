@@ -1,0 +1,79 @@
+{
+  "source": "User-supplied screenshot on 2026-10-11",
+  "provenance": "Crops of unannotated contact-sheet cells; original page unavailable. Expected rule supplied by user.",
+  "limitations": "One real problem, resized screenshot. Regression fixture, not an independent benchmark.",
+  "items": [
+    {
+      "file": "A01.png",
+      "label": true,
+      "expected_arrow_relation": "opposed",
+      "expected_arrows": 2
+    },
+    {
+      "file": "A02.png",
+      "label": true,
+      "expected_arrow_relation": "opposed",
+      "expected_arrows": 2
+    },
+    {
+      "file": "A03.png",
+      "label": true,
+      "expected_arrow_relation": "opposed",
+      "expected_arrows": 2
+    },
+    {
+      "file": "A04.png",
+      "label": true,
+      "expected_arrow_relation": "opposed",
+      "expected_arrows": 2
+    },
+    {
+      "file": "A05.png",
+      "label": true,
+      "expected_arrow_relation": "opposed",
+      "expected_arrows": 2
+    },
+    {
+      "file": "A06.png",
+      "label": true,
+      "expected_arrow_relation": "opposed",
+      "expected_arrows": 2
+    },
+    {
+      "file": "B01.png",
+      "label": false,
+      "expected_arrow_relation": "same",
+      "expected_arrows": 2
+    },
+    {
+      "file": "B02.png",
+      "label": false,
+      "expected_arrow_relation": "same",
+      "expected_arrows": 2
+    },
+    {
+      "file": "B03.png",
+      "label": false,
+      "expected_arrow_relation": "same",
+      "expected_arrows": 2
+    },
+    {
+      "file": "B04.png",
+      "label": false,
+      "expected_arrow_relation": "same",
+      "expected_arrows": 2
+    },
+    {
+      "file": "B05.png",
+      "label": false,
+      "expected_arrow_relation": "same",
+      "expected_arrows": 2
+    },
+    {
+      "file": "B06.png",
+      "label": false,
+      "expected_arrow_relation": "same",
+      "expected_arrows": 2
+    }
+  ]
+}

@@ -1,0 +1,289 @@
+accuracy,condition,depth,episode,exact_program_recovery,explanation,generated_validity,perfect_hypotheses,search_seconds,semantic_recovery_100_probes,system,target,target_index,train_consistency
+1.0,clean,1,0,True,There is at least one circle,1.0,31,0.14302059984765947,True,symbolic_ground_truth,There is at least one circle,0,1.0
+0.5,clean,,0,,,,,,,pixel_prototype,,0,
+0.0,clean,,0,,,,,,,tensorflow_prototype,,0,
+1.0,clean,,0,True,There is at least one circle,,32,,True,symbolic_cv,,0,1.0
+1.0,clean,,0,True,There is at least one circle,,32,,True,symbolic_cv_regularized,,0,1.0
+0.5,clean,,0,True,There is at least one circle,,31,,True,neural_perception_hard_symbolic,,0,1.0
+0.5,rotation,,0,,,,,,,pixel_prototype,,0,
+0.0,rotation,,0,,,,,,,tensorflow_prototype,,0,
+1.0,rotation,,0,True,There is at least one circle,,32,,True,symbolic_cv,,0,1.0
+1.0,rotation,,0,True,There is at least one circle,,32,,True,symbolic_cv_regularized,,0,1.0
+0.5,rotation,,0,True,There is at least one circle,,31,,True,neural_perception_hard_symbolic,,0,1.0
+0.5,noise,,0,,,,,,,pixel_prototype,,0,
+0.0,noise,,0,,,,,,,tensorflow_prototype,,0,
+1.0,noise,,0,True,There is at least one circle,,32,,True,symbolic_cv,,0,1.0
+1.0,noise,,0,True,There is at least one circle,,32,,True,symbolic_cv_regularized,,0,1.0
+0.5,noise,,0,True,There is at least one circle,,31,,True,neural_perception_hard_symbolic,,0,1.0
+1.0,clean,1,1,False,There are exactly 1 objects matching: circle,1.0,30,0.1443197000771761,False,symbolic_ground_truth,There is at least one circle,0,1.0
+1.0,clean,,1,,,,,,,pixel_prototype,,0,
+0.0,clean,,1,,,,,,,tensorflow_prototype,,0,
+1.0,clean,,1,False,There are exactly 1 objects matching: circle,,30,,False,symbolic_cv,,0,1.0
+1.0,clean,,1,False,There are exactly 1 objects matching: circle,,30,,False,symbolic_cv_regularized,,0,1.0
+0.5,clean,,1,False,There are exactly 1 objects matching: circle,,31,,False,neural_perception_hard_symbolic,,0,1.0
+1.0,rotation,,1,,,,,,,pixel_prototype,,0,
+0.0,rotation,,1,,,,,,,tensorflow_prototype,,0,
+1.0,rotation,,1,False,There are exactly 1 objects matching: circle,,30,,False,symbolic_cv,,0,1.0
+1.0,rotation,,1,False,There are exactly 1 objects matching: circle,,30,,False,symbolic_cv_regularized,,0,1.0
+0.5,rotation,,1,False,There are exactly 1 objects matching: circle,,31,,False,neural_perception_hard_symbolic,,0,1.0
+1.0,noise,,1,,,,,,,pixel_prototype,,0,
+0.0,noise,,1,,,,,,,tensorflow_prototype,,0,
+1.0,noise,,1,False,There are exactly 1 objects matching: circle,,30,,False,symbolic_cv,,0,1.0
+1.0,noise,,1,False,There are exactly 1 objects matching: circle,,30,,False,symbolic_cv_regularized,,0,1.0
+0.5,noise,,1,False,There are exactly 1 objects matching: circle,,31,,False,neural_perception_hard_symbolic,,0,1.0
+0.5,clean,1,2,False,There are exactly 1 objects matching: circle,1.0,34,0.14302910002879798,False,symbolic_ground_truth,There is at least one circle,0,1.0
+0.5,clean,,2,,,,,,,pixel_prototype,,0,
+0.5,clean,,2,,,,,,,tensorflow_prototype,,0,
+0.5,clean,,2,False,There are exactly 1 objects matching: circle,,34,,False,symbolic_cv,,0,1.0
+0.5,clean,,2,False,There are exactly 1 objects matching: circle,,34,,False,symbolic_cv_regularized,,0,1.0
+1.0,clean,,2,False,(There is at least one large object) or (There is at least one circle),,2,,False,neural_perception_hard_symbolic,,0,1.0
+0.5,rotation,,2,,,,,,,pixel_prototype,,0,
+0.5,rotation,,2,,,,,,,tensorflow_prototype,,0,
+0.5,rotation,,2,False,There are exactly 1 objects matching: circle,,34,,False,symbolic_cv,,0,1.0
+0.5,rotation,,2,False,There are exactly 1 objects matching: circle,,34,,False,symbolic_cv_regularized,,0,1.0
+1.0,rotation,,2,False,(There is at least one large object) or (There is at least one circle),,2,,False,neural_perception_hard_symbolic,,0,1.0
+0.5,noise,,2,,,,,,,pixel_prototype,,0,
+0.5,noise,,2,,,,,,,tensorflow_prototype,,0,
+0.5,noise,,2,False,There are exactly 1 objects matching: circle,,34,,False,symbolic_cv,,0,1.0
+0.5,noise,,2,False,There are exactly 1 objects matching: circle,,34,,False,symbolic_cv_regularized,,0,1.0
+1.0,noise,,2,False,(There is at least one large object) or (There is at least one circle),,2,,False,neural_perception_hard_symbolic,,0,1.0
+1.0,clean,1,0,True,There is at least one filled object,1.0,28,0.14677569991908967,True,symbolic_ground_truth,There is at least one filled object,1,1.0
+0.5,clean,,0,,,,,,,pixel_prototype,,1,
+1.0,clean,,0,,,,,,,tensorflow_prototype,,1,
+1.0,clean,,0,True,There is at least one filled object,,28,,True,symbolic_cv,,1,1.0
+1.0,clean,,0,True,There is at least one filled object,,28,,True,symbolic_cv_regularized,,1,1.0
+1.0,clean,,0,True,There is at least one filled object,,28,,True,neural_perception_hard_symbolic,,1,1.0
+1.0,rotation,,0,,,,,,,pixel_prototype,,1,
+1.0,rotation,,0,,,,,,,tensorflow_prototype,,1,
+1.0,rotation,,0,True,There is at least one filled object,,28,,True,symbolic_cv,,1,1.0
+1.0,rotation,,0,True,There is at least one filled object,,28,,True,symbolic_cv_regularized,,1,1.0
+1.0,rotation,,0,True,There is at least one filled object,,28,,True,neural_perception_hard_symbolic,,1,1.0
+0.5,noise,,0,,,,,,,pixel_prototype,,1,
+1.0,noise,,0,,,,,,,tensorflow_prototype,,1,
+1.0,noise,,0,True,There is at least one filled object,,28,,True,symbolic_cv,,1,1.0
+1.0,noise,,0,True,There is at least one filled object,,28,,True,symbolic_cv_regularized,,1,1.0
+1.0,noise,,0,True,There is at least one filled object,,28,,True,neural_perception_hard_symbolic,,1,1.0
+1.0,clean,1,1,True,There is at least one filled object,1.0,31,0.14384960010647774,True,symbolic_ground_truth,There is at least one filled object,1,1.0
+0.5,clean,,1,,,,,,,pixel_prototype,,1,
+1.0,clean,,1,,,,,,,tensorflow_prototype,,1,
+1.0,clean,,1,True,There is at least one filled object,,30,,True,symbolic_cv,,1,1.0
+1.0,clean,,1,True,There is at least one filled object,,30,,True,symbolic_cv_regularized,,1,1.0
+1.0,clean,,1,True,There is at least one filled object,,30,,True,neural_perception_hard_symbolic,,1,1.0
+0.5,rotation,,1,,,,,,,pixel_prototype,,1,
+1.0,rotation,,1,,,,,,,tensorflow_prototype,,1,
+1.0,rotation,,1,True,There is at least one filled object,,30,,True,symbolic_cv,,1,1.0
+1.0,rotation,,1,True,There is at least one filled object,,30,,True,symbolic_cv_regularized,,1,1.0
+1.0,rotation,,1,True,There is at least one filled object,,30,,True,neural_perception_hard_symbolic,,1,1.0
+0.5,noise,,1,,,,,,,pixel_prototype,,1,
+1.0,noise,,1,,,,,,,tensorflow_prototype,,1,
+1.0,noise,,1,True,There is at least one filled object,,30,,True,symbolic_cv,,1,1.0
+1.0,noise,,1,True,There is at least one filled object,,30,,True,symbolic_cv_regularized,,1,1.0
+1.0,noise,,1,True,There is at least one filled object,,30,,True,neural_perception_hard_symbolic,,1,1.0
+1.0,clean,1,2,True,There is at least one filled object,1.0,30,0.1727417998481542,True,symbolic_ground_truth,There is at least one filled object,1,1.0
+0.5,clean,,2,,,,,,,pixel_prototype,,1,
+0.5,clean,,2,,,,,,,tensorflow_prototype,,1,
+1.0,clean,,2,True,There is at least one filled object,,30,,True,symbolic_cv,,1,1.0
+1.0,clean,,2,True,There is at least one filled object,,30,,True,symbolic_cv_regularized,,1,1.0
+1.0,clean,,2,True,There is at least one filled object,,30,,True,neural_perception_hard_symbolic,,1,1.0
+0.5,rotation,,2,,,,,,,pixel_prototype,,1,
+0.5,rotation,,2,,,,,,,tensorflow_prototype,,1,
+1.0,rotation,,2,True,There is at least one filled object,,30,,True,symbolic_cv,,1,1.0
+1.0,rotation,,2,True,There is at least one filled object,,30,,True,symbolic_cv_regularized,,1,1.0
+1.0,rotation,,2,True,There is at least one filled object,,30,,True,neural_perception_hard_symbolic,,1,1.0
+0.5,noise,,2,,,,,,,pixel_prototype,,1,
+0.5,noise,,2,,,,,,,tensorflow_prototype,,1,
+1.0,noise,,2,True,There is at least one filled object,,30,,True,symbolic_cv,,1,1.0
+1.0,noise,,2,True,There is at least one filled object,,30,,True,symbolic_cv_regularized,,1,1.0
+1.0,noise,,2,True,There is at least one filled object,,30,,True,neural_perception_hard_symbolic,,1,1.0
+1.0,clean,1,0,True,There are exactly 2 objects matching: object,1.0,26,0.1393909000325948,True,symbolic_ground_truth,There are exactly 2 objects matching: object,2,1.0
+1.0,clean,,0,,,,,,,pixel_prototype,,2,
+0.0,clean,,0,,,,,,,tensorflow_prototype,,2,
+1.0,clean,,0,True,There are exactly 2 objects matching: object,,25,,True,symbolic_cv,,2,1.0
+1.0,clean,,0,True,There are exactly 2 objects matching: object,,25,,True,symbolic_cv_regularized,,2,1.0
+1.0,clean,,0,True,There are exactly 2 objects matching: object,,25,,True,neural_perception_hard_symbolic,,2,1.0
+1.0,rotation,,0,,,,,,,pixel_prototype,,2,
+0.0,rotation,,0,,,,,,,tensorflow_prototype,,2,
+1.0,rotation,,0,True,There are exactly 2 objects matching: object,,25,,True,symbolic_cv,,2,1.0
+1.0,rotation,,0,True,There are exactly 2 objects matching: object,,25,,True,symbolic_cv_regularized,,2,1.0
+1.0,rotation,,0,True,There are exactly 2 objects matching: object,,25,,True,neural_perception_hard_symbolic,,2,1.0
+1.0,noise,,0,,,,,,,pixel_prototype,,2,
+0.0,noise,,0,,,,,,,tensorflow_prototype,,2,
+1.0,noise,,0,True,There are exactly 2 objects matching: object,,25,,True,symbolic_cv,,2,1.0
+1.0,noise,,0,True,There are exactly 2 objects matching: object,,25,,True,symbolic_cv_regularized,,2,1.0
+1.0,noise,,0,True,There are exactly 2 objects matching: object,,25,,True,neural_perception_hard_symbolic,,2,1.0
+1.0,clean,1,1,True,There are exactly 2 objects matching: object,1.0,24,0.13333710003644228,True,symbolic_ground_truth,There are exactly 2 objects matching: object,2,1.0
+0.5,clean,,1,,,,,,,pixel_prototype,,2,
+1.0,clean,,1,,,,,,,tensorflow_prototype,,2,
+1.0,clean,,1,True,There are exactly 2 objects matching: object,,24,,True,symbolic_cv,,2,1.0
+1.0,clean,,1,True,There are exactly 2 objects matching: object,,24,,True,symbolic_cv_regularized,,2,1.0
+1.0,clean,,1,True,There are exactly 2 objects matching: object,,24,,True,neural_perception_hard_symbolic,,2,1.0
+0.5,rotation,,1,,,,,,,pixel_prototype,,2,
+1.0,rotation,,1,,,,,,,tensorflow_prototype,,2,
+1.0,rotation,,1,True,There are exactly 2 objects matching: object,,24,,True,symbolic_cv,,2,1.0
+1.0,rotation,,1,True,There are exactly 2 objects matching: object,,24,,True,symbolic_cv_regularized,,2,1.0
+1.0,rotation,,1,True,There are exactly 2 objects matching: object,,24,,True,neural_perception_hard_symbolic,,2,1.0
+0.5,noise,,1,,,,,,,pixel_prototype,,2,
+1.0,noise,,1,,,,,,,tensorflow_prototype,,2,
+1.0,noise,,1,True,There are exactly 2 objects matching: object,,24,,True,symbolic_cv,,2,1.0
+1.0,noise,,1,True,There are exactly 2 objects matching: object,,24,,True,symbolic_cv_regularized,,2,1.0
+1.0,noise,,1,True,There are exactly 2 objects matching: object,,24,,True,neural_perception_hard_symbolic,,2,1.0
+1.0,clean,1,2,True,There are exactly 2 objects matching: object,1.0,15,0.14129840000532568,True,symbolic_ground_truth,There are exactly 2 objects matching: object,2,1.0
+1.0,clean,,2,,,,,,,pixel_prototype,,2,
+0.0,clean,,2,,,,,,,tensorflow_prototype,,2,
+1.0,clean,,2,True,There are exactly 2 objects matching: object,,15,,True,symbolic_cv,,2,1.0
+1.0,clean,,2,True,There are exactly 2 objects matching: object,,15,,True,symbolic_cv_regularized,,2,1.0
+1.0,clean,,2,True,There are exactly 2 objects matching: object,,15,,True,neural_perception_hard_symbolic,,2,1.0
+1.0,rotation,,2,,,,,,,pixel_prototype,,2,
+0.5,rotation,,2,,,,,,,tensorflow_prototype,,2,
+1.0,rotation,,2,True,There are exactly 2 objects matching: object,,15,,True,symbolic_cv,,2,1.0
+1.0,rotation,,2,True,There are exactly 2 objects matching: object,,15,,True,symbolic_cv_regularized,,2,1.0
+1.0,rotation,,2,True,There are exactly 2 objects matching: object,,15,,True,neural_perception_hard_symbolic,,2,1.0
+1.0,noise,,2,,,,,,,pixel_prototype,,2,
+0.0,noise,,2,,,,,,,tensorflow_prototype,,2,
+1.0,noise,,2,True,There are exactly 2 objects matching: object,,15,,True,symbolic_cv,,2,1.0
+1.0,noise,,2,True,There are exactly 2 objects matching: object,,15,,True,symbolic_cv_regularized,,2,1.0
+1.0,noise,,2,True,There are exactly 2 objects matching: object,,15,,True,neural_perception_hard_symbolic,,2,1.0
+1.0,clean,2,0,True,(There are exactly 2 objects matching: object) and (There is at least one circle),1.0,1,0.14729530015029013,True,symbolic_ground_truth,(There are exactly 2 objects matching: object) and (There is at least one circle),3,1.0
+0.5,clean,,0,,,,,,,pixel_prototype,,3,
+1.0,clean,,0,,,,,,,tensorflow_prototype,,3,
+1.0,clean,,0,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv,,3,1.0
+1.0,clean,,0,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv_regularized,,3,1.0
+1.0,clean,,0,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,neural_perception_hard_symbolic,,3,1.0
+0.5,rotation,,0,,,,,,,pixel_prototype,,3,
+1.0,rotation,,0,,,,,,,tensorflow_prototype,,3,
+1.0,rotation,,0,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv,,3,1.0
+1.0,rotation,,0,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv_regularized,,3,1.0
+1.0,rotation,,0,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,neural_perception_hard_symbolic,,3,1.0
+0.5,noise,,0,,,,,,,pixel_prototype,,3,
+1.0,noise,,0,,,,,,,tensorflow_prototype,,3,
+1.0,noise,,0,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv,,3,1.0
+1.0,noise,,0,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv_regularized,,3,1.0
+1.0,noise,,0,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,neural_perception_hard_symbolic,,3,1.0
+1.0,clean,2,1,True,(There are exactly 2 objects matching: object) and (There is at least one circle),1.0,1,0.14547299989499152,True,symbolic_ground_truth,(There are exactly 2 objects matching: object) and (There is at least one circle),3,1.0
+0.5,clean,,1,,,,,,,pixel_prototype,,3,
+0.5,clean,,1,,,,,,,tensorflow_prototype,,3,
+1.0,clean,,1,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv,,3,1.0
+1.0,clean,,1,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv_regularized,,3,1.0
+1.0,clean,,1,False,(There are at least 2 objects matching: object) and (There are exactly 1 objects matching: circle),,0,,False,neural_perception_hard_symbolic,,3,0.9
+0.5,rotation,,1,,,,,,,pixel_prototype,,3,
+0.5,rotation,,1,,,,,,,tensorflow_prototype,,3,
+1.0,rotation,,1,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv,,3,1.0
+1.0,rotation,,1,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv_regularized,,3,1.0
+1.0,rotation,,1,False,(There are at least 2 objects matching: object) and (There are exactly 1 objects matching: circle),,0,,False,neural_perception_hard_symbolic,,3,0.9
+0.5,noise,,1,,,,,,,pixel_prototype,,3,
+0.5,noise,,1,,,,,,,tensorflow_prototype,,3,
+1.0,noise,,1,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv,,3,1.0
+1.0,noise,,1,True,(There are exactly 2 objects matching: object) and (There is at least one circle),,1,,True,symbolic_cv_regularized,,3,1.0
+1.0,noise,,1,False,(There are at least 2 objects matching: object) and (There are exactly 1 objects matching: circle),,0,,False,neural_perception_hard_symbolic,,3,0.9
+0.5,clean,2,2,False,There is a circle that is larger than a distinct object,1.0,2,0.13718790002167225,False,symbolic_ground_truth,(There are exactly 2 objects matching: object) and (There is at least one circle),3,1.0
+0.0,clean,,2,,,,,,,pixel_prototype,,3,
+0.5,clean,,2,,,,,,,tensorflow_prototype,,3,
+0.5,clean,,2,False,There is a circle that is larger than a distinct object,,2,,False,symbolic_cv,,3,1.0
+0.5,clean,,2,False,There is a circle that is larger than a distinct object,,2,,False,symbolic_cv_regularized,,3,1.0
+0.5,clean,,2,False,(There are exactly 1 objects matching: large object) or (There is a object that is above a distinct circle),,1,,False,neural_perception_hard_symbolic,,3,1.0
+0.0,rotation,,2,,,,,,,pixel_prototype,,3,
+0.5,rotation,,2,,,,,,,tensorflow_prototype,,3,
+0.5,rotation,,2,False,There is a circle that is larger than a distinct object,,2,,False,symbolic_cv,,3,1.0
+0.5,rotation,,2,False,There is a circle that is larger than a distinct object,,2,,False,symbolic_cv_regularized,,3,1.0
+0.5,rotation,,2,False,(There are exactly 1 objects matching: large object) or (There is a object that is above a distinct circle),,1,,False,neural_perception_hard_symbolic,,3,1.0
+0.0,noise,,2,,,,,,,pixel_prototype,,3,
+0.5,noise,,2,,,,,,,tensorflow_prototype,,3,
+0.5,noise,,2,False,There is a circle that is larger than a distinct object,,2,,False,symbolic_cv,,3,1.0
+0.5,noise,,2,False,There is a circle that is larger than a distinct object,,2,,False,symbolic_cv_regularized,,3,1.0
+0.5,noise,,2,False,(There are exactly 1 objects matching: large object) or (There is a object that is above a distinct circle),,1,,False,neural_perception_hard_symbolic,,3,1.0
+0.5,clean,1,0,False,There is a object that is above a distinct circle,1.0,43,0.1565648999530822,False,symbolic_ground_truth,There is a triangle that is left of a distinct circle,4,1.0
+0.5,clean,,0,,,,,,,pixel_prototype,,4,
+0.5,clean,,0,,,,,,,tensorflow_prototype,,4,
+0.5,clean,,0,False,There is a object that is above a distinct circle,,43,,False,symbolic_cv,,4,1.0
+0.5,clean,,0,False,There is a object that is above a distinct circle,,43,,False,symbolic_cv_regularized,,4,1.0
+1.0,clean,,0,False,There is a object that is left of a distinct circle,,34,,False,neural_perception_hard_symbolic,,4,1.0
+0.5,rotation,,0,,,,,,,pixel_prototype,,4,
+0.5,rotation,,0,,,,,,,tensorflow_prototype,,4,
+0.5,rotation,,0,False,There is a object that is above a distinct circle,,43,,False,symbolic_cv,,4,1.0
+0.5,rotation,,0,False,There is a object that is above a distinct circle,,43,,False,symbolic_cv_regularized,,4,1.0
+0.5,rotation,,0,False,There is a object that is above a distinct circle,,43,,False,neural_perception_hard_symbolic,,4,1.0
+0.5,noise,,0,,,,,,,pixel_prototype,,4,
+0.5,noise,,0,,,,,,,tensorflow_prototype,,4,
+0.5,noise,,0,False,There is a object that is above a distinct circle,,43,,False,symbolic_cv,,4,1.0
+0.5,noise,,0,False,There is a object that is above a distinct circle,,43,,False,symbolic_cv_regularized,,4,1.0
+1.0,noise,,0,False,There is a object that is left of a distinct circle,,34,,False,neural_perception_hard_symbolic,,4,1.0
+1.0,clean,1,1,False,There is a triangle that is left of a distinct object,1.0,30,0.26401559985242784,False,symbolic_ground_truth,There is a triangle that is left of a distinct circle,4,1.0
+0.5,clean,,1,,,,,,,pixel_prototype,,4,
+0.5,clean,,1,,,,,,,tensorflow_prototype,,4,
+1.0,clean,,1,False,There is a triangle that is left of a distinct object,,30,,False,symbolic_cv,,4,1.0
+1.0,clean,,1,False,There is a triangle that is left of a distinct object,,30,,False,symbolic_cv_regularized,,4,1.0
+1.0,clean,,1,False,There is a triangle that is left of a distinct object,,29,,False,neural_perception_hard_symbolic,,4,1.0
+0.5,rotation,,1,,,,,,,pixel_prototype,,4,
+0.5,rotation,,1,,,,,,,tensorflow_prototype,,4,
+1.0,rotation,,1,False,There is a triangle that is left of a distinct object,,30,,False,symbolic_cv,,4,1.0
+1.0,rotation,,1,False,There is a triangle that is left of a distinct object,,30,,False,symbolic_cv_regularized,,4,1.0
+1.0,rotation,,1,False,There is a triangle that is left of a distinct object,,29,,False,neural_perception_hard_symbolic,,4,1.0
+0.5,noise,,1,,,,,,,pixel_prototype,,4,
+0.5,noise,,1,,,,,,,tensorflow_prototype,,4,
+1.0,noise,,1,False,There is a triangle that is left of a distinct object,,30,,False,symbolic_cv,,4,1.0
+1.0,noise,,1,False,There is a triangle that is left of a distinct object,,30,,False,symbolic_cv_regularized,,4,1.0
+1.0,noise,,1,False,There is a triangle that is left of a distinct object,,29,,False,neural_perception_hard_symbolic,,4,1.0
+1.0,clean,1,2,False,There is a object that is left of a distinct circle,1.0,45,0.13978259987197816,False,symbolic_ground_truth,There is a triangle that is left of a distinct circle,4,1.0
+0.5,clean,,2,,,,,,,pixel_prototype,,4,
+1.0,clean,,2,,,,,,,tensorflow_prototype,,4,
+1.0,clean,,2,False,There is a object that is left of a distinct circle,,42,,False,symbolic_cv,,4,1.0
+1.0,clean,,2,False,There is a object that is left of a distinct circle,,42,,False,symbolic_cv_regularized,,4,1.0
+1.0,clean,,2,False,There is a object that is left of a distinct circle,,42,,False,neural_perception_hard_symbolic,,4,1.0
+0.5,rotation,,2,,,,,,,pixel_prototype,,4,
+0.5,rotation,,2,,,,,,,tensorflow_prototype,,4,
+1.0,rotation,,2,False,There is a object that is left of a distinct circle,,42,,False,symbolic_cv,,4,1.0
+1.0,rotation,,2,False,There is a object that is left of a distinct circle,,42,,False,symbolic_cv_regularized,,4,1.0
+1.0,rotation,,2,False,There is a object that is left of a distinct circle,,42,,False,neural_perception_hard_symbolic,,4,1.0
+0.5,noise,,2,,,,,,,pixel_prototype,,4,
+0.0,noise,,2,,,,,,,tensorflow_prototype,,4,
+1.0,noise,,2,False,There is a object that is left of a distinct circle,,42,,False,symbolic_cv,,4,1.0
+1.0,noise,,2,False,There is a object that is left of a distinct circle,,42,,False,symbolic_cv_regularized,,4,1.0
+1.0,noise,,2,False,There is a object that is left of a distinct circle,,42,,False,neural_perception_hard_symbolic,,4,1.0
+1.0,clean,1,0,False,There are exactly 0 objects matching: filled object,1.0,11,0.12959590018726885,True,symbolic_ground_truth,Every filled object is inside a distinct outline object,5,1.0
+0.5,clean,,0,,,,,,,pixel_prototype,,5,
+0.5,clean,,0,,,,,,,tensorflow_prototype,,5,
+1.0,clean,,0,False,There are exactly 0 objects matching: filled object,,11,,True,symbolic_cv,,5,1.0
+1.0,clean,,0,False,There are exactly 0 objects matching: filled object,,11,,True,symbolic_cv_regularized,,5,1.0
+1.0,clean,,0,False,There are exactly 0 objects matching: filled object,,11,,True,neural_perception_hard_symbolic,,5,1.0
+0.5,rotation,,0,,,,,,,pixel_prototype,,5,
+0.5,rotation,,0,,,,,,,tensorflow_prototype,,5,
+1.0,rotation,,0,False,There are exactly 0 objects matching: filled object,,11,,True,symbolic_cv,,5,1.0
+1.0,rotation,,0,False,There are exactly 0 objects matching: filled object,,11,,True,symbolic_cv_regularized,,5,1.0
+1.0,rotation,,0,False,There are exactly 0 objects matching: filled object,,11,,True,neural_perception_hard_symbolic,,5,1.0
+0.5,noise,,0,,,,,,,pixel_prototype,,5,
+0.5,noise,,0,,,,,,,tensorflow_prototype,,5,
+1.0,noise,,0,False,There are exactly 0 objects matching: filled object,,11,,True,symbolic_cv,,5,1.0
+1.0,noise,,0,False,There are exactly 0 objects matching: filled object,,11,,True,symbolic_cv_regularized,,5,1.0
+1.0,noise,,0,False,There are exactly 0 objects matching: filled object,,11,,True,neural_perception_hard_symbolic,,5,1.0
+1.0,clean,1,1,False,There are exactly 0 objects matching: filled object,1.0,11,0.13272859994322062,False,symbolic_ground_truth,Every filled object is inside a distinct outline object,5,1.0
+1.0,clean,,1,,,,,,,pixel_prototype,,5,
+1.0,clean,,1,,,,,,,tensorflow_prototype,,5,
+1.0,clean,,1,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv,,5,1.0
+1.0,clean,,1,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv_regularized,,5,1.0
+1.0,clean,,1,False,There are exactly 0 objects matching: filled object,,11,,False,neural_perception_hard_symbolic,,5,1.0
+1.0,rotation,,1,,,,,,,pixel_prototype,,5,
+1.0,rotation,,1,,,,,,,tensorflow_prototype,,5,
+1.0,rotation,,1,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv,,5,1.0
+1.0,rotation,,1,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv_regularized,,5,1.0
+1.0,rotation,,1,False,There are exactly 0 objects matching: filled object,,11,,False,neural_perception_hard_symbolic,,5,1.0
+1.0,noise,,1,,,,,,,pixel_prototype,,5,
+1.0,noise,,1,,,,,,,tensorflow_prototype,,5,
+1.0,noise,,1,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv,,5,1.0
+1.0,noise,,1,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv_regularized,,5,1.0
+1.0,noise,,1,False,There are exactly 0 objects matching: filled object,,11,,False,neural_perception_hard_symbolic,,5,1.0
+1.0,clean,1,2,False,There are exactly 0 objects matching: filled object,1.0,11,0.13139849994331598,False,symbolic_ground_truth,Every filled object is inside a distinct outline object,5,1.0
+0.5,clean,,2,,,,,,,pixel_prototype,,5,
+1.0,clean,,2,,,,,,,tensorflow_prototype,,5,
+1.0,clean,,2,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv,,5,1.0
+1.0,clean,,2,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv_regularized,,5,1.0
+1.0,clean,,2,False,There are exactly 0 objects matching: filled object,,11,,False,neural_perception_hard_symbolic,,5,1.0
+0.5,rotation,,2,,,,,,,pixel_prototype,,5,
+1.0,rotation,,2,,,,,,,tensorflow_prototype,,5,
+1.0,rotation,,2,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv,,5,1.0
+1.0,rotation,,2,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv_regularized,,5,1.0
+1.0,rotation,,2,False,There are exactly 0 objects matching: filled object,,11,,False,neural_perception_hard_symbolic,,5,1.0
+0.5,noise,,2,,,,,,,pixel_prototype,,5,
+1.0,noise,,2,,,,,,,tensorflow_prototype,,5,
+1.0,noise,,2,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv,,5,1.0
+1.0,noise,,2,False,There are exactly 0 objects matching: filled object,,11,,False,symbolic_cv_regularized,,5,1.0
+1.0,noise,,2,False,There are exactly 0 objects matching: filled object,,11,,False,neural_perception_hard_symbolic,,5,1.0

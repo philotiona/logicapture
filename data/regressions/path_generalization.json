@@ -1,0 +1,528 @@
+{
+  "protocol": "Infer from training page pixels; freeze AST; evaluate new renderer seeds and canvas/pen styles from panel pixels.",
+  "scope": "Synthetic legible open/closed paths. This does not measure handwritten generalization.",
+  "training_seed": 113,
+  "heldout_seeds": [
+    7,
+    31,
+    91
+  ],
+  "concepts": [
+    {
+      "name": "opposing_arrows",
+      "intended": {
+        "op": "exists",
+        "predicates": [
+          {
+            "op": "arrow_relation",
+            "value": "opposed",
+            "children": []
+          }
+        ],
+        "children": [],
+        "n": 0,
+        "relation": ""
+      },
+      "inferred": {
+        "op": "exists",
+        "predicates": [
+          {
+            "op": "arrow_relation",
+            "value": "opposed",
+            "children": []
+          }
+        ],
+        "children": [],
+        "n": 0,
+        "relation": ""
+      },
+      "description": "There is at least one path whose arrows point opposite ways along the path",
+      "training": {
+        "correct": 12,
+        "total": 12,
+        "known": 12,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      },
+      "heldout": [
+        {
+          "seed": 7,
+          "canvas": 240,
+          "stroke": 2,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        },
+        {
+          "seed": 31,
+          "canvas": 208,
+          "stroke": 3,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        },
+        {
+          "seed": 91,
+          "canvas": 320,
+          "stroke": 4,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        }
+      ],
+      "failures": [],
+      "aggregate_intended": {
+        "correct": 36,
+        "total": 36,
+        "known": 36,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      },
+      "aggregate_inferred": {
+        "correct": 36,
+        "total": 36,
+        "known": 36,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      }
+    },
+    {
+      "name": "open_paths",
+      "intended": {
+        "op": "exists",
+        "predicates": [
+          {
+            "op": "topology",
+            "value": "open",
+            "children": []
+          }
+        ],
+        "children": [],
+        "n": 0,
+        "relation": ""
+      },
+      "inferred": {
+        "op": "exists",
+        "predicates": [
+          {
+            "op": "cycle_count",
+            "value": "0",
+            "children": []
+          }
+        ],
+        "children": [],
+        "n": 0,
+        "relation": ""
+      },
+      "description": "There is at least one path with 0 cycles",
+      "training": {
+        "correct": 12,
+        "total": 12,
+        "known": 12,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      },
+      "heldout": [
+        {
+          "seed": 7,
+          "canvas": 240,
+          "stroke": 2,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        },
+        {
+          "seed": 31,
+          "canvas": 208,
+          "stroke": 3,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        },
+        {
+          "seed": 91,
+          "canvas": 320,
+          "stroke": 4,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        }
+      ],
+      "failures": [],
+      "aggregate_intended": {
+        "correct": 36,
+        "total": 36,
+        "known": 36,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      },
+      "aggregate_inferred": {
+        "correct": 36,
+        "total": 36,
+        "known": 36,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      }
+    },
+    {
+      "name": "straight_paths",
+      "intended": {
+        "op": "exists",
+        "predicates": [
+          {
+            "op": "geometry",
+            "value": "straight",
+            "children": []
+          }
+        ],
+        "children": [],
+        "n": 0,
+        "relation": ""
+      },
+      "inferred": {
+        "op": "exists",
+        "predicates": [
+          {
+            "op": "geometry",
+            "value": "straight",
+            "children": []
+          }
+        ],
+        "children": [],
+        "n": 0,
+        "relation": ""
+      },
+      "description": "There is at least one straight path",
+      "training": {
+        "correct": 12,
+        "total": 12,
+        "known": 12,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      },
+      "heldout": [
+        {
+          "seed": 7,
+          "canvas": 240,
+          "stroke": 2,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        },
+        {
+          "seed": 31,
+          "canvas": 208,
+          "stroke": 3,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        },
+        {
+          "seed": 91,
+          "canvas": 320,
+          "stroke": 4,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        }
+      ],
+      "failures": [],
+      "aggregate_intended": {
+        "correct": 36,
+        "total": 36,
+        "known": 36,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      },
+      "aggregate_inferred": {
+        "correct": 36,
+        "total": 36,
+        "known": 36,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      }
+    },
+    {
+      "name": "arrow_presence",
+      "intended": {
+        "op": "exists",
+        "predicates": [
+          {
+            "op": "has_arrows",
+            "value": "",
+            "children": []
+          }
+        ],
+        "children": [],
+        "n": 0,
+        "relation": ""
+      },
+      "inferred": {
+        "op": "exists",
+        "predicates": [
+          {
+            "op": "has_arrows",
+            "value": "",
+            "children": []
+          }
+        ],
+        "children": [],
+        "n": 0,
+        "relation": ""
+      },
+      "description": "There is at least one path with arrows",
+      "training": {
+        "correct": 12,
+        "total": 12,
+        "known": 12,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      },
+      "heldout": [
+        {
+          "seed": 7,
+          "canvas": 240,
+          "stroke": 2,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        },
+        {
+          "seed": 31,
+          "canvas": 208,
+          "stroke": 3,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        },
+        {
+          "seed": 91,
+          "canvas": 320,
+          "stroke": 4,
+          "intended": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          },
+          "inferred": {
+            "correct": 12,
+            "total": 12,
+            "known": 12,
+            "unknown": 0,
+            "wrong": 0,
+            "accuracy": 1.0,
+            "coverage": 1.0
+          }
+        }
+      ],
+      "failures": [],
+      "aggregate_intended": {
+        "correct": 36,
+        "total": 36,
+        "known": 36,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      },
+      "aggregate_inferred": {
+        "correct": 36,
+        "total": 36,
+        "known": 36,
+        "unknown": 0,
+        "wrong": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      }
+    }
+  ]
+}
