@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL import Image
 
 from src.datasets import DatasetEpisode, ImageRef, Query, SplitProvenance
-from src.evaluation.general_benchmark import input_manifest, summarize, refresh_summary
+from src.evaluation.general_benchmark import input_manifest, summarize, refresh_summary, _save
 from src.evaluation.parallel_benchmark import fit_without_query_truth
 from src.reasoning import FeatureBatch, EpisodeClassifier, EpisodeSupport
 import numpy as np
@@ -59,3 +59,22 @@ def test_cpu_worker_matches_direct_fit_and_accepts_no_query_truth():
     direct = fitted.predict(batch.subset([6, 7]))
     assert [p.to_dict() for p in result["predictions"]] == [p.to_dict() for p in direct]
     assert "query_truth" not in result
+
+
+def test_checkpoint_retries_transient_windows_reader_lock(monkeypatch, tmp_path):
+    import json
+    import src.evaluation.general_benchmark as benchmark
+    target = tmp_path/"checkpoint.json"
+    target.write_text('{"old": true}', encoding="utf-8")
+    original, attempts = Path.replace, []
+    def intermittent(self, destination):
+        attempts.append(True)
+        if len(attempts) < 3:
+            assert json.loads(target.read_text()) == {"old": True}
+            raise PermissionError("Simulated Windows reader lock")
+        return original(self, destination)
+    monkeypatch.setattr(Path, "replace", intermittent)
+    monkeypatch.setattr(benchmark.time, "sleep", lambda _: None)
+    _save(target, {"complete": True})
+    assert len(attempts) == 3
+    assert json.loads(target.read_text()) == {"complete": True}

@@ -133,22 +133,26 @@ def general_bongard():
             encoder = semantic_encoder() if representation != "Measured drawing features" else None
             measured = StructuralEncoder() if representation != "Learned semantic features" else None
             result = GeneralVisualSolver(encoder, measured).solve(positive, negative, queries, progress=status.caption)
-            concept_result = None
+            saved_analysis = {"fingerprint": fingerprint, "features": result, "concepts": None, "concept_error": None}
+            st.session_state.general_analysis = saved_analysis
             if language:
                 if encoder: encoder.unload()
                 from src.reasoning.concepts import ConceptInducer
                 status.caption("Proposing an open-language concept from support examples")
                 backend = language_backend(language_model)
                 try:
-                    concept_result = ConceptInducer(backend, max_rounds=rounds, measured_grounding=True).solve(positive, negative, queries, progress=status.caption)
+                    saved_analysis["concepts"] = ConceptInducer(backend, max_rounds=rounds, measured_grounding=True).solve(positive, negative, queries, progress=status.caption)
+                except (ValueError, RuntimeError, ImportError, OSError) as error:
+                    saved_analysis["concept_error"] = str(error)
                 finally:
                     backend.unload()
-            st.session_state.general_analysis = {"fingerprint": fingerprint, "features": result, "concepts": concept_result}
         except (ValueError, RuntimeError, ImportError, OSError) as error: st.error(str(error))
         finally: status.empty()
     saved = st.session_state.get("general_analysis")
     if not saved or saved["fingerprint"] != fingerprint: return
     result, concepts = saved["features"], saved["concepts"]
+    if saved.get("concept_error"):
+        st.warning("The optional concept search failed; the visual decisions below are retained. " + saved["concept_error"])
     st.markdown("**Visual decision**")
     cv = result.diagnostics["nested_cv_accuracy"]
     learner = result.diagnostics["selected_candidate"]
@@ -180,5 +184,6 @@ def general_bongard():
             st.write(f"{prediction.image_id}: nearest supports {', '.join(prediction.nearest_support_ids)}")
         st.json({k: v for k, v in result.diagnostics.items() if k != "selection_cv"}, expanded=False)
         export = {"features": result.to_dict(), "concepts": concepts.to_dict() if concepts else None,
+                  "concept_error": saved.get("concept_error"),
                   "evaluation_truth": truth, "all_inference_local": True}
         st.download_button("Download analysis JSON", json.dumps(export, indent=2), "general_bongard.json", "application/json", key="general_export")

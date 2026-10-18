@@ -29,7 +29,15 @@ def _save(path, report):
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix+".tmp")
     temporary.write_text(json.dumps(report, indent=2, allow_nan=False), encoding="utf-8")
-    temporary.replace(path)
+    for attempt in range(8):
+        try:
+            temporary.replace(path)
+            break
+        except PermissionError:
+            # Windows readers/indexers can briefly hold a file without delete
+            # sharing. Keep the previous valid checkpoint until replace works.
+            if attempt == 7: raise
+            time.sleep(min(.05*2**attempt, .5))
 
 
 def summarize(records):
