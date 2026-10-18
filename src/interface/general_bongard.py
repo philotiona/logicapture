@@ -1,0 +1,184 @@
+"""Compact local broad-concept workspace, separate from executable DSL proofs."""
+from __future__ import annotations
+
+from hashlib import sha256
+from io import BytesIO
+import json
+from pathlib import Path
+
+import numpy as np
+from PIL import Image
+import streamlit as st
+
+from .panels import group_board
+
+
+@st.cache_resource
+def semantic_encoder():
+    from src.vision.pretrained import SiglipEncoder
+    return SiglipEncoder()
+
+
+@st.cache_resource
+def language_backend(model="qwen"):
+    from src.vision.pretrained import QwenLocalBackend
+    return QwenLocalBackend(model=model)
+
+
+def _load_upload(file):
+    from src.vision.pretrained import rgb_image
+    with Image.open(BytesIO(file.getvalue())) as image:
+        if image.width*image.height > 80_000_000: raise ValueError("Image exceeds the 80-megapixel limit.")
+        return np.array(rgb_image(image))
+
+
+def _label(value): return "A" if value is True else "B" if value is False else "Unresolved"
+
+
+def general_bongard():
+    from src.vision.pretrained import model_directory, image_digest, MODELS
+    from src.reasoning.general import GeneralVisualSolver
+    from src.vision.structural_features import StructuralEncoder
+
+    st.write("Compare two groups, then classify unseen images. No fixed list of shape names or rule sentences is required.")
+    st.caption("Local visual features · support-adapted classifier · optional language hypotheses")
+    positive, negative, queries, truth = [], [], [], None
+    options = ["Separate images", "Page image", "Supplied path example"]
+    if Path("data/external/classic_bongard/episodes.json").is_file(): options.append("Classic problems / local data")
+    source = st.radio("Input source", options, horizontal=True, key="general_source")
+    if source == "Separate images":
+        left, right = st.columns(2)
+        a = left.file_uploader("A / examples with the property", type=["png", "jpg", "jpeg", "webp"], accept_multiple_files=True, key="general_a")
+        b = right.file_uploader("B / examples without the property", type=["png", "jpg", "jpeg", "webp"], accept_multiple_files=True, key="general_b")
+        q = st.file_uploader("Unseen images / optional", type=["png", "jpg", "jpeg", "webp"], accept_multiple_files=True, key="general_q")
+        try:
+            positive, negative, queries = [_load_upload(f) for f in a], [_load_upload(f) for f in b], [_load_upload(f) for f in q]
+        except (ValueError, Image.UnidentifiedImageError) as error: st.error(str(error)); return
+        if not a and not b:
+            st.info("Add four to six images to each group, or choose an example above.")
+    elif source == "Page image":
+        uploaded = st.file_uploader("Bongard page / A on left, B on right", type=["png", "jpg", "jpeg", "webp"], key="general_page")
+        with st.expander("Page layout"):
+            divider = st.slider("Vertical divider", .2, .8, .5, .01, key="general_divider")
+            count = st.number_input("Panels per group", 2, 20, 6, key="general_panel_count")
+        if uploaded:
+            try:
+                from src.vision import detect_panels
+                image = _load_upload(uploaded)
+                panels = detect_panels(image, divider=image.shape[1]*divider, expected_per_group=int(count))
+                positive = [p.image for p in panels if p.label]
+                negative = [p.image for p in panels if not p.label]
+            except (ValueError, Image.UnidentifiedImageError) as error: st.error(str(error)); return
+    elif source == "Supplied path example":
+        folder = Path("data/fixtures/arrow_paths")
+        positive = [np.array(Image.open(folder/f"A{i:02d}.png").convert("RGB")) for i in range(1, 7)]
+        negative = [np.array(Image.open(folder/f"B{i:02d}.png").convert("RGB")) for i in range(1, 7)]
+        st.caption("This is the supplied arrow-direction regression. Executable structural rules remain the specialist for precise path flow.")
+    else:
+        from src.datasets import load_classic, DatasetError
+        episodes = load_classic("data/external/classic_bongard")
+        index = st.selectbox("Problem", range(len(episodes)), format_func=lambda i: episodes[i].episode_id, key="general_classic")
+        try:
+            prepared = episodes[index].prepare()
+            positive, negative, queries = map(list, (prepared.input.positive, prepared.input.negative, prepared.input.queries))
+            truth = prepared.query_labels
+        except DatasetError as error:
+            st.warning(f"Strict independent evaluation excludes this problem: {error}"); return
+        st.caption("Five examples per group; the sixth is hidden for evaluation. Task names and solutions do not enter inference.")
+    if positive and negative and not queries:
+        can_reserve = min(len(positive), len(negative)) >= 3
+        reserve = st.checkbox("Withhold the last image in each group for a test", value=can_reserve,
+                              disabled=not can_reserve, key="general_holdout")
+        if not can_reserve: st.caption("A reserved test needs at least three images per group, leaving two supports each. You can also upload unseen images separately.")
+        if reserve and min(len(positive), len(negative)) >= 3:
+            # Interleave hidden queries in a deterministic pixel-based order.
+            pairs = [(positive[-1], True), (negative[-1], False)]
+            pairs.sort(key=lambda item: sha256(item[0].tobytes()).hexdigest())
+            queries, truth = [p[0] for p in pairs], tuple(p[1] for p in pairs)
+            positive, negative = positive[:-1], negative[:-1]
+    if positive or negative:
+        left, right = st.columns(2)
+        for column, images, name in ((left, positive, "A / positive support"), (right, negative, "B / negative support")):
+            with column:
+                st.markdown(f"**{name}** · {len(images)} images")
+                if images: st.image(group_board(images, [f"{name[0]}{i+1:02d}" for i in range(len(images))]), width="stretch")
+        if queries:
+            with st.expander(f"Unseen test images / {len(queries)}", expanded=True):
+                st.image(group_board(queries, [f"Q{i+1:02d}" for i in range(len(queries))], tile=160), width=min(900, 172*min(3, len(queries))))
+    have_semantic = model_directory("siglip") is not None
+    language_models = [key for key in ("qwen8b", "qwen") if model_directory(key) is not None]
+    have_language = bool(language_models)
+    language_model = language_models[0] if language_models else "qwen"
+    rounds = 2
+    with st.expander("Local inference settings", expanded=not have_semantic):
+        choices = ["Hybrid / learned + measured", "Learned semantic features", "Measured drawing features"] if have_semantic else ["Measured drawing features"]
+        representation = st.selectbox("Representation", choices, key="general_representation")
+        language = st.checkbox("Propose and check an open-language concept", value=False, disabled=not have_language, key="general_language")
+        st.caption("Learned features handle natural images; measured features retain count, topology, boundaries, arrangement and symmetry. Representation selection uses support-only validation.")
+        if not have_semantic or not have_language:
+            st.code("python -m pip install -r requirements-general.txt\npython -m src.vision.pretrained --download siglip --download qwen", language="shell")
+            st.caption("Downloads several GB of official model weights once. Inference then runs offline. No API key or usage charges.")
+        if language:
+            language_model = st.selectbox("Local concept model", language_models, format_func=lambda v: "Qwen3 VL 8B / NF4" if v == "qwen8b" else "Qwen3 VL 2B", key="general_language_model")
+            rounds = st.slider("Concept search rounds", 1, 4, 2, key="general_concept_rounds")
+            st.caption("The local model proposes concepts from support only, checks each image independently, and revises failed hypotheses. This can take several minutes. Its self-checks can still be wrong.")
+    identities = tuple((key, spec.revision) for key, spec in MODELS.items())
+    fingerprint = sha256(repr((2, identities, representation, language, language_model, rounds,
+                               len(positive), len(negative), len(queries))).encode()+
+                         "".join(image_digest(i) for i in positive+negative+queries).encode()).hexdigest()
+    if st.button("Solve locally", type="primary", disabled=min(len(positive), len(negative)) < 2, key="general_solve"):
+        st.session_state.pop("general_analysis", None)
+        status = st.empty()
+        try:
+            encoder = semantic_encoder() if representation != "Measured drawing features" else None
+            measured = StructuralEncoder() if representation != "Learned semantic features" else None
+            result = GeneralVisualSolver(encoder, measured).solve(positive, negative, queries, progress=status.caption)
+            concept_result = None
+            if language:
+                if encoder: encoder.unload()
+                from src.reasoning.concepts import ConceptInducer
+                status.caption("Proposing an open-language concept from support examples")
+                backend = language_backend(language_model)
+                try:
+                    concept_result = ConceptInducer(backend, max_rounds=rounds, measured_grounding=True).solve(positive, negative, queries, progress=status.caption)
+                finally:
+                    backend.unload()
+            st.session_state.general_analysis = {"fingerprint": fingerprint, "features": result, "concepts": concept_result}
+        except (ValueError, RuntimeError, ImportError, OSError) as error: st.error(str(error))
+        finally: status.empty()
+    saved = st.session_state.get("general_analysis")
+    if not saved or saved["fingerprint"] != fingerprint: return
+    result, concepts = saved["features"], saved["concepts"]
+    st.markdown("**Visual decision**")
+    cv = result.diagnostics["nested_cv_accuracy"]
+    learner = result.diagnostics["selected_candidate"]
+    st.caption(f"Nested support validation: {cv:.0%}" if cv is not None else "Insufficient independent support for validation")
+    st.caption(f"Selected view: {learner['view']} · learner: {learner['learner']} · scores are uncalibrated")
+    rows = []
+    for i, prediction in enumerate(result.predictions):
+        row = {"Image": prediction.image_id, "Feature decision": _label(prediction.label),
+               "Evidence score": round(prediction.score, 3), "Reason": ", ".join(prediction.abstention_reasons) or "Stable support fits agree"}
+        if concepts: row["Concept decision"] = _label(concepts.predictions[i].label)
+        if truth is not None: row["Held-out truth"] = _label(truth[i])
+        rows.append(row)
+    if rows: st.dataframe(rows, hide_index=True, width="stretch")
+    else: st.info("Add unseen images to test the decision. Support agreement alone does not establish the intended rule.")
+    if truth is not None:
+        from src.reasoning.evaluation import prediction_metrics
+        metric = prediction_metrics(result.predictions, truth)
+        st.caption(f"Held-out: {sum(p.label is y for p,y in zip(result.predictions,truth))}/{len(truth)} correct, {metric['abstained']} unresolved. Ground truth is used only here, after prediction.")
+    if concepts:
+        st.markdown("**Open-language hypotheses**")
+        for checked in concepts.candidates:
+            st.write(f"A: {checked.concept.positive}")
+            st.write(f"B: {checked.concept.negative}")
+            st.caption(f"Group-blind checks on the same supports: {checked.support_correct}/{checked.support_total}; {checked.support_unknown} unresolved. " +
+                       ("Support-consistent candidate." if checked.consistent else "Rejected as a complete explanation."))
+        st.caption("A model-generated explanation is a hypothesis. Support consistency and a visual classification are separate from an executable proof.")
+    with st.expander("Evidence and reproducibility"):
+        for prediction in result.predictions:
+            st.write(f"{prediction.image_id}: nearest supports {', '.join(prediction.nearest_support_ids)}")
+        st.json({k: v for k, v in result.diagnostics.items() if k != "selection_cv"}, expanded=False)
+        export = {"features": result.to_dict(), "concepts": concepts.to_dict() if concepts else None,
+                  "evaluation_truth": truth, "all_inference_local": True}
+        st.download_button("Download analysis JSON", json.dumps(export, indent=2), "general_bongard.json", "application/json", key="general_export")

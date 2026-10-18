@@ -1,0 +1,387 @@
+[
+  [
+    [
+      {
+        "im_path": "./hake_images_20190730/HOI_PVP_00004168.jpg",
+        "crop_bbox": [
+          0,
+          9,
+          336,
+          312
+        ],
+        "sub_bbox": [
+          77,
+          88,
+          320,
+          290
+        ],
+        "obj_bbox": [
+          0,
+          14,
+          98,
+          75
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "swing",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": -1
+      },
+      {
+        "im_path": "./openimages/images/a409d7ca651f35be.jpg",
+        "crop_bbox": [
+          0,
+          18,
+          529,
+          480
+        ],
+        "sub_bbox": [
+          244,
+          22,
+          505,
+          460
+        ],
+        "obj_bbox": [
+          20,
+          229,
+          226,
+          356
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "swing",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": -1
+      },
+      {
+        "im_path": "./hake_images_20190730/HOI_PVP_00009491.jpg",
+        "crop_bbox": [
+          125,
+          0,
+          926,
+          602
+        ],
+        "sub_bbox": [
+          38,
+          7,
+          465,
+          581
+        ],
+        "obj_bbox": [
+          406,
+          371,
+          796,
+          568
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "swing",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": -1
+      },
+      {
+        "im_path": "./hico_20160224_det/images/train2015/HICO_train2015_00007828.jpg",
+        "crop_bbox": [
+          114,
+          141,
+          319,
+          544
+        ],
+        "sub_bbox": [
+          37,
+          35,
+          202,
+          388
+        ],
+        "obj_bbox": [
+          6,
+          20,
+          101,
+          144
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "swing",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": -1
+      },
+      {
+        "im_path": "./vcoco/train2014/COCO_train2014_000000217822.jpg",
+        "crop_bbox": [
+          314,
+          17,
+          640,
+          432
+        ],
+        "sub_bbox": [
+          92,
+          19,
+          322,
+          397
+        ],
+        "obj_bbox": [
+          16,
+          41,
+          128,
+          148
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "swing",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": -1
+      },
+      {
+        "im_path": "./openimages/images/891525123bfee7bf.jpg",
+        "crop_bbox": [
+          19,
+          0,
+          640,
+          443
+        ],
+        "sub_bbox": [
+          204,
+          11,
+          602,
+          442
+        ],
+        "obj_bbox": [
+          29,
+          289,
+          282,
+          436
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "swing",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": -1
+      },
+      {
+        "im_path": "./openimages/images/7fbc6a69016992fe.jpg",
+        "crop_bbox": [
+          4,
+          34,
+          639,
+          466
+        ],
+        "sub_bbox": [
+          30,
+          21,
+          630,
+          431
+        ],
+        "obj_bbox": [
+          30,
+          213,
+          255,
+          358
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "swing",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": -1
+      }
+    ],
+    [
+      {
+        "im_path": "./hico_20160224_det/images/train2015/HICO_train2015_00015144.jpg",
+        "crop_bbox": [
+          0,
+          5,
+          630,
+          426
+        ],
+        "sub_bbox": [
+          196,
+          157,
+          491,
+          410
+        ],
+        "obj_bbox": [
+          21,
+          20,
+          601,
+          399
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "hold",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": 48
+      },
+      {
+        "im_path": "./hcvrd/2348937.jpg",
+        "crop_bbox": [
+          286,
+          0,
+          491,
+          333
+        ],
+        "sub_bbox": [
+          29,
+          3,
+          196,
+          331
+        ],
+        "obj_bbox": [
+          10,
+          211,
+          122,
+          318
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "hold",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": 48
+      },
+      {
+        "im_path": "./hico_20160224_det/images/train2015/HICO_train2015_00024877.jpg",
+        "crop_bbox": [
+          204,
+          82,
+          389,
+          512
+        ],
+        "sub_bbox": [
+          22,
+          20,
+          177,
+          411
+        ],
+        "obj_bbox": [
+          9,
+          184,
+          90,
+          309
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "hold",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": 48
+      },
+      {
+        "im_path": "./openimages/images/b6ea31ca8b15d197.jpg",
+        "crop_bbox": [
+          298,
+          19,
+          565,
+          578
+        ],
+        "sub_bbox": [
+          13,
+          27,
+          252,
+          559
+        ],
+        "obj_bbox": [
+          95,
+          207,
+          255,
+          360
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "hold",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": 48
+      },
+      {
+        "im_path": "./openimages/images/0f4f248c7b88a491.jpg",
+        "crop_bbox": [
+          130,
+          125,
+          385,
+          430
+        ],
+        "sub_bbox": [
+          118,
+          14,
+          244,
+          292
+        ],
+        "obj_bbox": [
+          12,
+          197,
+          120,
+          272
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "hold",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": 48
+      },
+      {
+        "im_path": "./openimages/images/3ab1a53e3357e674.jpg",
+        "crop_bbox": [
+          39,
+          212,
+          428,
+          582
+        ],
+        "sub_bbox": [
+          18,
+          17,
+          243,
+          354
+        ],
+        "obj_bbox": [
+          192,
+          61,
+          372,
+          291
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "hold",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": 48
+      },
+      {
+        "im_path": "./openimages/images/b0fbf7b520eef8f7.jpg",
+        "crop_bbox": [
+          80,
+          13,
+          428,
+          548
+        ],
+        "sub_bbox": [
+          16,
+          25,
+          333,
+          511
+        ],
+        "obj_bbox": [
+          95,
+          166,
+          325,
+          345
+        ],
+        "sub_class": "person",
+        "obj_class": "tennis_racket",
+        "act_class": "hold",
+        "obj_id": -1,
+        "sub_id": 1,
+        "act_id": 48
+      }
+    ],
+    "swing++tennis_racket"
+  ]
+]

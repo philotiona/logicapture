@@ -1,6 +1,8 @@
 # Visual Rule Akinator & Bongard Solver
 
-A local neuro-symbolic Python application with two modes and one shared symbolic engine. **Akinator** selects informative drawings and filters executable hypotheses. **Bongard** reads pixels as paths, closed regions, and unresolved entities, measures topology and arrow direction, then searches for an executable rule. Primitive shape recognition is an optional view of compatible closed regions. The original contour/CNN pipelines remain selectable experimental baselines.
+A local Bongard research application with complementary approaches. **General visual inference** combines frozen semantic and dense image features with 544 numeric measurements, adapts a classifier to the positive and negative supports, and can propose and check open-language concepts with a local vision-language model. It does not require every concept to have a predefined rule sentence. **Executable structural rules** retains precise path, topology, arrow, region and geometric reasoning. **Akinator** remains symbolic. The original contour/CNN baselines are preserved.
+
+This is not a universal Bongard solver. A classification boundary, a model-generated explanation and an executable symbolic rule are different results. The app exposes support validation, abstention, failed hypotheses and withheld-image evaluation rather than claiming every output is the intended rule. See [general inference](docs/GENERAL_SOLVER.md), [episodic reasoning](docs/EPISODE_REASONING.md) and [dataset protocols](docs/DATASETS.md).
 
 ![Supplied arrow-path problem and its inferred rule](docs/screenshots/bongard-paths.jpg)
 
@@ -24,11 +26,22 @@ python -m venv .venv
 
 TensorFlow is optional for the app. To train and compare the fresh neural baseline, install `requirements-neural.txt`.
 
+For the optional broader local models:
+
+```powershell
+python -m pip install -r requirements-general.txt
+python -m src.vision.pretrained --download siglip --download qwen
+# Optional stronger concept model, approximately 17 GB of weights:
+python -m src.vision.pretrained --download qwen8b
+```
+
+For this Windows RTX 5060 machine, PyTorch was installed from the official CUDA 12.8 wheel index. Use a build appropriate for your hardware; the base app and measured-feature route require neither PyTorch nor model weights. All model revisions are pinned. Weight downloads are explicit; normal inference reads only local files. No API key, paid API, or hosted inference is used. Weights and external image datasets stay out of Git.
+
 ## Try both modes
 
 1. In **Akinator**, secretly choose a supported rule such as “exactly four filled triangles,” “at least four filled triangles,” “four objects, all filled triangles,” or a positional rule. Press **Start session** and answer yes/no. An empty panel is an intentional query. Undo can correct a mistaken answer.
 2. Observe the surviving program count and its history. When the available drawings no longer distinguish survivors, inspect the alternatives or request fresh drawings. A finite-pool agreement is not a logical-equivalence proof.
-3. In **Bongard**, select Demo, Upload page, Separate groups or Camera. Press **Read drawings**, review the two aligned groups and object counts, then press **Infer rule**. Even demonstration pages are analyzed from pixels. The selected demo's target is never passed to the solver.
+3. In **Bongard**, **General visual inference** accepts separate support/query images, a page, the supplied paths, or locally downloaded classic problems. Use **Solve locally**. Reserve test images to check generalization. Enable **Propose and check an open-language concept** for bounded local hypothesis search. For the existing executable-rule flow, choose **Executable structural rules**, select Demo, Upload page, Separate groups or Camera, then **Read drawings** and **Infer rule**. Targets never enter inference.
 4. **Show detected objects** adds traced paths and arrow evidence. **Inspect one drawing** shows topology, arrows, along-path flow, region attributes, and unresolved evidence. **Generate examples** draws a checked matching example and counterexample. All panels are used by default; reserve panels through the evaluation setting.
 5. Try your own clean page using `data/bongard_template.png`, or upload one tightly cropped image per panel into **Separate groups**. Black marker, white paper, closed shapes, and no overlapping ink are the safest starting conditions.
 6. Try **Arrow directions / supplied drawing** for the user's original screenshot regression. The solver receives the original drawing pixels, not the expected direction annotations. Arrows are compared along each curve, not by their screen angle.
@@ -41,6 +54,14 @@ After six negative Akinator answers without a positive, a question may display u
 ## Architecture
 
 ```text
+General Bongard: support/query pixels -> frozen semantic global/dense features
+                                     + numeric structural observations
+                -> support-only nested validation and feature/learner selection
+                -> unseen-image decisions, diagnostics, and abstention
+Optional: support pixels + support-selected measurements -> local concept proposal
+          -> group-blind single-image support checks -> bounded support-only repair
+          -> freeze consistent concepts -> unseen-image checks / disagreement
+
 Akinator: generated Scene + human yes/no labels
 Bongard: pixels → panels → isolated ink
                   → skeleton graph + paths + region boundaries
