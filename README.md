@@ -4,6 +4,8 @@ A local Bongard research application with complementary approaches. **General vi
 
 This is not a universal Bongard solver. A classification boundary, a model-generated explanation and an executable symbolic rule are different results. The app exposes support validation, abstention, failed hypotheses and withheld-image evaluation rather than claiming every output is the intended rule. See [general inference](docs/GENERAL_SOLVER.md), [episodic reasoning](docs/EPISODE_REASONING.md) and [dataset protocols](docs/DATASETS.md).
 
+The [external evaluation report](data/benchmarks/REPORT.md) includes 80 classic test problems and 37 available natural-image test problems. Forced classification reached 71.9% with measured features on the classic set and 64.9% with learned features on the natural-image subset. Many decisions remain unresolved; the report includes answer coverage, errors, prototype baselines and unsuccessful language hypotheses. Combining the representations did not consistently improve results.
+
 ![Supplied arrow-path problem and its inferred rule](docs/screenshots/bongard-paths.jpg)
 
 ## Run
@@ -77,6 +79,8 @@ Both: Scene → typed DSL → search / version space → executable rule
 - `src/active`: reproducible and constructive scene generation, deliberate selector/count coverage and near counterexamples, a persistent version space, queries balanced over distinct behaviors with grammar priors, optional union queries after repeated negatives, undo and checked answer generation.
 - `src/vision`: image/page normalization, panel detection, contour hierarchy, stroke skeletonization and graph tracing, localized arrowhead measurement, arbitrary closed contours, guarded neural attributes, and evidence overlays. Segmentation and measurements never receive the group labels.
 - `src/baselines`: raw-pixel prototypes and optional TensorFlow/Keras episodic prototypical training.
+- `src/reasoning`: visual feature interfaces, support-only nested validation, feature weighting, episodic learners, abstention and bounded local language-concept search.
+- `src/datasets`: strict pixel-only classic, HOI, LOGO and OpenWorld adapters, explicit public-data retrieval and frozen support/query cohorts.
 - `src/evaluation`: withheld panels, exact-program and sampled-semantic recovery, active/random comparison, clean/rotation/noise conditions, object/relation metrics and failure recording.
 - `src/interface`: black/white/Klein-blue interface, compact Akinator workspace, staged Bongard input/review/inference, aligned contact sheets, evidence inspectors and exports. `app.py` is the launch entry point.
 
@@ -99,6 +103,8 @@ assert all(best.evaluate(scene) == label for scene, label in examples)
 ForAll follows classical **vacuous truth**: every selected filled object is inside an outline object also holds when no filled objects exist. Combine it with `Exists(Predicate("filled"))` to require an actual filled object. Pair relations use distinct objects. Coordinates and areas are normalized to the panel; the actual shape outline is used for containment.
 
 ## Verify and reproduce results
+
+The commands and training description below concern the original synthetic pipelines. The new external protocols and reproduction commands are documented separately in [GENERAL_SOLVER.md](docs/GENERAL_SOLVER.md) and [the measured report](data/benchmarks/REPORT.md).
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider

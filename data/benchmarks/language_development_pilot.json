@@ -1,0 +1,705 @@
+{
+  "configuration": {
+    "dataset": "classic",
+    "partition": "dev",
+    "limit": 3,
+    "seed": 0,
+    "jobs": 1,
+    "methods": [
+      "language"
+    ],
+    "models": {
+      "siglip": {
+        "name": "SigLIP 2 Base / 224",
+        "repository": "google/siglip2-base-patch16-224",
+        "revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "license": "Apache-2.0"
+      },
+      "qwen": {
+        "name": "Qwen3 VL / 2B Instruct",
+        "repository": "Qwen/Qwen3-VL-2B-Instruct",
+        "revision": "89644892e4d85e24eaac8bacfd4f463576704203",
+        "license": "Apache-2.0"
+      },
+      "qwen8b": {
+        "name": "Qwen3 VL / 8B Instruct / local NF4",
+        "repository": "Qwen/Qwen3-VL-8B-Instruct",
+        "revision": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+        "license": "Apache-2.0"
+      }
+    },
+    "source_sha256": {
+      "src/reasoning/episode.py": "e3dd25576ea5d8769308fc5ae2dcf927efc07a4470b42e488ff5ad84ba9e7569",
+      "src/reasoning/features.py": "32b5b595c2d95e3a18346f46e4e88f01f6cf92e0c187fa2206de7fd35320e56e",
+      "src/reasoning/concepts.py": "7a4604cc9a499a1751a96f30b8dd8b5805ce8f556523d5e696be091bd6a96394",
+      "src/vision/pretrained.py": "5a9867da81ebc8d5168437b85bac21cb2b5ab0407c86f1574372a93d58e4e29c",
+      "src/vision/structural_features.py": "98c8bbdf118abce1c3608889ed7931143aa255c72b0a63c61ed1da7a3117f479",
+      "src/datasets/adapters.py": "990da6ff55149b7519176e2c6bdc09c4e5cbd1d7d014be2e353f4fc26c3da0d6",
+      "src/datasets/episodes.py": "f480fe380baf43a6eeb27326fec9c7764f7feb23f185c76fee9c84362743337d",
+      "src/reasoning/evaluation.py": "711f63c5df65682c8d4dac7a1cf4fc0797f14d51e0af1e57a05b8fdc26af3f02",
+      "src/evaluation/general_benchmark.py": "a17bf08b83bce4325d878faead50c942b8573fc040a21affced8ae9cacd1ec61",
+      "src/reasoning/grounding.py": "8369e9440ca1eae0bfff251498a43fb692e389b78024b8af6b82383a9a6f6d9b",
+      "src/evaluation/parallel_benchmark.py": "707209cddee3fa42b7c34d3991b9d83b7d135c4d2f2d9ef710a3ac02b7d6d2d8"
+    },
+    "support_only_nested_selection": true,
+    "query_labels_used_for_fitting": false,
+    "pretrained_model_contamination": "Unknown; external pretraining may include classic concepts/images.",
+    "measurement": "within-problem heldout image classification, not logical rule recovery",
+    "language_max_candidates": 1,
+    "language_model": "qwen8b",
+    "language_max_rounds": 2,
+    "language_measured_grounding": true,
+    "cohort_sha256": null,
+    "dataset_root_sha256": "231c34fec67ff11d3f391cff6d709ba589f95def359c5f6d2a98473ddaffb637",
+    "input_manifest_sha256": "e457bf1763fdffbe625a31b7fae1bf0826ddc39505f8a8a749c619f11a1ea5dc",
+    "local_only": true
+  },
+  "configuration_sha256": "529a460bd856d7c40e4b0d366a7230e4e283f7e9c688b29f00006b4937390c2a",
+  "input_manifest": [
+    {
+      "dataset": "classic-bongard",
+      "episode_id": "p0001",
+      "split": "classic-dev-001-020",
+      "provenance": {
+        "source_url": "https://osf.io/95dks/",
+        "annotation_sha256": "fa0628cf2f3841246caedc3bc4ced76a3e0090d9af5586830b717dbdd2ad3772",
+        "source_split": "classic-dev-001-020",
+        "protocol": "first-five-support-last-query-per-group-v1",
+        "note": "Within-problem heldout protocol; no official train/test partition is claimed."
+      },
+      "images": [
+        {
+          "relative_path": "panels/p0001/positive_0.png",
+          "sha256": "044fec88075da9ee04e6dd965f08a74b921d518a7d0e6b992e677e6b5f9ff0d4",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/positive_1.png",
+          "sha256": "044fec88075da9ee04e6dd965f08a74b921d518a7d0e6b992e677e6b5f9ff0d4",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/positive_2.png",
+          "sha256": "044fec88075da9ee04e6dd965f08a74b921d518a7d0e6b992e677e6b5f9ff0d4",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/positive_3.png",
+          "sha256": "044fec88075da9ee04e6dd965f08a74b921d518a7d0e6b992e677e6b5f9ff0d4",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/positive_4.png",
+          "sha256": "044fec88075da9ee04e6dd965f08a74b921d518a7d0e6b992e677e6b5f9ff0d4",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/negative_0.png",
+          "sha256": "3a56f8766372a64815baccd1f9c4e9d7c1b1ffb110b33cef6549307cb5f0625d",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/negative_1.png",
+          "sha256": "890bff57ce7d1adf3701d799dff4bf434be1d218de37520437776f0ed69cf555",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/negative_2.png",
+          "sha256": "024f241157c3edf3eb59ca465050f7fea36f6c13afa339279571d7182cae7937",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/negative_3.png",
+          "sha256": "0cf68ae9e6147c775f0554aba35f3a4da5ddc640529c6bfac2a1dab7473e5852",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/negative_4.png",
+          "sha256": "9eacf5cdda53da438242ca5de84f6d36a2266e4cd41dd820657fb0b8415bd540",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/positive_5.png",
+          "sha256": "044fec88075da9ee04e6dd965f08a74b921d518a7d0e6b992e677e6b5f9ff0d4",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0001/negative_5.png",
+          "sha256": "830515aa6eb060c536b1f9179cce951da65444a92a5c85b8efcfaa18483eb637",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        }
+      ],
+      "positive_support_count": 5,
+      "negative_support_count": 5,
+      "query_truth": [
+        true,
+        false
+      ]
+    },
+    {
+      "dataset": "classic-bongard",
+      "episode_id": "p0002",
+      "split": "classic-dev-001-020",
+      "provenance": {
+        "source_url": "https://osf.io/95dks/",
+        "annotation_sha256": "fa0628cf2f3841246caedc3bc4ced76a3e0090d9af5586830b717dbdd2ad3772",
+        "source_split": "classic-dev-001-020",
+        "protocol": "first-five-support-last-query-per-group-v1",
+        "note": "Within-problem heldout protocol; no official train/test partition is claimed."
+      },
+      "images": [
+        {
+          "relative_path": "panels/p0002/positive_0.png",
+          "sha256": "2b04bed3d9c1b466d072bac2c9b7720547081a95d8be88e93c0acd28c2c01d5e",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/positive_1.png",
+          "sha256": "8836fcbec4fb69c2cedccfd22efe98ec0cc86a9dcf8e4661eea8d035201c9864",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/positive_2.png",
+          "sha256": "4a7aa2db032e9edc54ab080a26ffc5a43f72832175b57e4b3b39e427ff0a403c",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/positive_3.png",
+          "sha256": "1d224fa50cea832d78aaef77193bdc4a28be4d3b649f5c45d29687bfac5c550c",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/positive_4.png",
+          "sha256": "ba11d74d1b3b7e5d9a1c5260836a48c328056dcecca84c85ea9dc77c6b1f142a",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/negative_0.png",
+          "sha256": "93693203704cb71a0d8add69dabdf5afa3a9a9d8637f6395e22c31d7db63b5a5",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/negative_1.png",
+          "sha256": "771b1719b47ac2f27381da71817344c640d769ecb612316bdecdf709e857171b",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/negative_2.png",
+          "sha256": "04620a7f0ae6661b10d137911db6beed99a38ad0731ae66c560eedc7804b6b57",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/negative_3.png",
+          "sha256": "67dccdb1d17e37e6bdd6c5f46d47032335f9e47114b0b071822c6fc70d4311d8",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/negative_4.png",
+          "sha256": "1cd6dfc6651a9b8f0a6b86fc1a6b888d9b26f0ae7cf692e24cfd5c55ec7ae1a6",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/positive_5.png",
+          "sha256": "64d926151db591d212bb423b0d4096ada05a113c3833ef00e03f1bcc54206d20",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0002/negative_5.png",
+          "sha256": "7b698bcaea04bbc922784014cf3fa90f8f2d3d98380eb6e6209ddbe507dceece",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        }
+      ],
+      "positive_support_count": 5,
+      "negative_support_count": 5,
+      "query_truth": [
+        true,
+        false
+      ]
+    },
+    {
+      "dataset": "classic-bongard",
+      "episode_id": "p0003",
+      "split": "classic-dev-001-020",
+      "provenance": {
+        "source_url": "https://osf.io/95dks/",
+        "annotation_sha256": "fa0628cf2f3841246caedc3bc4ced76a3e0090d9af5586830b717dbdd2ad3772",
+        "source_split": "classic-dev-001-020",
+        "protocol": "first-five-support-last-query-per-group-v1",
+        "note": "Within-problem heldout protocol; no official train/test partition is claimed."
+      },
+      "images": [
+        {
+          "relative_path": "panels/p0003/positive_0.png",
+          "sha256": "2195cf0b830258f778e484382ae1b206c60ca37c288f486b99f9f017a19e2151",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/positive_1.png",
+          "sha256": "cc44720689efa2811fca330b7dfb2778cb3478dd47d8667fe957eaa6b8d296c4",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/positive_2.png",
+          "sha256": "90a15ed6ffc77305dcaf8bc2014b6fb48bf1943ffb992c9ca47655c5451cecd5",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/positive_3.png",
+          "sha256": "cab02695c4d9975cd28db20c001ac5adaa2b85c9554495aba6646551551401c7",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/positive_4.png",
+          "sha256": "16499ae369704f202fdcf5e7bfa24e1b31cc217453121c6b0775f8396701320f",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/negative_0.png",
+          "sha256": "bbfec4ed9ebeb355a9c96eb53253a439f88592f5d50c4fd56d9d00bd37b5fc6a",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/negative_1.png",
+          "sha256": "9cd4c9c38fbb0a5c11afda1e1c19640c5d5bb3b56655d8ec847554ebaaf02f2c",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/negative_2.png",
+          "sha256": "992ee9ab48039ed62ca14bcca9f634f356fd427eb72ba70f009437453e03618f",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/negative_3.png",
+          "sha256": "e611960f66956d0a7509ebefe0aa84ad61f8fb4bdecd62bb4afc23fc609236b5",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/negative_4.png",
+          "sha256": "ec0cad431ef581487d1a71290c533284c77e6033c76dd4b758ee10ddffcc7fd3",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/positive_5.png",
+          "sha256": "f49a38bc72372ff50c7f08f91f7f946dc18de92401b912100e58a6a9d66fad90",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "panels/p0003/negative_5.png",
+          "sha256": "1cb03fda7d11418415fc9531adcc7bc64035537b0c5a659bcb264aac3d147a3c",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        }
+      ],
+      "positive_support_count": 5,
+      "negative_support_count": 5,
+      "query_truth": [
+        true,
+        false
+      ]
+    }
+  ],
+  "cohort": {
+    "planned_problems": 3,
+    "available_problems": 3,
+    "availability_exclusions": [],
+    "evaluated_problems": 2,
+    "strict_preparation_excluded": 1,
+    "pending_available_problems": 0
+  },
+  "records": [
+    {
+      "episode_id": "p0002",
+      "split": "classic-dev-001-020",
+      "provenance": {
+        "source_url": "https://osf.io/95dks/",
+        "annotation_sha256": "fa0628cf2f3841246caedc3bc4ced76a3e0090d9af5586830b717dbdd2ad3772",
+        "source_split": "classic-dev-001-020",
+        "protocol": "first-five-support-last-query-per-group-v1",
+        "note": "Within-problem heldout protocol; no official train/test partition is claimed."
+      },
+      "query_order": [
+        1,
+        0
+      ],
+      "query_truth": [
+        false,
+        true
+      ],
+      "methods": {
+        "language": {
+          "analysis": {
+            "candidates": [
+              {
+                "concept": {
+                  "positive": "The shape is a simple closed curve with no holes and no self-intersections.",
+                  "negative": "The shape is not a simple closed curve with no holes and no self-intersections."
+                },
+                "support_judgments": [
+                  {
+                    "label": true,
+                    "evidence": "The shape is a triangle, a simple closed curve with no holes and no self-intersections.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape is a triangle, a simple closed curve with no holes and no self-intersections.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "The shape is a simple closed curve with no holes and no self-intersections, as visually confirmed by its smooth, unbroken circular outline.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape is a simple closed curve with no holes and no self-intersections, as visually confirmed by its smooth, unbroken circular outline.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "The shape is a single continuous closed curve with no visible holes or self-intersections.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape is a single continuous closed curve with no visible holes or self-intersections.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape has self-intersections, as indicated by the crossing lines forming an 'X' like structure within the outline.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape has self-intersections, as indicated by the crossing lines forming an 'X' like structure within the outline.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape has a hole (invariant.hole_count_above_0.02: 1.0) and is not a simple closed curve.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape has a hole (invariant.hole_count_above_0.02: 1.0) and is not a simple closed curve.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "The shape is a simple closed curve with no holes and no self-intersections.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape is a simple closed curve with no holes and no self-intersections.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "The shape is a simple closed curve (circle) with no holes and no self-intersections.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape is a simple closed curve (circle) with no holes and no self-intersections.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape has self-intersections at the top vertex, making it not a simple closed curve.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape has self-intersections at the top vertex, making it not a simple closed curve.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape has a self-intersection or is not a simple closed curve.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape has a self-intersection or is not a simple closed curve.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape is a triangle, which is a simple closed curve with no holes and no self-intersections, so it should belong to Category A. However, the Bongard hypothesis requires classification based on the given categories, and since the shape is a simple closed curve with no holes and no self-intersections, it fits Category A. But the instruction says to classify based on the frozen hypothesis, and the evidence suggests it is not a simple closed curve (as it is a polygonal shape, not a smooth curve). Therefore, it belongs to Category B.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape is a triangle, which is a simple closed curve with no holes and no self-intersections, so it should belong to Category A. However, the Bongard hypothesis requires classification based on the given categories, and since the shape is a simple closed curve with no holes and no self-intersections, it fits Category A. But the instruction says to classify based on the frozen hypothesis, and the evidence suggests it is not a simple closed curve (as it is a polygonal shape, not a smooth curve). Therefore, it belongs to Category B.\"}"
+                  }
+                ],
+                "support_correct": 6,
+                "support_total": 10,
+                "support_unknown": 0,
+                "consistent": false
+              }
+            ],
+            "predictions": [
+              {
+                "label": null,
+                "votes": [],
+                "evidence": [],
+                "reason": "No concept passed every support check."
+              },
+              {
+                "label": null,
+                "votes": [],
+                "evidence": [],
+                "reason": "No concept passed every support check."
+              }
+            ],
+            "model_id": "Qwen/Qwen3-VL-8B-Instruct@0c351dd01ed87e9c1b53cbc748cba10e6187ff3b:nf4-bf16-compact-v2",
+            "diagnostics": {
+              "support_consistency_is_heldout_accuracy": false,
+              "query_images_used_in_proposal": false,
+              "query_labels_used": false,
+              "verification": "frozen concept, one image per prompt, no group label",
+              "consistent_concepts": 0,
+              "local_only": true,
+              "support_search_rounds": 2,
+              "maximum_rounds": 2,
+              "support_selected_measurement_axes": [
+                "invariant.mass_rms_radius",
+                "oriented.occupancy_2.cell_2",
+                "invariant.hole_count_above_0.02",
+                "invariant.component_count_above_0.02",
+                "invariant.occupancy_2.ordered_0",
+                "invariant.hole_area_fraction",
+                "invariant.occupancy_4.ordered_11",
+                "oriented.occupancy_4.cell_9"
+              ],
+              "limitations": "Same model proposes and checks; correlated errors and spurious concepts remain possible."
+            }
+          },
+          "metrics": {
+            "total": 2,
+            "answered": 0,
+            "correct": 0
+          }
+        }
+      },
+      "seconds": 85.40221559999918
+    },
+    {
+      "episode_id": "p0003",
+      "split": "classic-dev-001-020",
+      "provenance": {
+        "source_url": "https://osf.io/95dks/",
+        "annotation_sha256": "fa0628cf2f3841246caedc3bc4ced76a3e0090d9af5586830b717dbdd2ad3772",
+        "source_split": "classic-dev-001-020",
+        "protocol": "first-five-support-last-query-per-group-v1",
+        "note": "Within-problem heldout protocol; no official train/test partition is claimed."
+      },
+      "query_order": [
+        1,
+        0
+      ],
+      "query_truth": [
+        false,
+        true
+      ],
+      "methods": {
+        "language": {
+          "analysis": {
+            "candidates": [
+              {
+                "concept": {
+                  "positive": "The shape is an open curve (has at least one free endpoint or is not a closed loop)",
+                  "negative": "The shape is a closed loop"
+                },
+                "support_judgments": [
+                  {
+                    "label": true,
+                    "evidence": "The shape has a clear free endpoint at the top right, indicating it is not a closed loop.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape has a clear free endpoint at the top right, indicating it is not a closed loop.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape is a triangle with three connected straight edges forming a closed loop, no free endpoints.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape is a triangle with three connected straight edges forming a closed loop, no free endpoints.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape is a continuous, closed circular loop with no free endpoints.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape is a continuous, closed circular loop with no free endpoints.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape is a closed loop with no free endpoints.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape is a closed loop with no free endpoints.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "The shape has free endpoints and is not a closed loop.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape has free endpoints and is not a closed loop.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The triangle is a closed polygon with no free endpoints.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The triangle is a closed polygon with no free endpoints.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape appears as a continuous, closed loop with no free endpoints.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape appears as a continuous, closed loop with no free endpoints.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape is a solid square, which is a closed loop with no free endpoints.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape is a solid square, which is a closed loop with no free endpoints.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape is a solid circle, which is a closed loop with no free endpoints.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape is a solid circle, which is a closed loop with no free endpoints.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape forms a continuous, closed loop with no free endpoints.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape forms a continuous, closed loop with no free endpoints.\"}"
+                  }
+                ],
+                "support_correct": 7,
+                "support_total": 10,
+                "support_unknown": 0,
+                "consistent": false
+              },
+              {
+                "concept": {
+                  "positive": "The shape is not filled (has only an outline)",
+                  "negative": "The shape is filled (solid interior)"
+                },
+                "support_judgments": [
+                  {
+                    "label": true,
+                    "evidence": "The shape is defined solely by a black outline with no visible interior fill.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape is defined solely by a black outline with no visible interior fill.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "The shape has only an outline with no filled interior.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape has only an outline with no filled interior.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "The shape has a clear outline with a hollow interior, consistent with an unfilled shape.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape has a clear outline with a hollow interior, consistent with an unfilled shape.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "The shape has only an outline with no filled interior.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape has only an outline with no filled interior.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "The shape has only a black outline with no filled interior.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"The shape has only a black outline with no filled interior.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape has a solid black interior with no visible outline.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape has a solid black interior with no visible outline.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape has a solid interior with no visible outline.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape has a solid interior with no visible outline.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape is a solid black square with no visible outline, indicating a filled interior.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape is a solid black square with no visible outline, indicating a filled interior.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape is a solid black circle with no visible outline, indicating a filled interior.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape is a solid black circle with no visible outline, indicating a filled interior.\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The shape has a solid black interior with no visible outline.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The shape has a solid black interior with no visible outline.\"}"
+                  }
+                ],
+                "support_correct": 10,
+                "support_total": 10,
+                "support_unknown": 0,
+                "consistent": true
+              }
+            ],
+            "predictions": [
+              {
+                "label": false,
+                "votes": [
+                  false
+                ],
+                "evidence": [
+                  "The shape has a solid black interior with no visible outline."
+                ],
+                "reason": "All support-consistent concepts agree."
+              },
+              {
+                "label": true,
+                "votes": [
+                  true
+                ],
+                "evidence": [
+                  "The shape has only an outline with no visible solid interior fill."
+                ],
+                "reason": "All support-consistent concepts agree."
+              }
+            ],
+            "model_id": "Qwen/Qwen3-VL-8B-Instruct@0c351dd01ed87e9c1b53cbc748cba10e6187ff3b:nf4-bf16-compact-v2",
+            "diagnostics": {
+              "support_consistency_is_heldout_accuracy": false,
+              "query_images_used_in_proposal": false,
+              "query_labels_used": false,
+              "verification": "frozen concept, one image per prompt, no group label",
+              "consistent_concepts": 1,
+              "local_only": true,
+              "support_search_rounds": 2,
+              "maximum_rounds": 2,
+              "support_selected_measurement_axes": [
+                "invariant.hole_count",
+                "invariant.mass_radius.min",
+                "invariant.ink_width.max",
+                "invariant.component_envelope_ink_ratio.mean",
+                "invariant.morphology_open_2_retained",
+                "invariant.ink_width.p75",
+                "invariant.mass_radius.p25",
+                "invariant.skeleton_length_per_sqrt_ink"
+              ],
+              "limitations": "Same model proposes and checks; correlated errors and spurious concepts remain possible."
+            }
+          },
+          "metrics": {
+            "total": 2,
+            "answered": 2,
+            "correct": 2
+          }
+        }
+      },
+      "seconds": 79.73807020000095
+    }
+  ],
+  "summary": {
+    "language": {
+      "problems": 2,
+      "queries": 4,
+      "answered": 2,
+      "correct": 2,
+      "coverage": 0.5,
+      "accuracy_including_abstentions": 0.5,
+      "selective_accuracy": 1.0,
+      "forced_accuracy": null,
+      "global_prototype_forced_accuracy": null,
+      "denominator": "eligible evaluated queries only; see cohort counts/exclusions",
+      "errors": 0,
+      "full_planned_cohort_answer_coverage": 0.3333333333333333
+    }
+  },
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "excluded": [
+    {
+      "episode_id": "p0001",
+      "reason": "Byte-identical source images occur at different episode paths"
+    }
+  ],
+  "complete": true
+}

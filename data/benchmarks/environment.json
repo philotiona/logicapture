@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-18",
+  "python": "3.11.15",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.6",
+    "Pillow": "12.3.0",
+    "opencv-python-headless": "4.14.0.94",
+    "streamlit": "1.65.0",
+    "tensorflow": "2.21.0",
+    "torch": "2.11.0+cu128",
+    "torchvision": "0.26.0+cu128",
+    "transformers": "4.57.6",
+    "bitsandbytes": "0.50.2",
+    "accelerate": "1.15.0",
+    "safetensors": "0.8.0"
+  },
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "nominal_vram_gib": 8,
+    "nominal_ram_gib": 16
+  },
+  "feature_precision": "SigLIP CUDA fp16; cached float32; episodic reasoning float64",
+  "inference": "local only; no hosted API or API costs",
+  "inference_commit": "a3d881f",
+  "local_tests": {
+    "passed": 264,
+    "skipped": 1
+  },
+  "ci_url": "https://github.com/philotiona/logicapture/actions/runs/39103699853"
+}

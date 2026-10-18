@@ -33,7 +33,7 @@ arrow-flow and Akinator regressions continue to test their dedicated engines.
 
 Optional Qwen3 VL runs locally. The 2B profile supports CPU/GPU; the stronger 8B
 profile uses NF4 quantization and CUDA, with an explicit memory budget. On this
-RTX 5060, the 8B smoke test allocated approximately 6.3 GB of PyTorch tensors;
+RTX 5060, the 8B smoke test allocated approximately 6.4 GB of PyTorch tensors;
 runtime/display memory is additional. Large concurrent models can exhaust VRAM.
 
 The proposer sees only labelled supports. For drawing-like supports it can also
@@ -83,8 +83,8 @@ is not HOI image accuracy. Classic pages and OpenWorld photographs are evaluated
 locally with hidden queries and documented availability exclusions.
 
 ```powershell
-python -m src.evaluation.general_benchmark --partition test --output data/benchmarks/classic_test.json
-python -m src.evaluation.general_benchmark --dataset openworld --root data/external/bongard_openworld_expanded --cohort data/external/bongard_openworld_expanded/cohort_test_expanded.json --partition test --output data/benchmarks/openworld_test.json
+python -m src.evaluation.general_benchmark --partition test --jobs 4 --output outputs/classic_test_reproduction.json
+python -m src.evaluation.general_benchmark --dataset openworld --root data/external/bongard_openworld_expanded --cohort data/external/bongard_openworld_expanded/cohort_test_expanded.json --partition test --jobs 2 --output outputs/openworld_test_reproduction.json
 ```
 
 Every run freezes configuration, source hashes, source-image hashes, crop
@@ -94,6 +94,12 @@ Summaries include the global-prototype baseline, eligible-query denominators,
 availability exclusions, strict duplicate exclusions and full-cohort answer
 coverage. `structural` in these reports means numeric features plus episodic
 learning, not the separate executable DSL engine.
+
+Frozen availability cohorts run in full. For a smaller language pilot, freeze an
+explicit subcohort before inference; `--limit` applies to non-cohort loaders.
+
+Measured results, including failed language hypotheses and the weaker
+natural-image results, are published in [the external evaluation report](../data/benchmarks/REPORT.md).
 
 Public problems may have occurred in pretrained model data. There is no claim
 that withholding a cell proves absence of pretraining contamination, nor that

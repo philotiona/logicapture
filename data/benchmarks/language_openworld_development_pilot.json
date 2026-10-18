@@ -1,0 +1,652 @@
+{
+  "configuration": {
+    "dataset": "openworld",
+    "partition": "val",
+    "limit": null,
+    "seed": 0,
+    "jobs": 1,
+    "methods": [
+      "language"
+    ],
+    "models": {
+      "siglip": {
+        "name": "SigLIP 2 Base / 224",
+        "repository": "google/siglip2-base-patch16-224",
+        "revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "license": "Apache-2.0"
+      },
+      "qwen": {
+        "name": "Qwen3 VL / 2B Instruct",
+        "repository": "Qwen/Qwen3-VL-2B-Instruct",
+        "revision": "89644892e4d85e24eaac8bacfd4f463576704203",
+        "license": "Apache-2.0"
+      },
+      "qwen8b": {
+        "name": "Qwen3 VL / 8B Instruct / local NF4",
+        "repository": "Qwen/Qwen3-VL-8B-Instruct",
+        "revision": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+        "license": "Apache-2.0"
+      }
+    },
+    "source_sha256": {
+      "src/reasoning/episode.py": "e3dd25576ea5d8769308fc5ae2dcf927efc07a4470b42e488ff5ad84ba9e7569",
+      "src/reasoning/features.py": "32b5b595c2d95e3a18346f46e4e88f01f6cf92e0c187fa2206de7fd35320e56e",
+      "src/reasoning/concepts.py": "7a4604cc9a499a1751a96f30b8dd8b5805ce8f556523d5e696be091bd6a96394",
+      "src/vision/pretrained.py": "5a9867da81ebc8d5168437b85bac21cb2b5ab0407c86f1574372a93d58e4e29c",
+      "src/vision/structural_features.py": "98c8bbdf118abce1c3608889ed7931143aa255c72b0a63c61ed1da7a3117f479",
+      "src/datasets/adapters.py": "990da6ff55149b7519176e2c6bdc09c4e5cbd1d7d014be2e353f4fc26c3da0d6",
+      "src/datasets/episodes.py": "f480fe380baf43a6eeb27326fec9c7764f7feb23f185c76fee9c84362743337d",
+      "src/reasoning/evaluation.py": "711f63c5df65682c8d4dac7a1cf4fc0797f14d51e0af1e57a05b8fdc26af3f02",
+      "src/evaluation/general_benchmark.py": "a17bf08b83bce4325d878faead50c942b8573fc040a21affced8ae9cacd1ec61",
+      "src/reasoning/grounding.py": "8369e9440ca1eae0bfff251498a43fb692e389b78024b8af6b82383a9a6f6d9b",
+      "src/evaluation/parallel_benchmark.py": "707209cddee3fa42b7c34d3991b9d83b7d135c4d2f2d9ef710a3ac02b7d6d2d8"
+    },
+    "support_only_nested_selection": true,
+    "query_labels_used_for_fitting": false,
+    "pretrained_model_contamination": "Unknown; external pretraining may include classic concepts/images.",
+    "measurement": "within-problem heldout image classification, not logical rule recovery",
+    "language_max_candidates": 1,
+    "language_model": "qwen8b",
+    "language_max_rounds": 2,
+    "language_measured_grounding": true,
+    "cohort_sha256": "39e8a41940f684c9d5ef8b1a074f2e7f6c4e58f09e08bdbde22893a42ee7642d",
+    "dataset_root_sha256": "467604edaf1837db074a425919dbf6977a060d3167428fabf5807f6005e2f0ee",
+    "input_manifest_sha256": "e703b7c81e07334ef09945819984fcd0360135db814901e0b60a7baea5b65d90",
+    "local_only": true
+  },
+  "configuration_sha256": "6d4a50acdec271fc761c37572a7c0811b2ba6445c7f56a4cd219e9fcd83de178",
+  "input_manifest": [
+    {
+      "dataset": "bongard-openworld",
+      "episode_id": "0448",
+      "split": "val",
+      "provenance": {
+        "source_url": "https://huggingface.co/datasets/rujiewu/Bongard-OpenWorld",
+        "annotation_sha256": "aeecd23c1f7f40dd2db1cb59b3ecda22b1fc9656b18855c0928e6311a2764e0f",
+        "source_split": "val",
+        "protocol": "first-six-support-last-query-per-group-v1",
+        "note": "3-shot; official final image in each group remains query. Support uses first available original support images; availability-filtered condition."
+      },
+      "images": [
+        {
+          "relative_path": "images_portable/0c043685fb82f88d297213f46aeb04f371cf5a5677f8530a7fb5b70da865e3ab.img",
+          "sha256": "fb337ed08b9293358f89b4b0c364f2c252202b8758216a26820a75c88c6d8a82",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/b0281d5dd86849b3140a8121c859151106762e54ecaee20b656ca45bd61593a6.img",
+          "sha256": "42dc830400cd63d3ac7c520cc849ce875229a74fee07a90c4bda5d682c1c84ba",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/28d1f4d80222566634f0000e8e2dbf53be1bb3529e0e3ef2c1693e0f5c3ca5cc.img",
+          "sha256": "31677633a38f5af12423a251d8eda35f4fa42163b2b3676cc3b47c7371f9aa7f",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/6c3ef178e73419c2aeb971e54444571df5cd02058cc2ba0e31ad03842b9696e4.img",
+          "sha256": "54410c293af67a479511344668f0c0bc97716c3f68e5b36a9181a67c3b0c0eac",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/51fd65ec63435d68c353575ff605436d3799af58549eccf5c40dd19eaecdbe03.img",
+          "sha256": "66d49e8072ca5923f0a15beff802dc909e7203c6522a2b3d146c4f33c09c0a23",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/6289a8cb1d20ced8d303771c492d49a6fab2c4ad5cfa5eb541ac57e2acec727a.img",
+          "sha256": "ce2f358d72c28d3c9dc50f95c77f9b0d68bbb1ca248558ea5df39c7c8530d717",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/f4c5acd38c5bac88e415081c5416307a0e8f62ab7fb226d59e3179c70c37ec19.img",
+          "sha256": "82c1eafc8be448043a15d55e07237bc2e6632fa08243618e0d53c28cf0f1ddba",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/e56a54754936dd2ebee6403867c4ecea546434d9880f7db90844a05c3cdd075d.img",
+          "sha256": "f2a734d610d68be074f60fc2739423c78d33bbe4a973ec53de087b7af4dd8eb3",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        }
+      ],
+      "positive_support_count": 3,
+      "negative_support_count": 3,
+      "query_truth": [
+        true,
+        false
+      ]
+    },
+    {
+      "dataset": "bongard-openworld",
+      "episode_id": "0371",
+      "split": "val",
+      "provenance": {
+        "source_url": "https://huggingface.co/datasets/rujiewu/Bongard-OpenWorld",
+        "annotation_sha256": "aeecd23c1f7f40dd2db1cb59b3ecda22b1fc9656b18855c0928e6311a2764e0f",
+        "source_split": "val",
+        "protocol": "first-six-support-last-query-per-group-v1",
+        "note": "3-shot; official final image in each group remains query. Support uses first available original support images; availability-filtered condition."
+      },
+      "images": [
+        {
+          "relative_path": "images_portable/a32d9a95ce863f2ee7b0fedfc64fc0bed9f1eaada0cf75d466c0cb32b0596675.img",
+          "sha256": "c432b1d4e69fa9a42630f34575941b0271f221c322328efef08d0796c53e725d",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/eb4cc07ddebdbfcf4696362e711759c364bc3209063122c18f451a1068d05891.img",
+          "sha256": "6e43212ff12a11c698823f151449db103eb16fbafc0c4ca49849d48a9c23dd0c",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/74354755c8c8a9113048cdbd8e9a2f5a0873cc07b291c3c18d36435900c90e06.img",
+          "sha256": "0a6262a9545c48cfc6fef75bec7c5bc61d77879d2b03510102546d6a8f02e67b",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/1f5fdee7d98b5d4e7e1f0dc8a723611f8e5866846bf745ebd327da053d3d753e.img",
+          "sha256": "16185a95ef2cdf762d74159b072b3015bcd9752df3b1605b74da8a29ad0b9146",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/ed28e83bf913d9f6da63a2c5e7e15fcf1bd639b1467bdf72999d633d70c972b2.img",
+          "sha256": "057beaeb048eb8ca3529572cdb3a9f6697f198f6802d1b944d3a56f7a14d63da",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/3934f31548f3556764deb627e9b0adf3f4769b3c495673883e46255f92b95879.img",
+          "sha256": "56945a7ec18ed9249fbb16f8fef31d4cba7bdc534c44839b6161f85f853e682c",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/e11e449d63e7f872922a6bb295d8861a058856e8fef895569015199e32929179.img",
+          "sha256": "ff7b86b4558998ad3aa3e0cde93826b85d593b43692657ee0dc50c9cedc45394",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/c8d9aaaacde3677bfc767235b40e3bc42c1469c5eec3f17abeb117ea7441f267.img",
+          "sha256": "9af28bb7f8db5f73b058c164c30a3d50c0deb9e32856899f7d2d1d4e722dffab",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        }
+      ],
+      "positive_support_count": 3,
+      "negative_support_count": 3,
+      "query_truth": [
+        true,
+        false
+      ]
+    },
+    {
+      "dataset": "bongard-openworld",
+      "episode_id": "0114",
+      "split": "val",
+      "provenance": {
+        "source_url": "https://huggingface.co/datasets/rujiewu/Bongard-OpenWorld",
+        "annotation_sha256": "aeecd23c1f7f40dd2db1cb59b3ecda22b1fc9656b18855c0928e6311a2764e0f",
+        "source_split": "val",
+        "protocol": "first-six-support-last-query-per-group-v1",
+        "note": "3-shot; official final image in each group remains query. Support uses first available original support images; availability-filtered condition."
+      },
+      "images": [
+        {
+          "relative_path": "images_portable/c45d4ff946a7c15547a7ca94ecef543a966216463efdd29ad1e40ad971a96c28.img",
+          "sha256": "0035b67bab90a36575a3517ebbd279ed86d29733b4ed6603f1853ea9d244df82",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/7bd1d171537e30fabd90778f8c63bedaf253404df7adbd82600e47e097070603.img",
+          "sha256": "34fed53a668fcfa1c01442633959081c2b3f157a6bfbcc66e75717ad6b92d38f",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/5644d8923abf5ea4efacc479d5af6c19acd63857f94f146065ac7007b3a5413b.img",
+          "sha256": "62d1db2f49806845d265fa4891ab62d3ae42816c75738e94403ef9aeba013d04",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/697418e065bbc448352864e2dc4c6f77545b25b3bf04882f4ee10e1ae1f89fb7.img",
+          "sha256": "580e54b59cc94a0b0fe8d9252c090a1627ddffef16c5fb80ecc2e0e5333cd342",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/ad7786b956e766f9ea989d1be35ae3c6e41a81f1efce86672cfa6e6ed5e533da.img",
+          "sha256": "939f568a523b6bd80e24f9cc84445d6b6bf51f7cc334cb0f2731b4768a1e05ce",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/cd2c46d6ff4887d61f542e99d82193223fa6f4d1d03499ab5c97555973bad6f6.img",
+          "sha256": "9c1aaf59324c69ab07d19c52699a9101ba6b4470d4d039877f2298948904add6",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/24b814fde9c13029375a22f46b586d842e88780e41f47c8f431720d82fab6219.img",
+          "sha256": "1ec93d253ae74d01b3a2974d27a97c8dd65ec82ab37b8565db4110fec280ef59",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        },
+        {
+          "relative_path": "images_portable/ceaf8e3d318c8dc3b2d145bb37ab0457f94e408834025a3141bc1799168dc162.img",
+          "sha256": "257b79abf09d5fb3f68b945eb2c899515ca1332bfc053ffb9d570aecae8cb42e",
+          "crop_bbox": null,
+          "coordinate_scale": 1.0
+        }
+      ],
+      "positive_support_count": 3,
+      "negative_support_count": 3,
+      "query_truth": [
+        true,
+        false
+      ]
+    }
+  ],
+  "cohort": {
+    "planned_problems": 3,
+    "available_problems": 3,
+    "availability_exclusions": [],
+    "evaluated_problems": 3,
+    "strict_preparation_excluded": 0,
+    "pending_available_problems": 0
+  },
+  "records": [
+    {
+      "episode_id": "0448",
+      "split": "val",
+      "provenance": {
+        "source_url": "https://huggingface.co/datasets/rujiewu/Bongard-OpenWorld",
+        "annotation_sha256": "aeecd23c1f7f40dd2db1cb59b3ecda22b1fc9656b18855c0928e6311a2764e0f",
+        "source_split": "val",
+        "protocol": "first-six-support-last-query-per-group-v1",
+        "note": "3-shot; official final image in each group remains query. Support uses first available original support images; availability-filtered condition."
+      },
+      "query_order": [
+        1,
+        0
+      ],
+      "query_truth": [
+        false,
+        true
+      ],
+      "methods": {
+        "language": {
+          "analysis": {
+            "candidates": [
+              {
+                "concept": {
+                  "positive": "All images show a fire or fire-related event",
+                  "negative": "None of the images show a fire or fire-related event"
+                },
+                "support_judgments": [
+                  {
+                    "label": true,
+                    "evidence": "house engulfed in thick black smoke with firefighter on ladder and hoses on ground",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"house engulfed in thick black smoke with firefighter on ladder and hoses on ground\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "visible flames, thick smoke, and a firefighter in gear at a burning house",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"visible flames, thick smoke, and a firefighter in gear at a burning house\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "large plume of black smoke rising in background indicating fire",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"large plume of black smoke rising in background indicating fire\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "large flames visible on the left side of the image",
+                    "raw": "{\n  \"label\": \"A\",\n  \"evidence\": \"large flames visible on the left side of the image\"\n}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "no fire or fire-related event visible in the image",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"no fire or fire-related event visible in the image\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "The image shows a disassembled smoke detector with internal components, no fire or fire-related event visible.",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"The image shows a disassembled smoke detector with internal components, no fire or fire-related event visible.\"}"
+                  }
+                ],
+                "support_correct": 5,
+                "support_total": 6,
+                "support_unknown": 0,
+                "consistent": false
+              },
+              {
+                "concept": {
+                  "positive": "All images depict an outdoor scene",
+                  "negative": "All images depict an indoor scene"
+                },
+                "support_judgments": [
+                  {
+                    "label": true,
+                    "evidence": "house on grass with trees and fire truck outside",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"house on grass with trees and fire truck outside\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "house on grassy lot with trees and fence, fire and smoke outdoors",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"house on grassy lot with trees and fence, fire and smoke outdoors\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "road, houses, palm trees, sky, and smoke visible outdoors",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"road, houses, palm trees, sky, and smoke visible outdoors\"}"
+                  },
+                  {
+                    "label": null,
+                    "evidence": "fire and smoke suggest outdoor, but characters in suit imply controlled setting",
+                    "raw": "{\"label\":\"unknown\", \"evidence\":\"fire and smoke suggest outdoor, but characters in suit imply controlled setting\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "dog standing indoors near sofa and ottoman",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"dog standing indoors near sofa and ottoman\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "white ceiling with mounted device",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"white ceiling with mounted device\"}"
+                  }
+                ],
+                "support_correct": 5,
+                "support_total": 6,
+                "support_unknown": 1,
+                "consistent": false
+              }
+            ],
+            "predictions": [
+              {
+                "label": null,
+                "votes": [],
+                "evidence": [],
+                "reason": "No concept passed every support check."
+              },
+              {
+                "label": null,
+                "votes": [],
+                "evidence": [],
+                "reason": "No concept passed every support check."
+              }
+            ],
+            "model_id": "Qwen/Qwen3-VL-8B-Instruct@0c351dd01ed87e9c1b53cbc748cba10e6187ff3b:nf4-bf16-compact-v2",
+            "diagnostics": {
+              "support_consistency_is_heldout_accuracy": false,
+              "query_images_used_in_proposal": false,
+              "query_labels_used": false,
+              "verification": "frozen concept, one image per prompt, no group label",
+              "consistent_concepts": 0,
+              "local_only": true,
+              "support_search_rounds": 2,
+              "maximum_rounds": 2,
+              "support_selected_measurement_axes": [],
+              "limitations": "Same model proposes and checks; correlated errors and spurious concepts remain possible."
+            }
+          },
+          "metrics": {
+            "total": 2,
+            "answered": 0,
+            "correct": 0
+          }
+        }
+      },
+      "seconds": 62.60389199999918
+    },
+    {
+      "episode_id": "0371",
+      "split": "val",
+      "provenance": {
+        "source_url": "https://huggingface.co/datasets/rujiewu/Bongard-OpenWorld",
+        "annotation_sha256": "aeecd23c1f7f40dd2db1cb59b3ecda22b1fc9656b18855c0928e6311a2764e0f",
+        "source_split": "val",
+        "protocol": "first-six-support-last-query-per-group-v1",
+        "note": "3-shot; official final image in each group remains query. Support uses first available original support images; availability-filtered condition."
+      },
+      "query_order": [
+        0,
+        1
+      ],
+      "query_truth": [
+        true,
+        false
+      ],
+      "methods": {
+        "language": {
+          "analysis": {
+            "candidates": [
+              {
+                "concept": {
+                  "positive": "All images in A contain penguins",
+                  "negative": "All images in B contain penguins"
+                },
+                "support_judgments": [
+                  {
+                    "label": true,
+                    "evidence": "A single penguin standing on grassy terrain with ocean in background.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"A single penguin standing on grassy terrain with ocean in background.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "A penguin is prominently featured standing on a rock, with other penguins visible in the background.",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"A penguin is prominently featured standing on a rock, with other penguins visible in the background.\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "\u5927\u91cf\u5e1d\u4f01\u9e45\u805a\u96c6\u5728\u6d77\u6ee9\u548c\u6d45\u6c34\u533a",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"\u5927\u91cf\u5e1d\u4f01\u9e45\u805a\u96c6\u5728\u6d77\u6ee9\u548c\u6d45\u6c34\u533a\"}"
+                  },
+                  {
+                    "label": null,
+                    "evidence": "no penguins visible in the image",
+                    "raw": "{\"label\":\"unknown\", \"evidence\":\"no penguins visible in the image\"}"
+                  },
+                  {
+                    "label": null,
+                    "evidence": "The image shows a small bird perched on a rock, but no penguins are visible.",
+                    "raw": "{\"label\":\"unknown\", \"evidence\":\"The image shows a small bird perched on a rock, but no penguins are visible.\"}"
+                  },
+                  {
+                    "label": null,
+                    "evidence": "The image shows a bald eagle perched on a rock, with no penguins visible.",
+                    "raw": "{\"label\":\"unknown\", \"evidence\":\"The image shows a bald eagle perched on a rock, with no penguins visible.\"}"
+                  }
+                ],
+                "support_correct": 3,
+                "support_total": 6,
+                "support_unknown": 3,
+                "consistent": false
+              }
+            ],
+            "predictions": [
+              {
+                "label": null,
+                "votes": [],
+                "evidence": [],
+                "reason": "No concept passed every support check."
+              },
+              {
+                "label": null,
+                "votes": [],
+                "evidence": [],
+                "reason": "No concept passed every support check."
+              }
+            ],
+            "model_id": "Qwen/Qwen3-VL-8B-Instruct@0c351dd01ed87e9c1b53cbc748cba10e6187ff3b:nf4-bf16-compact-v2",
+            "diagnostics": {
+              "support_consistency_is_heldout_accuracy": false,
+              "query_images_used_in_proposal": false,
+              "query_labels_used": false,
+              "verification": "frozen concept, one image per prompt, no group label",
+              "consistent_concepts": 0,
+              "local_only": true,
+              "support_search_rounds": 2,
+              "maximum_rounds": 2,
+              "support_selected_measurement_axes": [],
+              "limitations": "Same model proposes and checks; correlated errors and spurious concepts remain possible."
+            }
+          },
+          "metrics": {
+            "total": 2,
+            "answered": 0,
+            "correct": 0
+          }
+        }
+      },
+      "seconds": 21.370065099996282
+    },
+    {
+      "episode_id": "0114",
+      "split": "val",
+      "provenance": {
+        "source_url": "https://huggingface.co/datasets/rujiewu/Bongard-OpenWorld",
+        "annotation_sha256": "aeecd23c1f7f40dd2db1cb59b3ecda22b1fc9656b18855c0928e6311a2764e0f",
+        "source_split": "val",
+        "protocol": "first-six-support-last-query-per-group-v1",
+        "note": "3-shot; official final image in each group remains query. Support uses first available original support images; availability-filtered condition."
+      },
+      "query_order": [
+        1,
+        0
+      ],
+      "query_truth": [
+        false,
+        true
+      ],
+      "methods": {
+        "language": {
+          "analysis": {
+            "candidates": [
+              {
+                "concept": {
+                  "positive": "The image depicts a path or road surrounded by trees with leaves in autumn colors.",
+                  "negative": "The image depicts a path or road surrounded by green vegetation or water, not autumn trees."
+                },
+                "support_judgments": [
+                  {
+                    "label": true,
+                    "evidence": "path surrounded by trees with vibrant orange and yellow autumn leaves",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"path surrounded by trees with vibrant orange and yellow autumn leaves\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "path covered in yellow autumn leaves, surrounded by trees with yellow foliage",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"path covered in yellow autumn leaves, surrounded by trees with yellow foliage\"}"
+                  },
+                  {
+                    "label": true,
+                    "evidence": "path surrounded by trees with yellow autumn leaves falling",
+                    "raw": "{\"label\":\"A\", \"evidence\":\"path surrounded by trees with yellow autumn leaves falling\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "path alongside river with green vegetation and no autumn colors visible",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"path alongside river with green vegetation and no autumn colors visible\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "path surrounded by green vegetation, no autumn colors visible",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"path surrounded by green vegetation, no autumn colors visible\"}"
+                  },
+                  {
+                    "label": false,
+                    "evidence": "path surrounded by green grass and trees with green leaves, no autumn colors visible",
+                    "raw": "{\"label\":\"B\", \"evidence\":\"path surrounded by green grass and trees with green leaves, no autumn colors visible\"}"
+                  }
+                ],
+                "support_correct": 6,
+                "support_total": 6,
+                "support_unknown": 0,
+                "consistent": true
+              }
+            ],
+            "predictions": [
+              {
+                "label": true,
+                "votes": [
+                  true
+                ],
+                "evidence": [
+                  "path surrounded by bare trees with scattered brown leaves on ground, suggesting autumn"
+                ],
+                "reason": "All support-consistent concepts agree."
+              },
+              {
+                "label": true,
+                "votes": [
+                  true
+                ],
+                "evidence": [
+                  "road flanked by trees showing red and orange autumn foliage"
+                ],
+                "reason": "All support-consistent concepts agree."
+              }
+            ],
+            "model_id": "Qwen/Qwen3-VL-8B-Instruct@0c351dd01ed87e9c1b53cbc748cba10e6187ff3b:nf4-bf16-compact-v2",
+            "diagnostics": {
+              "support_consistency_is_heldout_accuracy": false,
+              "query_images_used_in_proposal": false,
+              "query_labels_used": false,
+              "verification": "frozen concept, one image per prompt, no group label",
+              "consistent_concepts": 1,
+              "local_only": true,
+              "support_search_rounds": 1,
+              "maximum_rounds": 2,
+              "support_selected_measurement_axes": [],
+              "limitations": "Same model proposes and checks; correlated errors and spurious concepts remain possible."
+            }
+          },
+          "metrics": {
+            "total": 2,
+            "answered": 2,
+            "correct": 1
+          }
+        }
+      },
+      "seconds": 22.75351199999568
+    }
+  ],
+  "summary": {
+    "language": {
+      "problems": 3,
+      "queries": 6,
+      "answered": 2,
+      "correct": 1,
+      "coverage": 0.3333333333333333,
+      "accuracy_including_abstentions": 0.16666666666666666,
+      "selective_accuracy": 0.5,
+      "forced_accuracy": null,
+      "global_prototype_forced_accuracy": null,
+      "denominator": "eligible evaluated queries only; see cohort counts/exclusions",
+      "errors": 0,
+      "full_planned_cohort_answer_coverage": 0.3333333333333333
+    }
+  },
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "excluded": [],
+  "complete": true
+}
