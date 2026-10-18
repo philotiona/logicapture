@@ -1,10 +1,12 @@
 # Visual Rule Akinator & Bongard Solver
 
-A local Bongard research application with complementary approaches. **General visual inference** combines frozen semantic and dense image features with 544 numeric measurements, adapts a classifier to the positive and negative supports, and can propose and check open-language concepts with a local vision-language model. It does not require every concept to have a predefined rule sentence. **Executable structural rules** retains precise path, topology, arrow, region and geometric reasoning. **Akinator** remains symbolic. The original contour/CNN baselines are preserved.
+A local Bongard research application with complementary approaches. The default **General visual inference** screen first tries executable rules on traced monochrome drawings. If support-only validation fails, it falls back to frozen image features and a support-adapted classifier. The optional local vision-language model can propose and check open-language concepts. **Executable structural rules** provides the detailed path, topology, arrow, region and geometric inspector. **Akinator** remains symbolic. The original contour/CNN baselines are preserved.
 
 This is not a universal Bongard solver. A classification boundary, a model-generated explanation and an executable symbolic rule are different results. The app exposes support validation, abstention, failed hypotheses and withheld-image evaluation rather than claiming every output is the intended rule. See [general inference](docs/GENERAL_SOLVER.md), [episodic reasoning](docs/EPISODE_REASONING.md) and [dataset protocols](docs/DATASETS.md).
 
 The [external evaluation report](data/benchmarks/REPORT.md) includes 80 classic test problems and 37 available natural-image test problems. Forced classification reached 71.9% with measured features on the classic set and 64.9% with learned features on the natural-image subset. Many decisions remain unresolved; the report includes answer coverage, errors, prototype baselines and unsuccessful language hypotheses. Combining the representations did not consistently improve results.
+
+Those published numbers evaluate the feature classifiers, not the newer automatic structural routing. A default-screen regression now checks the original arrow problem: ten supports recover the along-path opposition rule and both withheld drawings are classified correctly. This targeted repair is not evidence of universal solving ability.
 
 ![Supplied arrow-path problem and its inferred rule](docs/screenshots/bongard-paths.jpg)
 
@@ -56,7 +58,13 @@ After six negative Akinator answers without a positive, a question may display u
 ## Architecture
 
 ```text
-General Bongard: support/query pixels -> frozen semantic global/dense features
+Default Bongard: monochrome support pixels -> traced paths/regions -> executable DSL
+                -> refit minimum-cost rules in every leave-one-per-group fold
+                -> if all held-out support assessments agree: freeze rules
+                   and classify queries, retaining unknown/disagreement
+                -> otherwise: feature inference below
+
+Feature baseline: support/query pixels -> frozen semantic global/dense features
                                      + numeric structural observations
                 -> support-only nested validation and feature/learner selection
                 -> unseen-image decisions, diagnostics, and abstention

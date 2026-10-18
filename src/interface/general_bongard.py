@@ -40,8 +40,8 @@ def general_bongard():
     from src.reasoning.general import GeneralVisualSolver
     from src.vision.structural_features import StructuralEncoder
 
-    st.write("Compare two groups, then classify unseen images. No fixed list of shape names or rule sentences is required.")
-    st.caption("Local visual features · support-adapted classifier · optional language hypotheses")
+    st.write("Find a property separating A from B, then test it on unseen images.")
+    st.caption("Executable drawing rules first · local visual classification for broader concepts")
     positive, negative, queries, truth = [], [], [], None
     options = ["Separate images", "Page image", "Supplied path example"]
     if Path("data/external/classic_bongard/episodes.json").is_file(): options.append("Classic problems / local data")
@@ -73,7 +73,7 @@ def general_bongard():
         folder = Path("data/fixtures/arrow_paths")
         positive = [np.array(Image.open(folder/f"A{i:02d}.png").convert("RGB")) for i in range(1, 7)]
         negative = [np.array(Image.open(folder/f"B{i:02d}.png").convert("RGB")) for i in range(1, 7)]
-        st.caption("This is the supplied arrow-direction regression. Executable structural rules remain the specialist for precise path flow.")
+        st.caption("Arrow directions are measured along each curve. The automatic route checks executable rules before trying image features.")
     else:
         from src.datasets import load_classic, DatasetError
         episodes = load_classic("data/external/classic_bongard")
@@ -111,6 +111,8 @@ def general_bongard():
     language_model = language_models[0] if language_models else "qwen"
     rounds = 2
     with st.expander("Local inference settings", expanded=not have_semantic):
+        structural_first = st.checkbox("Try executable drawing rules first", value=True, key="general_structural_first")
+        st.caption("For monochrome drawings, trace paths and regions and refit rules while withholding one support from each group. Use feature classification if this check fails. Disable to reproduce the feature-only baseline.")
         choices = ["Hybrid / learned + measured", "Learned semantic features", "Measured drawing features"] if have_semantic else ["Measured drawing features"]
         representation = st.selectbox("Representation", choices, key="general_representation")
         language = st.checkbox("Propose and check an open-language concept", value=False, disabled=not have_language, key="general_language")
@@ -123,7 +125,7 @@ def general_bongard():
             rounds = st.slider("Concept search rounds", 1, 4, 2, key="general_concept_rounds")
             st.caption("The local model proposes concepts from support only, checks each image independently, and revises failed hypotheses. This can take several minutes. Its self-checks can still be wrong.")
     identities = tuple((key, spec.revision) for key, spec in MODELS.items())
-    fingerprint = sha256(repr((2, identities, representation, language, language_model, rounds,
+    fingerprint = sha256(repr((3, identities, structural_first, representation, language, language_model, rounds,
                                len(positive), len(negative), len(queries))).encode()+
                          "".join(image_digest(i) for i in positive+negative+queries).encode()).hexdigest()
     if st.button("Solve locally", type="primary", disabled=min(len(positive), len(negative)) < 2, key="general_solve"):
@@ -132,10 +134,10 @@ def general_bongard():
         try:
             encoder = semantic_encoder() if representation != "Measured drawing features" else None
             measured = StructuralEncoder() if representation != "Learned semantic features" else None
-            result = GeneralVisualSolver(encoder, measured).solve(positive, negative, queries, progress=status.caption)
+            result = GeneralVisualSolver(encoder, measured, structural_first=structural_first).solve(positive, negative, queries, progress=status.caption)
             saved_analysis = {"fingerprint": fingerprint, "features": result, "concepts": None, "concept_error": None}
             st.session_state.general_analysis = saved_analysis
-            if language:
+            if language and not result.diagnostics.get("logical_explanation"):
                 if encoder: encoder.unload()
                 from src.reasoning.concepts import ConceptInducer
                 status.caption("Proposing an open-language concept from support examples")
@@ -153,15 +155,35 @@ def general_bongard():
     result, concepts = saved["features"], saved["concepts"]
     if saved.get("concept_error"):
         st.warning("The optional concept search failed; the visual decisions below are retained. " + saved["concept_error"])
-    st.markdown("**Visual decision**")
-    cv = result.diagnostics["nested_cv_accuracy"]
-    learner = result.diagnostics["selected_candidate"]
-    st.caption(f"Nested support validation: {cv:.0%}" if cv is not None else "Insufficient independent support for validation")
-    st.caption(f"Selected view: {learner['view']} · learner: {learner['learner']} · scores are uncalibrated")
+    structural = result.diagnostics.get("selected_pipeline") == "executable_structural_rules"
+    if structural:
+        st.markdown("**Inferred structural rule / group A**")
+        st.write(result.diagnostics["logical_explanation"])
+        attempt = result.diagnostics["structural_attempt"]
+        st.caption(f"Support fit: {attempt['support_correct']}/{attempt['support_total']}. "
+                   f"Leave-one-per-group validation: {attempt['validation_correct']}/{attempt['validation_total']} "
+                   f"assessments across {attempt['validation_folds']} refits. Queries were not used to choose the rule.")
+        st.caption(f"{attempt['candidate_count']} equally simple support-consistent programs; a query is answered only when they agree and its required evidence is available. This does not prove the intended rule is unique.")
+    else:
+        st.markdown("**Visual classification / no executable rule recovered**")
+        cv = result.diagnostics["nested_cv_accuracy"]
+        learner = result.diagnostics["selected_candidate"]
+        st.caption(f"Nested support validation: {cv:.0%}" if cv is not None else "Insufficient independent support for validation")
+        st.caption(f"Selected view: {learner['view']} · learner: {learner['learner']} · scores are uncalibrated")
+        if cv is not None and cv <= .5:
+            st.warning("The classifier did not establish a reliable separating pattern on the supports. Its unresolved outputs are failures to solve this problem.")
+        attempt = result.diagnostics.get("structural_attempt", {})
+        if structural_first and attempt.get("reason"):
+            st.caption("Drawing-rule check: " + attempt["reason"].replace("_", " "))
     rows = []
     for i, prediction in enumerate(result.predictions):
-        row = {"Image": prediction.image_id, "Feature decision": _label(prediction.label),
-               "Evidence score": round(prediction.score, 3), "Reason": ", ".join(prediction.abstention_reasons) or "Stable support fits agree"}
+        row = {"Image": prediction.image_id, "Rule decision" if structural else "Feature decision": _label(prediction.label)}
+        if structural:
+            measured_objects = prediction.diagnostics["measured_evidence"].get("objects", [])
+            row["Measured path flow"] = ", ".join(obj["along_path_flow"] for obj in measured_objects if "along_path_flow" in obj) or "—"
+        else:
+            row["Evidence score"] = round(prediction.score, 3)
+        row["Reason"] = ", ".join(prediction.abstention_reasons) or ("Executable rules agree" if structural else "Stable support fits agree")
         if concepts: row["Concept decision"] = _label(concepts.predictions[i].label)
         if truth is not None: row["Held-out truth"] = _label(truth[i])
         rows.append(row)
@@ -181,7 +203,11 @@ def general_bongard():
         st.caption("A model-generated explanation is a hypothesis. Support consistency and a visual classification are separate from an executable proof.")
     with st.expander("Evidence and reproducibility"):
         for prediction in result.predictions:
-            st.write(f"{prediction.image_id}: nearest supports {', '.join(prediction.nearest_support_ids)}")
+            if structural:
+                st.write(prediction.image_id)
+                st.json(prediction.diagnostics, expanded=False)
+            else:
+                st.write(f"{prediction.image_id}: nearest supports {', '.join(prediction.nearest_support_ids)}")
         st.json({k: v for k, v in result.diagnostics.items() if k != "selection_cv"}, expanded=False)
         export = {"features": result.to_dict(), "concepts": concepts.to_dict() if concepts else None,
                   "concept_error": saved.get("concept_error"),

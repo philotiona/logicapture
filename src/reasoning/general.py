@@ -53,11 +53,14 @@ def validate_episode_images(positive, negative, queries=()):
 
 
 class GeneralVisualSolver:
-    def __init__(self, semantic_encoder=None, structural_encoder=None, classifier=None):
-        if semantic_encoder is None and structural_encoder is None:
+    def __init__(self, semantic_encoder=None, structural_encoder=None, classifier=None, *, structural_first=False):
+        if semantic_encoder is None and structural_encoder is None and not structural_first:
             raise ValueError("Provide at least one visual encoder.")
         self.semantic_encoder, self.structural_encoder = semantic_encoder, structural_encoder
         self.classifier = classifier or EpisodeClassifier()
+        # Explicit opt-in keeps published feature-only benchmark ablations
+        # reproducible. The application enables this automatic route by default.
+        self.structural_first = structural_first
 
     def encode(self, images: Sequence, image_ids):
         batches = {}
@@ -76,6 +79,25 @@ class GeneralVisualSolver:
         ids = tuple([f"A{i+1:02d}" for i in range(len(positive))] +
                     [f"B{i+1:02d}" for i in range(len(negative))] +
                     [f"Q{i+1:02d}" for i in range(len(queries))])
+        structural_attempt = {"accepted": False, "reason": "disabled_for_feature_baseline"}
+        if self.structural_first:
+            from .structural import fit_structural_support
+            fitted_rules, structural_attempt = fit_structural_support(
+                images[:len(positive)], images[len(positive):support_count], progress=progress)
+            if fitted_rules is not None:
+                predictions = fitted_rules.predict(images[support_count:], ids[support_count:])
+                diagnostics = {"input": "pixels and support membership only", "local_only": True,
+                               "heldout_queries": len(queries), "query_labels_used": False,
+                               "architecture": "traced drawing structure + executable symbolic rules",
+                               "selected_pipeline": "executable_structural_rules",
+                               "structural_attempt": structural_attempt,
+                               "logical_explanation": structural_attempt["candidates"][0]["text"],
+                               "warning": "Support validation does not prove that this is the intended rule."}
+                return GeneralAnalysis(predictions, [], diagnostics, "adaptive-structure-dsl-v1",
+                                       ids[:support_count], ids[support_count:])
+        if self.semantic_encoder is None and self.structural_encoder is None:
+            raise ValueError("No validated structural rule; provide a visual encoder for feature fallback. "
+                             + structural_attempt["reason"])
         if progress: progress("Encoding pixels locally")
         batch = self.encode(images, ids)
         support = EpisodeSupport(batch.subset(range(support_count)),
@@ -88,6 +110,7 @@ class GeneralVisualSolver:
             scores = nearest_prototype(support, query).tolist()
         else: predictions, scores = [], []
         diagnostics = {**fitted.diagnostics, "input": "pixels and support membership only",
+                       "selected_pipeline": "visual_feature_classifier", "structural_attempt": structural_attempt,
                        "representation_views": list(batch.views()),
                        "heldout_queries": len(queries), "local_only": True,
                        "architecture": "frozen visual encoders + support-adapted statistical classifier",

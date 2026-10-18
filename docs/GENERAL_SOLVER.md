@@ -7,6 +7,33 @@ to solve every possible Bongard problem.
 
 ## Representations and inference
 
+The application enables **Try executable drawing rules first** by default. This
+restores path-flow reasoning that was accidentally bypassed when the broader
+feature classifier became the default screen. On suitable monochrome drawings,
+the app traces paths and regions, fits a fixed compositional grammar, and keeps
+all minimum-cost programs that fit the supports. It refits from scratch while
+withholding every possible pair of one A and one B support. The structural route
+is accepted only when the selected programs unanimously classify both omitted
+supports correctly in every fold. These repeated support assessments are not
+independent unseen-query accuracy or a uniqueness proof.
+
+Rule selection and routing never inspect query pixels. After fitting, unknown
+query evidence or disagreement among equally simple programs produces an
+unresolved result. The UI displays the executable rule, validation counts and
+measured along-path direction instead of an unrelated feature score. For the
+original arrow drawings, five supports per group yield 50/50 correct omitted
+support assessments across 25 refits, and the two withheld queries are correct.
+Tests also invert the group labels, reorder supports, change the query batch and
+remove arrow evidence. There is no filename, fixture identity or target-rule
+annotation in the inference API.
+
+This bounded specialist currently accepts three to eight supports per group,
+at most 24 reliably extracted objects per image, and monochrome drawings. It
+resizes large panels to at most 768 pixels per side for tracing. Photos,
+unresolved extraction, rules absent from the grammar and failed support
+validation fall back to the feature route below. An unfamiliar query does not
+change a frozen structural fit or silently trigger a different query classifier.
+
 1. A frozen, revision-pinned SigLIP 2 vision encoder produces global image and
    dense patch features. No class names or query labels are required.
 2. OpenCV measurements describe topology, counts, holes, nesting, boundaries,
@@ -25,9 +52,13 @@ and visual novelty produce unresolved answers. These checks are empirical
 diagnostics, not statistical correctness guarantees. Forced predictions and
 answer coverage must be reported alongside accuracy on answered queries.
 
-The existing executable DSL remains a separate specialist. A learned visual
-decision boundary is not exported as an invented logical program. The original
-arrow-flow and Akinator regressions continue to test their dedicated engines.
+The detailed executable-DSL workspace remains available separately. A learned
+visual decision boundary is not exported as an invented logical program.
+Disable the automatic structural setting to reproduce feature-only experiments.
+The Python `GeneralVisualSolver` API keeps `structural_first=False` by default
+for existing benchmark callers; the UI explicitly enables it. The published
+external evaluation reports have not been rerun with automatic routing and
+must not be attributed to it. Akinator continues to use its symbolic engine.
 
 ## Open-language concept search
 
