@@ -1,0 +1,2 @@
+# Raw benchmark traces are generated; the Markdown report stays visible in diffs.
+data/benchmarks/*.json linguist-generated

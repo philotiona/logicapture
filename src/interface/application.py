@@ -282,6 +282,15 @@ def review_groups(saved, rule=None):
 
 def solver():
     st.subheader("Bongard solver")
+    approach = st.radio("Reasoning approach", ["General visual inference", "Executable structural rules"], horizontal=True)
+    if approach == "General visual inference":
+        from .general_bongard import general_bongard
+        general_bongard()
+        return
+    symbolic_solver()
+
+
+def symbolic_solver():
     st.write("Find a rule that is true for Group A and false for Group B.")
     st.markdown('<div class="step-line">01 INPUT &nbsp; / &nbsp; 02 REVIEW DRAWINGS &nbsp; / &nbsp; 03 INFER RULE</div>', unsafe_allow_html=True)
     section(1, "Input")

@@ -1,0 +1,9 @@
+# Optional local-only broad visual inference. Base app remains CPU-only/installable.
+-r requirements.txt
+torch>=2.7,<3
+torchvision>=0.22,<1
+transformers>=4.57,<5
+accelerate>=1.10,<2
+sentencepiece>=0.2,<1
+safetensors>=0.6,<1
+bitsandbytes>=0.48,<1; platform_system == "Windows" or platform_system == "Linux"

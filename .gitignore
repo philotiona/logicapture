@@ -10,3 +10,6 @@ outputs/*
 !outputs/.gitkeep
 .streamlit/secrets.toml
 *.egg-info/
+.cache/
+data/external/
+data/feature_cache/
