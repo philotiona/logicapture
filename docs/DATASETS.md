@@ -8,6 +8,12 @@ No upstream training scripts or downloaded Python loaders are executed.
 
 ## Available local evaluation data
 
+The complete 409-entry Foundalis collection is additionally cached under
+`data/external/foundalis`: 408 static pages and twelve animated panels. Its
+separate [coverage audit](PAGE_CAMERA_AND_COVERAGE.md) reports automatic crops,
+executable candidates, wrong answers and unsupported cases. No solution text
+enters inference, and no universal rule-recovery claim is made.
+
 | Dataset condition | Development | Test | Actual local data |
 |---|---|---|---|
 | Classic original problems | p0001–p0020;19 eligible after duplicate exclusion | p0021–p0100;80 eligible |100 original pages and1,200 cell crops |

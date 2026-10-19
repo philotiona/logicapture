@@ -37,6 +37,13 @@ def _read(image):
     if max(h, w) > 768:
         image = cv2.resize(image, (round(w*768/max(h, w)), round(h*768/max(h, w))),
                            interpolation=cv2.INTER_AREA)
+    # Dense dot fields are handled by measured relations. Avoid tracing
+    # hundreds of disconnected marks before discovering the object budget.
+    from src.vision.adaptive_perception import ink_mask, remove_ruling
+    mask,_ = remove_ruling(ink_mask(image))
+    _,_,stats,_ = cv2.connectedComponentsWithStats(mask,8)
+    if sum(area >= max(12,.0009*mask.size) for area in stats[1:,4]) > 24:
+        return None
     scene = extract_scene(image, representation="adaptive", remove_panel_ruling=True)
     if (len(scene.objects) > 24
             or any(obj.confidence < EVIDENCE_THRESHOLD or obj.kind == "unknown" for obj in scene.objects)

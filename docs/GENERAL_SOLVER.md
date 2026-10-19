@@ -7,6 +7,12 @@ to solve every possible Bongard problem.
 
 ## Representations and inference
 
+Complete pages are the default input. The same extraction path handles uploads
+and local live video. The executable route also checks explicit quantitative
+observations, including relative dot spacing, and can generate new examples
+that are re-read from pixels. See [camera, page parsing, and complete Foundalis
+coverage](PAGE_CAMERA_AND_COVERAGE.md) for setup and measured limitations.
+
 The application enables **Try executable drawing rules first** by default. This
 restores path-flow reasoning that was accidentally bypassed when the broader
 feature classifier became the default screen. On suitable monochrome drawings,

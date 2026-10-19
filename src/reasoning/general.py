@@ -81,15 +81,15 @@ class GeneralVisualSolver:
                     [f"Q{i+1:02d}" for i in range(len(queries))])
         structural_attempt = {"accepted": False, "reason": "disabled_for_feature_baseline"}
         if self.structural_first:
-            from .structural import fit_structural_support
-            fitted_rules, structural_attempt = fit_structural_support(
+            from .drawing import fit_drawing_rules
+            fitted_rules, structural_attempt, pipeline = fit_drawing_rules(
                 images[:len(positive)], images[len(positive):support_count], progress=progress)
             if fitted_rules is not None:
                 predictions = fitted_rules.predict(images[support_count:], ids[support_count:])
                 diagnostics = {"input": "pixels and support membership only", "local_only": True,
                                "heldout_queries": len(queries), "query_labels_used": False,
                                "architecture": "traced drawing structure + executable symbolic rules",
-                               "selected_pipeline": "executable_structural_rules",
+                               "selected_pipeline": pipeline,
                                "structural_attempt": structural_attempt,
                                "logical_explanation": structural_attempt["candidates"][0]["text"],
                                "warning": "Support validation does not prove that this is the intended rule."}
