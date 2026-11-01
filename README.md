@@ -24,6 +24,8 @@ The project environment is already installed in `.venv` on this machine. From th
 
 Open <http://127.0.0.1:8501>. A convenience launcher is also supplied as `run.ps1`.
 
+The **РГР** tab adds the model-testing assignment to the same app: single-photo upload or camera capture with manual cropping, confidence/brightness/contrast sliders, resolution and augmentation experiments, labeled-photo ZIP upload, local adaptation of the existing shape CNN, and before/after reports. A working synthetic demo is included; personal photographs are still required for the assignment's photo tests. Saved reports verify checkpoint hashes and use the original training split. See [РГР instructions](docs/RGR.md). This tab needs `requirements-neural.txt`; the other non-neural screens retain the base requirements.
+
 For a fresh installation with Python 3.11 or later:
 
 ```powershell
