@@ -51,6 +51,21 @@ the broader solver. A single-frame capture is available as a fallback. If no
 executable rule or checked generated pair is available, the app says so.
 It does not label a copied support image as a newly generated example.
 
+The capture button refreshes with live detection and freezes the one displayed
+camera state. A new invalid snapshot clears the earlier selection; deleting a
+snapshot clears snapshot-derived input. A page deliberately selected from live
+video is preserved when an older snapshot widget remains unchanged or is removed.
+The interface states when full analysis uses that frozen live selection.
+
+## Small support groups
+
+Executable drawing rules require at least three support images per group. With
+three uploaded examples on each side, the default keeps all six for inference.
+Automatic reservation starts at four per group, leaving three supports after
+one test image is withheld. An explicitly enabled holdout at three per group
+leaves two supports and uses the feature-classifier fallback; the interface
+explains this. Feature-only experiments can still reserve from three per group.
+
 ## Executable measurements and generated examples
 
 The drawing route now complements the existing compositional region/path DSL
@@ -76,13 +91,15 @@ human interpretation of the original problem.
 
 ## Foundalis coverage
 
+The table below preserves the original audit. The newer [boundary-geometry comparison](BOUNDARY_RULES.md) increases executable candidates from 33 to 36, with 62 correct and 10 wrong answered queries. Both raw runs and the added failure are retained.
+
 The complete frozen [Foundalis index](https://www.foundalis.com/res/bps/bpidx.htm)
 contains **409 numbered entries**. All were retrieved locally without fetching
 the solutions page: 408 static complete-page images, plus twelve animated
 panels belonging to problem 300. All 420 image files are accounted for. Media
 remain ignored by Git; no redistribution license is inferred.
 
-The final executable-rule audit is in
+The original executable-rule audit is in
 [the raw report](../data/benchmarks/foundalis_rules_audit.json). It withholds the
 last panel per group before rule fitting. Solver inputs contain only pixels and
 group membership; source names, IDs, and explanations are not supplied.
