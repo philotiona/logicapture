@@ -3,7 +3,8 @@ from dataclasses import asdict, dataclass
 from itertools import product
 import numpy as np
 
-from src.vision.observations import observations, DESCRIPTIONS
+from src.vision.observations import (observations, DESCRIPTIONS, OBSERVATION_VERSION,
+                                     BOUNDARY_PERIMETER_TOLERANCE)
 from .episode import EpisodePrediction
 from .structural import _drawing
 
@@ -73,7 +74,9 @@ class MeasurementFit:
 
 def fit_measurement_rules(positive, negative, *, progress=None):
     images = list(positive)+list(negative)
-    attempt = {"accepted":False, "query_images_used_in_selection":False}
+    attempt = {"accepted":False, "query_images_used_in_selection":False,
+               "observation_version": OBSERVATION_VERSION,
+               "boundary_perimeter_tolerance": BOUNDARY_PERIMETER_TOLERANCE}
     if min(len(positive),len(negative)) < 3 or max(len(positive),len(negative)) > 8 or not all(_drawing(i) for i in images):
         return None, {**attempt,"reason":"outside_measurement_rule_domain"}
     if progress:

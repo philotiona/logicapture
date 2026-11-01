@@ -467,12 +467,15 @@ def main():
     st.set_page_config(page_title="Rule Lab", layout="wide")
     st.markdown(CSS, unsafe_allow_html=True)
     st.markdown('<div class="app-header"><div class="app-name">RULE LAB</div><div class="app-caption">ACTIVE CONCEPT INFERENCE<br>BONGARD PROBLEM SOLVING</div></div>', unsafe_allow_html=True)
-    if "mode" not in st.session_state or st.session_state.mode not in ("Akinator", "Bongard", "Experiments"):
+    if "mode" not in st.session_state or st.session_state.mode not in ("Akinator", "Bongard", "РГР", "Experiments"):
         st.session_state.mode = "Akinator"
-    for column, name in zip(st.columns(3), ("Akinator", "Bongard", "Experiments")):
-        if column.button(name, key=f"nav_{name.lower()}", type="primary" if st.session_state.mode == name else "secondary", width="stretch"):
+    for column, name, key in zip(st.columns(4), ("Akinator", "Bongard", "РГР", "Experiments"), ("akinator", "bongard", "rgr", "experiments")):
+        if column.button(name, key=f"nav_{key}", type="primary" if st.session_state.mode == name else "secondary", width="stretch"):
             st.session_state.mode = name
             st.rerun()
     if st.session_state.mode == "Akinator": akinator()
     elif st.session_state.mode == "Bongard": solver()
+    elif st.session_state.mode == "РГР":
+        from .rgr import rgr_workspace
+        rgr_workspace()
     else: experiments()

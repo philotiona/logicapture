@@ -1,0 +1,144 @@
+{
+  "scope": "Main Bongard executable drawing solver; development coverage audit, not an unseen benchmark or intended-rule evaluation",
+  "input_policy": "Final cell per group withheld before fitting. No solutions, captions, concept names or filenames enter inference.",
+  "manifest_sha256": "a56752f0252612167bd72bd1efe0de669beb91eaef089a1c0e8883298a20cfb6",
+  "baseline_report": "data/benchmarks/foundalis_boundary_baseline.json",
+  "baseline_sha256": "54650e798fc8c6b3f8d3776a1cf86b094ccc6682c3ee7d7476a738bbd26f714c",
+  "updated_report": "data/benchmarks/foundalis_boundary_extension.json",
+  "updated_sha256": "65ee7b3918aca78caf2f4606ec47bc13a4364a874afec4db8144e025a17cfec2",
+  "before": {
+    "processed_images": 420,
+    "split_images": 408,
+    "executable_candidates": 33,
+    "answered_queries": 66,
+    "correct_queries": 57,
+    "fully_correct_query_pairs": 27
+  },
+  "after": {
+    "processed_images": 420,
+    "split_images": 408,
+    "executable_candidates": 36,
+    "answered_queries": 72,
+    "correct_queries": 62,
+    "fully_correct_query_pairs": 29
+  },
+  "baseline_wrong_answered_queries": 9,
+  "updated_wrong_answered_queries": 10,
+  "existing_decisions_changed": [],
+  "added_candidates": [
+    {
+      "id": "foundalis-0004",
+      "rule": "The median simplified-boundary convexity (area / convex-hull area) is greater than 0.948",
+      "answered": 2,
+      "correct": 2,
+      "queries": [
+        {
+          "label": true,
+          "truth": true,
+          "evidence": {
+            "rule_votes": [
+              true,
+              true
+            ],
+            "measured_evidence": {
+              "median_boundary_convexity": 1.0,
+              "minimum_boundary_convexity": 1.0
+            }
+          }
+        },
+        {
+          "label": false,
+          "truth": false,
+          "evidence": {
+            "rule_votes": [
+              false,
+              false
+            ],
+            "measured_evidence": {
+              "median_boundary_convexity": 0.7315494173500215,
+              "minimum_boundary_convexity": 0.7315494173500215
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "foundalis-0012",
+      "rule": "The maximum rotation-independent component elongation (long side / short side) is greater than 2.39",
+      "answered": 2,
+      "correct": 2,
+      "queries": [
+        {
+          "label": true,
+          "truth": true,
+          "evidence": {
+            "rule_votes": [
+              true,
+              true,
+              true
+            ],
+            "measured_evidence": {
+              "maximum_elongation": 2.9130434782608696,
+              "median_elongation": 2.9130434782608696,
+              "minimum_elongation": 2.9130434782608696
+            }
+          }
+        },
+        {
+          "label": false,
+          "truth": false,
+          "evidence": {
+            "rule_votes": [
+              false,
+              false,
+              false
+            ],
+            "measured_evidence": {
+              "maximum_elongation": 1.0,
+              "median_elongation": 1.0,
+              "minimum_elongation": 1.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "foundalis-0152",
+      "rule": "The minimum rotation-independent component elongation (long side / short side) is greater than 1.44",
+      "answered": 2,
+      "correct": 1,
+      "queries": [
+        {
+          "label": false,
+          "truth": true,
+          "evidence": {
+            "rule_votes": [
+              false
+            ],
+            "measured_evidence": {
+              "minimum_elongation": 1.397233214817856
+            }
+          }
+        },
+        {
+          "label": false,
+          "truth": false,
+          "evidence": {
+            "rule_votes": [
+              false
+            ],
+            "measured_evidence": {
+              "minimum_elongation": 1.1333333333333333
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "The feature design was developed after inspecting collection examples; this is not independent held-out model-selection accuracy.",
+    "Thresholds are fitted from support only. Query answers are used only for reporting after prediction.",
+    "The added problem 152 candidate gets one query wrong; the nine earlier wrong decisions also remain.",
+    "Most problems remain unresolved; animated concepts and arbitrary semantic rules are unsupported."
+  ]
+}

@@ -44,7 +44,7 @@ def general_bongard():
     st.write("Find a property separating A from B, then test it on unseen images.")
     st.caption("Executable drawing rules first · local visual classification for broader concepts")
     positive, negative, queries, truth = [], [], [], None
-    options = ["Page image", "Live camera", "Separate images", "Supplied path example", "Supplied dotted page"]
+    options = ["Page image", "Live camera", "Separate images", "Generated geometry", "Supplied path example", "Supplied dotted page"]
     if Path("data/external/classic_bongard/episodes.json").is_file(): options.append("Classic problems / local data")
     if Path("data/external/foundalis/manifest.json").is_file(): options.append("Foundalis collection / local data")
     source = st.radio("Input source", options, horizontal=True, key="general_source")
@@ -81,6 +81,11 @@ def general_bongard():
     elif source == "Live camera":
         from .live_camera import live_camera_workspace
         positive,negative = live_camera_workspace()
+    elif source == "Generated geometry":
+        from src.reasoning.examples import geometric_demo
+        example = st.selectbox("Geometry problem", ["Convex / concave boundaries", "Elongated / compact shapes"], key="general_geometry")
+        positive, negative = map(list, geometric_demo("convexity" if example.startswith("Convex") else "elongation"))
+        st.caption("Generated demonstrations vary rotation, fill and polygon shape. The solver receives only pixels and the A/B groups; the last drawing on each side is reserved by default.")
     elif source == "Supplied dotted page":
         from src.vision.panel_detection import split_problem_page
         image = np.array(Image.open("data/fixtures/dotted_page.png").convert("RGB"))
@@ -138,11 +143,27 @@ def general_bongard():
             st.warning(f"Strict independent evaluation excludes this problem: {error}"); return
         st.caption("Five examples per group; the sixth is hidden for evaluation. Task names and solutions do not enter inference.")
     if positive and negative and not queries:
-        can_reserve = min(len(positive), len(negative)) >= 3
-        reserve = st.checkbox("Withhold the last image in each group for a test", value=can_reserve,
+        per_group = min(len(positive), len(negative))
+        can_reserve = per_group >= 3
+        executable_first = st.session_state.get("general_structural_first", True)
+        default_reserve = per_group >= (4 if executable_first else 3)
+        holdout_context = (source, len(positive), len(negative), executable_first)
+        # Reset before creating the widget when its support budget changes.
+        # A checked six-panel default must not silently leave only two supports
+        # after switching to a three-panel upload. Ordinary reruns retain an
+        # explicit user choice for the same input counts and reasoning mode.
+        if ("general_holdout" not in st.session_state
+                or st.session_state.get("general_holdout_context") != holdout_context):
+            st.session_state.general_holdout = default_reserve
+            st.session_state.general_holdout_context = holdout_context
+        reserve = st.checkbox("Withhold the last image in each group for a test",
                               disabled=not can_reserve, key="general_holdout")
         if not can_reserve: st.caption("A reserved test needs at least three images per group, leaving two supports each. You can also upload unseen images separately.")
-        if reserve and min(len(positive), len(negative)) >= 3:
+        if executable_first and per_group == 3:
+            st.caption("Executable drawing rules need at least three support images per group. "
+                       "Leave the test unchecked to use all three; checking it leaves two supports "
+                       "and uses visual feature classification instead.")
+        if reserve and can_reserve:
             # Interleave hidden queries in a deterministic pixel-based order.
             pairs = [(positive[-1], True), (negative[-1], False)]
             pairs.sort(key=lambda item: sha256(item[0].tobytes()).hexdigest())
@@ -178,7 +199,7 @@ def general_bongard():
             rounds = st.slider("Concept search rounds", 1, 4, 2, key="general_concept_rounds")
             st.caption("The local model proposes concepts from support only, checks each image independently, and revises failed hypotheses. This can take several minutes. Its self-checks can still be wrong.")
     identities = tuple((key, spec.revision) for key, spec in MODELS.items())
-    fingerprint = sha256(repr((4, identities, structural_first, representation, language, language_model, rounds,generate,
+    fingerprint = sha256(repr((5, identities, structural_first, representation, language, language_model, rounds,generate,
                                len(positive), len(negative), len(queries))).encode()+
                          "".join(image_digest(i) for i in positive+negative+queries).encode()).hexdigest()
     if st.button("Solve locally", type="primary", disabled=min(len(positive), len(negative)) < 2, key="general_solve"):

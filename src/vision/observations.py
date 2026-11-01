@@ -6,6 +6,9 @@ evidence is None. Relative lengths use the observed marks, not the panel size.
 import cv2
 import numpy as np
 
+OBSERVATION_VERSION = "ink-boundary-observations-v2"
+BOUNDARY_PERIMETER_TOLERANCE = .02
+
 DESCRIPTIONS = {
     "component_count": "number of disconnected ink components",
     "hole_count": "number of enclosed white holes",
@@ -16,6 +19,11 @@ DESCRIPTIONS = {
     "mean_component_area": "mean component area relative to the panel",
     "median_solidity": "median component convexity (area / convex-hull area)",
     "minimum_solidity": "minimum component convexity (area / convex-hull area)",
+    "median_boundary_convexity": "median simplified-boundary convexity (area / convex-hull area)",
+    "minimum_boundary_convexity": "minimum simplified-boundary convexity (area / convex-hull area)",
+    "median_elongation": "median rotation-independent component elongation (long side / short side)",
+    "minimum_elongation": "minimum rotation-independent component elongation (long side / short side)",
+    "maximum_elongation": "maximum rotation-independent component elongation (long side / short side)",
     "median_circularity": "median component circularity",
     "area_variation": "variation in component sizes",
     "mirror_x": "agreement with a left-right reflection",
@@ -69,15 +77,33 @@ def observations(image):
     values.update(mean_component_area=float(areas.mean()/(w*h)), area_variation=float(areas.std()/areas.mean()))
     for name, reflected in (("mirror_x", crop[:,::-1]), ("mirror_y", crop[::-1]), ("rotation_180", crop[::-1,::-1])):
         values[name] = float(np.count_nonzero(crop & reflected)/np.count_nonzero(crop | reflected))
-    solidity, circularity = [], []
+    solidity, circularity, boundary_convexity, elongations = [], [], [], []
     for index in keep:
         contour = max(cv2.findContours(np.uint8(labels == index)*255, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0], key=cv2.contourArea)
         area = cv2.contourArea(contour)
         perimeter = cv2.arcLength(contour, True)
         solidity.append(area/max(1.,cv2.contourArea(cv2.convexHull(contour))))
         circularity.append(4*np.pi*area/max(1.,perimeter**2))
+        # Raster stair steps depress raw solidity, especially for small filled
+        # triangles. Measure a boundary simplified at a fixed 2% perimeter
+        # tolerance as separate evidence; retain the original raw measurements.
+        boundary = cv2.approxPolyDP(contour, BOUNDARY_PERIMETER_TOLERANCE*perimeter, True)
+        boundary_area = cv2.contourArea(boundary)
+        hull_area = cv2.contourArea(cv2.convexHull(boundary))
+        boundary_convexity.append(float(boundary_area/hull_area)
+                                 if len(boundary) >= 3 and boundary_area > 0 and hull_area > 0 else None)
+        # A minimum-area rectangle rotates with the component. Axis-aligned
+        # panel extents cannot express "elongated" across arbitrary rotations.
+        sides = cv2.minAreaRect(contour)[1]
+        elongations.append(float(max(sides)/min(sides)) if min(sides) > 0 else None)
     values.update(median_solidity=float(np.median(solidity)), minimum_solidity=float(min(solidity)),
                   median_circularity=float(np.median(circularity)))
+    if all(value is not None for value in boundary_convexity):
+        values.update(median_boundary_convexity=float(np.median(boundary_convexity)),
+                      minimum_boundary_convexity=float(min(boundary_convexity)))
+    if all(value is not None for value in elongations):
+        values.update(median_elongation=float(np.median(elongations)),
+                      minimum_elongation=float(min(elongations)), maximum_elongation=float(max(elongations)))
     dot_ids = [j for j in range(len(keep)) if .5*np.median(areas) <= areas[j] <= 2*np.median(areas)
                and circularity[j] > .4]
     if (3 <= len(dot_ids) <= 512 and len(dot_ids) >= .6*len(keep)

@@ -40,6 +40,51 @@ def _dotted(rng, spacing, size=320):
     return image
 
 
+def _boundary_drawing(rng, size=320, *, concave=None, elongated=None, filled=None, corners=None):
+    """New convex/concave and elongated figures, checked after rendering."""
+    image = np.full((size, size, 3), 255, np.uint8)
+    corners = int(rng.integers(3, 9)) if corners is None else corners
+    concave = bool(rng.integers(2)) if concave is None else concave
+    angles = np.linspace(0, 2*pi, corners*(2 if concave else 1), endpoint=False)
+    radius = np.ones(len(angles))
+    if concave:
+        # Stay inside the apothem even for a three-point star; otherwise the
+        # supposed concave example could still be a convex hexagon.
+        radius[1::2] = float(rng.uniform(.18, .30))
+    points = np.column_stack((np.cos(angles), np.sin(angles)))*radius[:, None]
+    aspect = rng.uniform(.12, .23) if elongated is True else rng.uniform(.8, 1.) if elongated is False else rng.uniform(.12, 1.)
+    points[:, 0] *= float(aspect)
+    points *= float(rng.uniform(.24, .36))*size
+    angle = float(rng.uniform(0, 2*pi))
+    rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
+    points = np.rint(points@rotation+size/2+rng.uniform(-.06, .06, 2)*size).astype(np.int32)
+    filled = bool(rng.integers(2)) if filled is None else filled
+    if filled:
+        cv2.fillPoly(image, [points], (0, 0, 0))
+    else:
+        cv2.polylines(image, [points], True, (0, 0, 0), int(rng.integers(2, 5)))
+    return image
+
+
+def geometric_demo(concept, *, seed=73, per_group=6):
+    """A controlled pixel-only demonstration, not an external benchmark.
+
+    The concept names select what the generator draws. Only the resulting
+    pixels and group membership enter the solver, exactly as with an upload.
+    """
+    if concept not in ("convexity", "elongation") or not 4 <= per_group <= 8:
+        raise ValueError("Choose convexity or elongation and 4–8 examples per group.")
+    rng = np.random.default_rng(seed)
+    groups = []
+    for label in (True, False):
+        groups.append([_boundary_drawing(rng,
+            concave=not label if concept == "convexity" else bool(index % 2),
+            elongated=label if concept == "elongation" else False,
+            filled=bool((index if concept == "convexity" else index//2) % 2),
+            corners=3+index % 5) for index in range(per_group)])
+    return tuple(groups)
+
+
 def generate_checked_examples(diagnostics, *, seed=97, attempts=64):
     candidates = diagnostics.get("structural_attempt",{}).get("candidates",[])
     if not candidates:
@@ -56,6 +101,8 @@ def generate_checked_examples(diagnostics, *, seed=97, attempts=64):
             try:
                 if numeric and rules[0].feature.startswith("dot_spacing"):
                     image = _dotted(rng, float(rng.uniform(1.15,4.5)))
+                elif numeric and any("boundary_convexity" in rule.feature or "elongation" in rule.feature for rule in rules):
+                    image = _boundary_drawing(rng)
                 elif numeric:
                     # Broad constructive pool, never a copied support drawing.
                     image = np.array(draw_scene(generator.random_scene(int(rng.integers(0,7)))))

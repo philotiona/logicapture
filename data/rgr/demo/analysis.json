@@ -1,0 +1,1863 @@
+{
+  "metadata": {
+    "source": "reproducible command-line experiment",
+    "dataset_kind": "synthetic",
+    "settings": {
+      "threshold": 0.6,
+      "brightness": 0,
+      "contrast": 1,
+      "size": 224,
+      "rotation": 0,
+      "flip": false
+    },
+    "dataset_fingerprint": "9deae2858bd6056176680be9dc4b5103c4ac62621ae86595ab36c549b429b27b",
+    "split_seed": 2026,
+    "preprocessing_id": "rgr-letterbox-bilinear-linear-tones-normalize48-v1",
+    "base_model_sha256": "bd88f1884467a978c0af39a175c15fe07204e2f3b75331a6f568ff077ab15f60",
+    "adapted_model_sha256": "08d81c4eb90282d3bcc88440a71bf0664ff5b08374af6c4e576b2d55d489de4f",
+    "split_counts": {
+      "train": 72,
+      "validation": 24,
+      "test": 24
+    },
+    "test_image": "synthetic/quadrilateral/2026_0000.png",
+    "test_image_id": "084bcd17199c15a652ed7cfcfa19ff4af6f833285ccf922236b1ac2f3f45fc36",
+    "sweep_model": "Pretrained CNN",
+    "cnn_input": [
+      48,
+      48
+    ],
+    "sliders": [
+      "confidence",
+      "brightness",
+      "contrast"
+    ]
+  },
+  "model_comparison": [
+    {
+      "name": "Compact attribute CNN",
+      "task": "Shape/fill classification of segmented objects",
+      "advantages": "Trainable on personal examples; reports class confidence; existing project-pretrained checkpoint",
+      "disadvantages": "Depends on segmentation; domain shift; confidence is not calibrated accuracy",
+      "resources": "TensorFlow/Keras; local checkpoint; 113,558 parameters; modest object crops",
+      "project_fit": "Chosen: reuses the project's attribute model and supports before/after fine-tuning"
+    },
+    {
+      "name": "MobileNetV2",
+      "task": "General image classification / transferable image features",
+      "advantages": "Compact general-purpose architecture; official Keras implementation; transferable features",
+      "disadvantages": "ImageNet labels do not directly classify this project's geometric shapes; requires a new task head and labeled adaptation",
+      "resources": "TensorFlow/Keras; additional weights if ImageNet initialization is used",
+      "project_fit": "Considered, not trained or benchmarked here; less direct reuse than the existing narrow shape CNN"
+    },
+    {
+      "name": "OpenCV geometric classifier",
+      "task": "Contour-based shape/fill classification",
+      "advantages": "Local, deterministic, lightweight; no training data or neural weights",
+      "disadvantages": "Fixed geometry rules; broken/merged contours and irregular drawings can fail",
+      "resources": "CPU; OpenCV; no learned checkpoint",
+      "project_fit": "Existing geometric alternative and useful baseline; cannot be fine-tuned with gradients"
+    }
+  ],
+  "sweeps": {
+    "threshold": [
+      {
+        "value": 0.1,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7947641015052795,
+        "probabilities": {
+          "circle": 0.00020376326574478298,
+          "triangle": 0.19599507749080658,
+          "quadrilateral": 0.7947641015052795,
+          "polygon": 0.009036993607878685
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.425300001865253,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 0.3,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7947641015052795,
+        "probabilities": {
+          "circle": 0.00020376326574478298,
+          "triangle": 0.19599507749080658,
+          "quadrilateral": 0.7947641015052795,
+          "polygon": 0.009036993607878685
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.401299993740395,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 0.5,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7947641015052795,
+        "probabilities": {
+          "circle": 0.00020376326574478298,
+          "triangle": 0.19599507749080658,
+          "quadrilateral": 0.7947641015052795,
+          "polygon": 0.009036993607878685
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.834800005890429,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 0.7,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7947641015052795,
+        "probabilities": {
+          "circle": 0.00020376326574478298,
+          "triangle": 0.19599507749080658,
+          "quadrilateral": 0.7947641015052795,
+          "polygon": 0.009036993607878685
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.862199981696904,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 0.9,
+        "prediction": "quadrilateral",
+        "accepted": false,
+        "confidence": 0.7947641015052795,
+        "probabilities": {
+          "circle": 0.00020376326574478298,
+          "triangle": 0.19599507749080658,
+          "quadrilateral": 0.7947641015052795,
+          "polygon": 0.009036993607878685
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "reason": "below_confidence_threshold",
+        "elapsed_ms": 6.626599992159754,
+        "truth": "quadrilateral",
+        "correct": false
+      }
+    ],
+    "brightness": [
+      {
+        "value": -100,
+        "prediction": null,
+        "accepted": false,
+        "confidence": 0.0,
+        "probabilities": {},
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "reason": "blank_or_uniform_image",
+        "elapsed_ms": 0.9618999902158976,
+        "truth": "quadrilateral",
+        "correct": false
+      },
+      {
+        "value": -50,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.9952948689460754,
+        "probabilities": {
+          "circle": 3.023458702955395e-05,
+          "triangle": 0.004561874084174633,
+          "quadrilateral": 0.9952948689460754,
+          "polygon": 0.00011302490747766569
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.152100017061457,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 0,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7947641015052795,
+        "probabilities": {
+          "circle": 0.00020376326574478298,
+          "triangle": 0.19599507749080658,
+          "quadrilateral": 0.7947641015052795,
+          "polygon": 0.009036993607878685
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.5805999911390245,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 50,
+        "prediction": "triangle",
+        "accepted": true,
+        "confidence": 0.931740939617157,
+        "probabilities": {
+          "circle": 1.7907841538544744e-05,
+          "triangle": 0.931740939617157,
+          "quadrilateral": 0.06783048808574677,
+          "polygon": 0.00041060178773477674
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.026399991242215,
+        "truth": "quadrilateral",
+        "correct": false
+      },
+      {
+        "value": 100,
+        "prediction": null,
+        "accepted": false,
+        "confidence": 0.0,
+        "probabilities": {},
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "reason": "blank_or_uniform_image",
+        "elapsed_ms": 0.836799998069182,
+        "truth": "quadrilateral",
+        "correct": false
+      }
+    ],
+    "contrast": [
+      {
+        "value": 0.5,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7555970549583435,
+        "probabilities": {
+          "circle": 0.00013223910355009139,
+          "triangle": 0.2422914355993271,
+          "quadrilateral": 0.7555970549583435,
+          "polygon": 0.0019793547689914703
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.455900002038106,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 1.0,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7947641015052795,
+        "probabilities": {
+          "circle": 0.00020376326574478298,
+          "triangle": 0.19599507749080658,
+          "quadrilateral": 0.7947641015052795,
+          "polygon": 0.009036993607878685
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.372599978931248,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 2.0,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.8208677768707275,
+        "probabilities": {
+          "circle": 0.0001648246543481946,
+          "triangle": 0.17069043219089508,
+          "quadrilateral": 0.8208677768707275,
+          "polygon": 0.008276949636638165
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.151799985673279,
+        "truth": "quadrilateral",
+        "correct": true
+      }
+    ],
+    "size": [
+      {
+        "value": 128,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.8057012557983398,
+        "probabilities": {
+          "circle": 0.00020740095351357013,
+          "triangle": 0.18559888005256653,
+          "quadrilateral": 0.8057012557983398,
+          "polygon": 0.008492451161146164
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 128,
+        "elapsed_ms": 5.698600027244538,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 224,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7947641015052795,
+        "probabilities": {
+          "circle": 0.00020376326574478298,
+          "triangle": 0.19599507749080658,
+          "quadrilateral": 0.7947641015052795,
+          "polygon": 0.009036993607878685
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.048499984899536,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 320,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.743270754814148,
+        "probabilities": {
+          "circle": 0.00018731123418547213,
+          "triangle": 0.24881604313850403,
+          "quadrilateral": 0.743270754814148,
+          "polygon": 0.0077258748933672905
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 320,
+        "elapsed_ms": 8.867199998348951,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 416,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7745966911315918,
+        "probabilities": {
+          "circle": 0.00020432769088074565,
+          "triangle": 0.21671153604984283,
+          "quadrilateral": 0.7745966911315918,
+          "polygon": 0.008487381041049957
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 416,
+        "elapsed_ms": 10.456399992108345,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": 640,
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7443475723266602,
+        "probabilities": {
+          "circle": 0.00018956077110487968,
+          "triangle": 0.24761731922626495,
+          "quadrilateral": 0.7443475723266602,
+          "polygon": 0.007845587097108364
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 640,
+        "elapsed_ms": 19.666399981360883,
+        "truth": "quadrilateral",
+        "correct": true
+      }
+    ],
+    "augmentation": [
+      {
+        "value": "original",
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7947641015052795,
+        "probabilities": {
+          "circle": 0.00020376326574478298,
+          "triangle": 0.19599507749080658,
+          "quadrilateral": 0.7947641015052795,
+          "polygon": 0.009036993607878685
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.886899995151907,
+        "truth": "quadrilateral",
+        "correct": true
+      },
+      {
+        "value": "rotate20",
+        "prediction": "polygon",
+        "accepted": false,
+        "confidence": 0.42931583523750305,
+        "probabilities": {
+          "circle": 0.0732993483543396,
+          "triangle": 0.2587503492832184,
+          "quadrilateral": 0.23863452672958374,
+          "polygon": 0.42931583523750305
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "reason": "below_confidence_threshold",
+        "elapsed_ms": 7.419800007482991,
+        "truth": "quadrilateral",
+        "correct": false
+      },
+      {
+        "value": "hflip",
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.8270475268363953,
+        "probabilities": {
+          "circle": 0.00013382303586695343,
+          "triangle": 0.16529440879821777,
+          "quadrilateral": 0.8270475268363953,
+          "polygon": 0.0075243012979626656
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.194699992192909,
+        "truth": "quadrilateral",
+        "correct": true
+      }
+    ]
+  },
+  "training": {
+    "schema_version": 1,
+    "seed": 2026,
+    "epochs": 4,
+    "selected_epoch": 3,
+    "checkpoint_selection": "validation accuracy, then validation loss",
+    "classes": [
+      "circle",
+      "triangle",
+      "quadrilateral",
+      "polygon"
+    ],
+    "dataset_fingerprint": "9deae2858bd6056176680be9dc4b5103c4ac62621ae86595ab36c549b429b27b",
+    "source": "synthetic_demo",
+    "base_model": "C:\\Users\\philo\\Documents\\ChatGPT\\logicapture 2\\data\\models\\attributes.keras",
+    "base_model_sha256": "bd88f1884467a978c0af39a175c15fe07204e2f3b75331a6f568ff077ab15f60",
+    "adaptation": "Only the shape head is fine-tuned; visual features and fill head are frozen.",
+    "trainable_parameters": 132,
+    "augmentation": [
+      "training-only rotation ±10 degrees",
+      "training-only horizontal flip",
+      "training-only brightness and contrast"
+    ],
+    "split": {
+      "train": [
+        {
+          "name": "synthetic/circle/2026_0000.png",
+          "label": "circle",
+          "pixel_sha256": "be07a22fad14ce6656b5629f4f6a9e998773ad1534d72845f000b5a49c6600ae"
+        },
+        {
+          "name": "synthetic/circle/2026_0025.png",
+          "label": "circle",
+          "pixel_sha256": "2c0613588d8fffe8b3a50f5d94d10a2203dca528e4992f150a8bbddc10198c07"
+        },
+        {
+          "name": "synthetic/circle/2026_0007.png",
+          "label": "circle",
+          "pixel_sha256": "0476149c857ea59f4b335759226450b7cab984a0aefc48016273ebb656673975"
+        },
+        {
+          "name": "synthetic/circle/2026_0024.png",
+          "label": "circle",
+          "pixel_sha256": "54281a4f17e7113d5c452bac33c7433dcaeef9a4fb8c79e221346f2729491358"
+        },
+        {
+          "name": "synthetic/circle/2026_0020.png",
+          "label": "circle",
+          "pixel_sha256": "042a4814ac2ef4e8ad0e63f1afef6de0e75782cebebeb8880e733fae8ded5274"
+        },
+        {
+          "name": "synthetic/circle/2026_0029.png",
+          "label": "circle",
+          "pixel_sha256": "62f3c8e451ef05a199b35400106d6358d1511c7112308e99957c327169dd84a1"
+        },
+        {
+          "name": "synthetic/circle/2026_0014.png",
+          "label": "circle",
+          "pixel_sha256": "054b55df790de8b837e5a4ae2b66ca54de03a7df30cb63c4c32b790842def2b7"
+        },
+        {
+          "name": "synthetic/circle/2026_0018.png",
+          "label": "circle",
+          "pixel_sha256": "69f286c4e3731e1c18ff16a7029bfcf2955b95188756d77c61da89163441a27d"
+        },
+        {
+          "name": "synthetic/circle/2026_0001.png",
+          "label": "circle",
+          "pixel_sha256": "66f34627d56a49285d9b9f840515d5bf241bbb4a1c1f12a8e22955b79e4ee3c9"
+        },
+        {
+          "name": "synthetic/circle/2026_0010.png",
+          "label": "circle",
+          "pixel_sha256": "b42312973536d2b606b2dad2b9ef4931f6025c6ff7b9d3356cf815fe15ea4356"
+        },
+        {
+          "name": "synthetic/circle/2026_0016.png",
+          "label": "circle",
+          "pixel_sha256": "3c122ddf9648b7c159835ab26ea09db3b40ef609eabac456f343143645e25420"
+        },
+        {
+          "name": "synthetic/circle/2026_0009.png",
+          "label": "circle",
+          "pixel_sha256": "e571c61a28e8210495a2d91d50c690e28bf9ae5b9b400496f745027c5dadec23"
+        },
+        {
+          "name": "synthetic/circle/2026_0019.png",
+          "label": "circle",
+          "pixel_sha256": "a96358146acec2d3ac5453ba77144fd4d7a5300bb39fa9bc3f52ffadfc192427"
+        },
+        {
+          "name": "synthetic/circle/2026_0023.png",
+          "label": "circle",
+          "pixel_sha256": "295b36a4fc0869fb50ba592f0d0cc68944b4fbfda6a5729c38ed247da4eb796a"
+        },
+        {
+          "name": "synthetic/circle/2026_0012.png",
+          "label": "circle",
+          "pixel_sha256": "e9ad97c1d76a479d494adca31622afa59ffe7742bb896375c5f322120b416611"
+        },
+        {
+          "name": "synthetic/circle/2026_0011.png",
+          "label": "circle",
+          "pixel_sha256": "2eed81ebc9bd595651c54f715594c4b6b1507d01d55f7e90f9dd692f320e66bc"
+        },
+        {
+          "name": "synthetic/circle/2026_0028.png",
+          "label": "circle",
+          "pixel_sha256": "279ae8d6fbd96fe16e99afdb24412b900ece3052e7d687c9d002803937e9f912"
+        },
+        {
+          "name": "synthetic/circle/2026_0013.png",
+          "label": "circle",
+          "pixel_sha256": "4be09ab660a48b5f457d0ae62f55a2acdf19cd66a7a907657f0096ebb847cd80"
+        },
+        {
+          "name": "synthetic/polygon/2026_0019.png",
+          "label": "polygon",
+          "pixel_sha256": "194769d90a237f41de26c99b21477089acd52def279a85f5e2cfc9a258d1dda6"
+        },
+        {
+          "name": "synthetic/polygon/2026_0029.png",
+          "label": "polygon",
+          "pixel_sha256": "0dfd48550f0b77176866efd0c80da0b76d05eb95bc0ed0e3ed989d66c9fabb10"
+        },
+        {
+          "name": "synthetic/polygon/2026_0028.png",
+          "label": "polygon",
+          "pixel_sha256": "ea298fe90db61e3f92c280e5261bfbd80afa5c534073a94136b2ca4ccc083d4d"
+        },
+        {
+          "name": "synthetic/polygon/2026_0002.png",
+          "label": "polygon",
+          "pixel_sha256": "2d8a3062e5bc11e4af2985de7350741d4dc153547f991704d2d486b7771307cc"
+        },
+        {
+          "name": "synthetic/polygon/2026_0022.png",
+          "label": "polygon",
+          "pixel_sha256": "9983059bbee5e932a8bb4efec4c3b57d9567a7e1bfed94f52d19ac157df76805"
+        },
+        {
+          "name": "synthetic/polygon/2026_0020.png",
+          "label": "polygon",
+          "pixel_sha256": "ded33b51a509d4134867d928e4bda5d3ee77eb05680c0b9edc47908a3116519c"
+        },
+        {
+          "name": "synthetic/polygon/2026_0001.png",
+          "label": "polygon",
+          "pixel_sha256": "c2e419b46bc646422eb9549edf1c30cad0329218cac14754341dcc06802c935d"
+        },
+        {
+          "name": "synthetic/polygon/2026_0008.png",
+          "label": "polygon",
+          "pixel_sha256": "266eca42c48671de01978c01b049677d3f70e78ecb6583067b1c34f5b1b2fec8"
+        },
+        {
+          "name": "synthetic/polygon/2026_0017.png",
+          "label": "polygon",
+          "pixel_sha256": "348c7562a56fdece52be2a6e856022bf7e3f62448c8e6f2ed68a7be7f70ed7d7"
+        },
+        {
+          "name": "synthetic/polygon/2026_0021.png",
+          "label": "polygon",
+          "pixel_sha256": "aca95d2473a52c7491646042bcbc510a51e6a11474a0034740be53799a728080"
+        },
+        {
+          "name": "synthetic/polygon/2026_0007.png",
+          "label": "polygon",
+          "pixel_sha256": "149c6fdb62613cbf7b3024556e0ee0c354de93828998ef8d874d70b68399c1dc"
+        },
+        {
+          "name": "synthetic/polygon/2026_0013.png",
+          "label": "polygon",
+          "pixel_sha256": "58d635b6b023b552ed5073f414d0a1b4bd2a66d5be3806357465dd981ac90d2d"
+        },
+        {
+          "name": "synthetic/polygon/2026_0006.png",
+          "label": "polygon",
+          "pixel_sha256": "c7a5be3a134284a0e26f323015f64443476872fd5d143beb573abae51d43a39e"
+        },
+        {
+          "name": "synthetic/polygon/2026_0024.png",
+          "label": "polygon",
+          "pixel_sha256": "11695a850a6a19be1cd768efa10dcc278e8c7af85fdb9c8262d8e1fcb886a5e4"
+        },
+        {
+          "name": "synthetic/polygon/2026_0012.png",
+          "label": "polygon",
+          "pixel_sha256": "3e84dfbfc51e30db099dee0444d87a57a3fbd4aacbde26db38229cd0f1287ff5"
+        },
+        {
+          "name": "synthetic/polygon/2026_0014.png",
+          "label": "polygon",
+          "pixel_sha256": "a9285f0c1a3d0ab1f6988663d7769ed33400e92b8a533699f5f24c4e54f64923"
+        },
+        {
+          "name": "synthetic/polygon/2026_0025.png",
+          "label": "polygon",
+          "pixel_sha256": "1bdd93b255c48d1f423a9f2250eff0a66f1cd781170ea9b366f31b6f41fbc8ac"
+        },
+        {
+          "name": "synthetic/polygon/2026_0005.png",
+          "label": "polygon",
+          "pixel_sha256": "d08a9918d6ea0b3b5b33fc53d26b554605c35acaf02d69dcb8458c82406ab01b"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0025.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "58fdc2f0b5cada331d7875eba8410ddd02ea4dbcd707791051ea8dd64c2f1bf2"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0007.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "c431c85085df05407fcd74d9c5380ecc7d569c70af3c77b48d45e083346aeedb"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0024.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "6d21e94c89ba83e23a7aff39030f8a2b1fad2c2122ea3ccff93542c4aaa58150"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0019.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "758c51e323f3e98876c22149a3e848cae6ba19e037dfedd18b578c7181d447c5"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0020.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "d2171de670d437249ca14492f11135d4c61e107932480ae5d1d98ab337c5b816"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0009.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "46a03f66cef7d5115f15d7cd3f811258aeba5454d58d98f51222f4ada8f2a0f2"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0012.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "ff0494f6876ba24794da73d2f44aa00c7f5ec2ee04f8b868d4bf9ba0f2162637"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0017.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "2559b91467a077c26329c40a6f2e45e21909c1c3b0739015fa20ab274fc5bce3"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0003.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "73bf9e0ebb7b09dc4ad5ff861de1b15775703c68c41ab0d361b07b7b72061c58"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0029.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "2f146f5c08b2db17be7d55e458b7b971fe61d7e4bf9f7c8a48156d7600b6de9c"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0016.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "6a3dd1230113acec2fea6e61dddaba028c96782050a2004b67b856ccd1a632a0"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0018.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "3d263e8043ed2a1a6f743b7135be44615a6a1e32aed1d8d9b9edc9734ebc9e92"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0027.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "c5e39ff9df31c1b29188b2a0014413d48ebc90be0a2e55630afad7cb85b327a5"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0001.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "f21895c97f10420ae01991b41feb778640043135192c972f17f4ec902899e7c2"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0013.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "c59f2fbb52179ebdc27dfd4a46b8696df7f8a548ac71530679f43f7a65bd26e8"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0005.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "b55b633586c7cc8fc4c5c569e463db0e1cf19f54cc1cac92e1c54b1d3e11be83"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0006.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "a1e9fd85dc6162ef29beff33754136f7f7b79112cb2f078cb065fa042c8830aa"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0015.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "62711ea1b5fe08f13fa024cf6296723697c7fcb106e11fa40a2ed3140afecbce"
+        },
+        {
+          "name": "synthetic/triangle/2026_0014.png",
+          "label": "triangle",
+          "pixel_sha256": "64865d1771fbd2e1cce993cd59e95cdd1f51425cc922bde5531bc70207da8052"
+        },
+        {
+          "name": "synthetic/triangle/2026_0010.png",
+          "label": "triangle",
+          "pixel_sha256": "a5ab033c74f6fef72d366d9d519368784df01124bdbc104b998d84ac60363e52"
+        },
+        {
+          "name": "synthetic/triangle/2026_0026.png",
+          "label": "triangle",
+          "pixel_sha256": "44ef37a65538708889ce5b7871989abca801ac97161f4a4d2b20bee77c55002a"
+        },
+        {
+          "name": "synthetic/triangle/2026_0017.png",
+          "label": "triangle",
+          "pixel_sha256": "039f3783bd0e7727192f621da4e6e44930fbabfa5a2b09ddf60d3fac27d319f8"
+        },
+        {
+          "name": "synthetic/triangle/2026_0009.png",
+          "label": "triangle",
+          "pixel_sha256": "f50281cefe033c3bd8a619113bb93d43eb029d3eae923a387014faeb0a9b2663"
+        },
+        {
+          "name": "synthetic/triangle/2026_0013.png",
+          "label": "triangle",
+          "pixel_sha256": "083db6d8be4e497862d6020bfbf2e73b70dfb557366ae854f180685e15547dd6"
+        },
+        {
+          "name": "synthetic/triangle/2026_0016.png",
+          "label": "triangle",
+          "pixel_sha256": "fed80c30115b74af62111a137f15cc714dca701ba7c92335931e6e157498dd36"
+        },
+        {
+          "name": "synthetic/triangle/2026_0003.png",
+          "label": "triangle",
+          "pixel_sha256": "ef8c72162fdd3943ae3d1a6991829f1b52b1103610004e22bc32a95a40215e35"
+        },
+        {
+          "name": "synthetic/triangle/2026_0020.png",
+          "label": "triangle",
+          "pixel_sha256": "78d0dc4733ab0037d1013651dad8a3ba9306ae0bcff77eecf21827d17d37f100"
+        },
+        {
+          "name": "synthetic/triangle/2026_0007.png",
+          "label": "triangle",
+          "pixel_sha256": "5ea5b06715fd7635882403d6fe918ee2eae78249b8d1d3df2e89763547ec77cb"
+        },
+        {
+          "name": "synthetic/triangle/2026_0025.png",
+          "label": "triangle",
+          "pixel_sha256": "12bec7e07f7d9f4e1244927d7eb1771aed16da9bd76ddeb2903396b2ba1b9de8"
+        },
+        {
+          "name": "synthetic/triangle/2026_0019.png",
+          "label": "triangle",
+          "pixel_sha256": "35433abb80083116d237336552b0a6b7867953bb0a3f46a0cbd6e80af8d10f84"
+        },
+        {
+          "name": "synthetic/triangle/2026_0008.png",
+          "label": "triangle",
+          "pixel_sha256": "a69bc3f35471c3aad7611ee9435019b259cb8f10a0c426ba9f9e3ace97105907"
+        },
+        {
+          "name": "synthetic/triangle/2026_0023.png",
+          "label": "triangle",
+          "pixel_sha256": "50b0c4b3649f03491f821f2014f1f04fcb76f60b8e59ed1a9c27421382081f5c"
+        },
+        {
+          "name": "synthetic/triangle/2026_0001.png",
+          "label": "triangle",
+          "pixel_sha256": "10f2cf819a9a4e5fef3d795dc3f175e825bc1fd504298de275ecbf003fd0760b"
+        },
+        {
+          "name": "synthetic/triangle/2026_0015.png",
+          "label": "triangle",
+          "pixel_sha256": "534a7a0fa3bde1d08c8bb7ba059cea4037ce3da9dedfce50900153e054bf2b5b"
+        },
+        {
+          "name": "synthetic/triangle/2026_0006.png",
+          "label": "triangle",
+          "pixel_sha256": "0246361e322399eef702e34b8022666ea14d054b27c4e1b5141780bdf3fcab8d"
+        },
+        {
+          "name": "synthetic/triangle/2026_0002.png",
+          "label": "triangle",
+          "pixel_sha256": "de2f27a2f1c0829cb53bd646a31a1662a3b53aeb8a6b5fa0355286f7f77d8322"
+        }
+      ],
+      "validation": [
+        {
+          "name": "synthetic/circle/2026_0006.png",
+          "label": "circle",
+          "pixel_sha256": "4074da95255deecc3bd384afbf4d650221b85736b7890b6253e443faa08550f3"
+        },
+        {
+          "name": "synthetic/circle/2026_0002.png",
+          "label": "circle",
+          "pixel_sha256": "5ffccdb0331721c420a41c46d5c1b6fd433c82cfb884549ca994b6717baf50ce"
+        },
+        {
+          "name": "synthetic/circle/2026_0004.png",
+          "label": "circle",
+          "pixel_sha256": "6b6c5cfc75e220861332f32fbb3ada6f8e2921de666f73e3f9231a1c46a7afbc"
+        },
+        {
+          "name": "synthetic/circle/2026_0027.png",
+          "label": "circle",
+          "pixel_sha256": "709ee2931599d21247fa81c5f82015c74a0cdc741bf57b525afb2a7e3bf164d4"
+        },
+        {
+          "name": "synthetic/circle/2026_0021.png",
+          "label": "circle",
+          "pixel_sha256": "b73e3e99dad373572ab46fe7683ff444c276547a4239929a029d7cab9e12d1eb"
+        },
+        {
+          "name": "synthetic/circle/2026_0005.png",
+          "label": "circle",
+          "pixel_sha256": "e75573286d47ea8d1ddfb3a7b253456ade62c2f26d1f9b80e3577f37c3ed60a8"
+        },
+        {
+          "name": "synthetic/polygon/2026_0016.png",
+          "label": "polygon",
+          "pixel_sha256": "9e3efe8de4b71865d539813d504366bd4d04465e7595e6f498357fbdec536c8f"
+        },
+        {
+          "name": "synthetic/polygon/2026_0003.png",
+          "label": "polygon",
+          "pixel_sha256": "38dd747fdba1b65b3c67a9f42b9422ce98c88b55717db4ae3b40e3f56349475d"
+        },
+        {
+          "name": "synthetic/polygon/2026_0010.png",
+          "label": "polygon",
+          "pixel_sha256": "34247b1c47784c5c4188e3dadc2270280640426c281946fc84082777f91df172"
+        },
+        {
+          "name": "synthetic/polygon/2026_0004.png",
+          "label": "polygon",
+          "pixel_sha256": "da23ee5121cbdb7415b66acd92dbbca8f77be5a5cd7520aaf5c8c7afe5dd111e"
+        },
+        {
+          "name": "synthetic/polygon/2026_0018.png",
+          "label": "polygon",
+          "pixel_sha256": "2474a6c66d70b10d22e3ddcc2cec76e1b02d7c0cea1b7599882f5def6612829a"
+        },
+        {
+          "name": "synthetic/polygon/2026_0011.png",
+          "label": "polygon",
+          "pixel_sha256": "6b4cee1092363d57ed3df781b8f94bcd1d37a1c98a82377dae8609630628c2d6"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0022.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "f29543b56be46385f302c9cdfd938fc42ead8a139d9611e98da9c3fe9aead01f"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0008.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "3d8e1dcc2bd0b667f78facd9c56f201168429a3d327c04afe343757c57b67fc7"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0010.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "ab00ba0c0ef3296fab565ed5433623abc759fcea0588656d9fbda7333c6f93a9"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0014.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "27b9a4e7095a56a89b346c9b08d1601cff193fd9c867871277a130826577ecdb"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0026.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "972c2f981f7355b17514b67cc81ce3516a93b389b250e5342f8707b4ff7e88dc"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0011.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "380e5c0527cb9e7ef0b2901526ed99e70ad7100df9b8bee777deace670822e4e"
+        },
+        {
+          "name": "synthetic/triangle/2026_0024.png",
+          "label": "triangle",
+          "pixel_sha256": "227778fee1121ff91f9fb9f750ec636f2ebab487d34c5442ecac2eed7f6f7168"
+        },
+        {
+          "name": "synthetic/triangle/2026_0028.png",
+          "label": "triangle",
+          "pixel_sha256": "c6d3ee08decea9458d36f8b740ddfbd052a09ca24c015309f90204ee79f7a2e1"
+        },
+        {
+          "name": "synthetic/triangle/2026_0000.png",
+          "label": "triangle",
+          "pixel_sha256": "5886743c3ef4e13d4ac1f1596e34590da91174402e81f765bab11eeff2db1abb"
+        },
+        {
+          "name": "synthetic/triangle/2026_0011.png",
+          "label": "triangle",
+          "pixel_sha256": "9cc5e5ba32e5d8d2a3a971fd4e616c3a92348624b2d6239a2c643f0fe36646e2"
+        },
+        {
+          "name": "synthetic/triangle/2026_0027.png",
+          "label": "triangle",
+          "pixel_sha256": "efc2a4d846c6d0dbc35da16f812d2f1210ae87000592bd4c935be144a7365252"
+        },
+        {
+          "name": "synthetic/triangle/2026_0005.png",
+          "label": "triangle",
+          "pixel_sha256": "7b70c3c54a4ad67041aa698e168bba0ad95f400bb77e824d3987ecd20420dbc3"
+        }
+      ],
+      "test": [
+        {
+          "name": "synthetic/circle/2026_0026.png",
+          "label": "circle",
+          "pixel_sha256": "26a7611ce483d2796eabd1917d65273c8189172707e7707071279f0efcd9d929"
+        },
+        {
+          "name": "synthetic/circle/2026_0022.png",
+          "label": "circle",
+          "pixel_sha256": "6a071b773a97338c8df34654a1456fc5f10593f93e73fed97845d0636423689e"
+        },
+        {
+          "name": "synthetic/circle/2026_0003.png",
+          "label": "circle",
+          "pixel_sha256": "e23123f082e5c7bd0795625a86dd347eb2025f6fc7bf449aecd7ba7f29c9a4ff"
+        },
+        {
+          "name": "synthetic/circle/2026_0017.png",
+          "label": "circle",
+          "pixel_sha256": "ac71cf14ce968afd62e424b701d5bf918967f72a00978d272bf7aa11da1b1965"
+        },
+        {
+          "name": "synthetic/circle/2026_0008.png",
+          "label": "circle",
+          "pixel_sha256": "b2d1bf004e5981ff9b43218393e0f43f16a0ddcc6336158670d331ccdad85372"
+        },
+        {
+          "name": "synthetic/circle/2026_0015.png",
+          "label": "circle",
+          "pixel_sha256": "b4455a58200d9368f1b67afbd7f92931ecec793a707814901776c06513e2f83e"
+        },
+        {
+          "name": "synthetic/polygon/2026_0009.png",
+          "label": "polygon",
+          "pixel_sha256": "be05a64087b24f8c02b7f98727f9c683da3b301cccde5e5771afe2c1717961a4"
+        },
+        {
+          "name": "synthetic/polygon/2026_0026.png",
+          "label": "polygon",
+          "pixel_sha256": "7b77d913905abd91182c719ae140ce6b42cc9e069d13ee72194e0d77450ca447"
+        },
+        {
+          "name": "synthetic/polygon/2026_0000.png",
+          "label": "polygon",
+          "pixel_sha256": "ac8dcaa8d3d4dca332da0af7adeea6f06cf39bcea17568e77b290ab7b2653368"
+        },
+        {
+          "name": "synthetic/polygon/2026_0015.png",
+          "label": "polygon",
+          "pixel_sha256": "8e4f9add085839b23bcb341d6edf59175ccfaa648a68a126b40c93311077be9b"
+        },
+        {
+          "name": "synthetic/polygon/2026_0027.png",
+          "label": "polygon",
+          "pixel_sha256": "be21cb4511c57380ca22044152f083eb82e96f18aba69c88e89ca321c5078fb3"
+        },
+        {
+          "name": "synthetic/polygon/2026_0023.png",
+          "label": "polygon",
+          "pixel_sha256": "585e335d99f4f790f10e46c3571821cc3c323a89816d026e56049d0c7694ad82"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0000.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "084bcd17199c15a652ed7cfcfa19ff4af6f833285ccf922236b1ac2f3f45fc36"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0002.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "97c66590f387327156cc5595dd2f1a84ec6e9cbaf1e611b09973a35d31ba62e5"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0028.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "bc88292fc3c7cefdf4b975a1e7236d93afc5d1b62202d496b460c6de7e1fa0a8"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0023.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "c06002ef628b37c745cbcc978aeca1d16b36d2606ce54bc3c9a83d1f1bba6de9"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0021.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "1917ee8ae8a5a0623f58888926fc35b77ffbb64b32db226cf371abc302e4ab54"
+        },
+        {
+          "name": "synthetic/quadrilateral/2026_0004.png",
+          "label": "quadrilateral",
+          "pixel_sha256": "82ec36ee3eef2ad04a2282175cfbf4e857954e745b41f4bc81c84a4b36f98d2f"
+        },
+        {
+          "name": "synthetic/triangle/2026_0029.png",
+          "label": "triangle",
+          "pixel_sha256": "8871b9c5c8cd0b30ff923ae7253fdf3cebe8e27c68daa58399a284f0fd449d21"
+        },
+        {
+          "name": "synthetic/triangle/2026_0012.png",
+          "label": "triangle",
+          "pixel_sha256": "b330549d9216c634c1b9a2a9290a1fbb5b8b905072ecd5730066b611b0feae85"
+        },
+        {
+          "name": "synthetic/triangle/2026_0021.png",
+          "label": "triangle",
+          "pixel_sha256": "837ec2f67837c827e325e1d12558595a3fa1e45325629d572281e992959bb7da"
+        },
+        {
+          "name": "synthetic/triangle/2026_0022.png",
+          "label": "triangle",
+          "pixel_sha256": "accc3ee9bad8be4ac14043524f1f8b27a3555adf5c0e9cdc1e48cea5a8dbad2c"
+        },
+        {
+          "name": "synthetic/triangle/2026_0018.png",
+          "label": "triangle",
+          "pixel_sha256": "6405945302090466d752363c7d65760d4a334776daaa3b0c882ba4cc801dea08"
+        },
+        {
+          "name": "synthetic/triangle/2026_0004.png",
+          "label": "triangle",
+          "pixel_sha256": "b3c8419010dc0ecec517d0a25a97dd45318b453866a0911d0de734c0653f3b92"
+        }
+      ]
+    },
+    "split_counts": {
+      "train": 72,
+      "validation": 24,
+      "test": 24
+    },
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 0.1802903844250573,
+        "validation_loss": 0.036792267113924026,
+        "validation_accuracy": 1.0
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.1110129016968939,
+        "validation_loss": 0.03406849130988121,
+        "validation_accuracy": 1.0
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.07797828244252338,
+        "validation_loss": 0.032939400523900986,
+        "validation_accuracy": 1.0
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.06184035229186217,
+        "validation_loss": 0.033319246023893356,
+        "validation_accuracy": 1.0
+      }
+    ],
+    "before": {
+      "accuracy": 1.0,
+      "correct": 24,
+      "incorrect": 0,
+      "count": 24,
+      "mean_confidence": 0.9321541786193848
+    },
+    "after": {
+      "accuracy": 1.0,
+      "correct": 24,
+      "incorrect": 0,
+      "count": 24,
+      "mean_confidence": 0.9588534235954285
+    },
+    "before_after": [
+      {
+        "name": "synthetic/circle/2026_0026.png",
+        "true_label": "circle",
+        "before_prediction": "circle",
+        "before_confidence": 0.9899168610572815,
+        "after_prediction": "circle",
+        "after_confidence": 0.9926839470863342
+      },
+      {
+        "name": "synthetic/circle/2026_0022.png",
+        "true_label": "circle",
+        "before_prediction": "circle",
+        "before_confidence": 0.781257152557373,
+        "after_prediction": "circle",
+        "after_confidence": 0.8283057808876038
+      },
+      {
+        "name": "synthetic/circle/2026_0003.png",
+        "true_label": "circle",
+        "before_prediction": "circle",
+        "before_confidence": 0.8741909861564636,
+        "after_prediction": "circle",
+        "after_confidence": 0.9043070673942566
+      },
+      {
+        "name": "synthetic/circle/2026_0017.png",
+        "true_label": "circle",
+        "before_prediction": "circle",
+        "before_confidence": 0.9635412096977234,
+        "after_prediction": "circle",
+        "after_confidence": 0.97502601146698
+      },
+      {
+        "name": "synthetic/circle/2026_0008.png",
+        "true_label": "circle",
+        "before_prediction": "circle",
+        "before_confidence": 0.8172935843467712,
+        "after_prediction": "circle",
+        "after_confidence": 0.8624470829963684
+      },
+      {
+        "name": "synthetic/circle/2026_0015.png",
+        "true_label": "circle",
+        "before_prediction": "circle",
+        "before_confidence": 0.9882956743240356,
+        "after_prediction": "circle",
+        "after_confidence": 0.9919683337211609
+      },
+      {
+        "name": "synthetic/polygon/2026_0009.png",
+        "true_label": "polygon",
+        "before_prediction": "polygon",
+        "before_confidence": 0.9499790668487549,
+        "after_prediction": "polygon",
+        "after_confidence": 0.9948989748954773
+      },
+      {
+        "name": "synthetic/polygon/2026_0026.png",
+        "true_label": "polygon",
+        "before_prediction": "polygon",
+        "before_confidence": 0.905436635017395,
+        "after_prediction": "polygon",
+        "after_confidence": 0.9927950501441956
+      },
+      {
+        "name": "synthetic/polygon/2026_0000.png",
+        "true_label": "polygon",
+        "before_prediction": "polygon",
+        "before_confidence": 0.7643924355506897,
+        "after_prediction": "polygon",
+        "after_confidence": 0.980426549911499
+      },
+      {
+        "name": "synthetic/polygon/2026_0015.png",
+        "true_label": "polygon",
+        "before_prediction": "polygon",
+        "before_confidence": 0.8214696049690247,
+        "after_prediction": "polygon",
+        "after_confidence": 0.9856904149055481
+      },
+      {
+        "name": "synthetic/polygon/2026_0027.png",
+        "true_label": "polygon",
+        "before_prediction": "polygon",
+        "before_confidence": 0.8115254640579224,
+        "after_prediction": "polygon",
+        "after_confidence": 0.9814032316207886
+      },
+      {
+        "name": "synthetic/polygon/2026_0023.png",
+        "true_label": "polygon",
+        "before_prediction": "polygon",
+        "before_confidence": 0.9826734662055969,
+        "after_prediction": "polygon",
+        "after_confidence": 0.9983474016189575
+      },
+      {
+        "name": "synthetic/quadrilateral/2026_0000.png",
+        "true_label": "quadrilateral",
+        "before_prediction": "quadrilateral",
+        "before_confidence": 0.7947643995285034,
+        "after_prediction": "quadrilateral",
+        "after_confidence": 0.7438380122184753
+      },
+      {
+        "name": "synthetic/quadrilateral/2026_0002.png",
+        "true_label": "quadrilateral",
+        "before_prediction": "quadrilateral",
+        "before_confidence": 0.9883939027786255,
+        "after_prediction": "quadrilateral",
+        "after_confidence": 0.9533793926239014
+      },
+      {
+        "name": "synthetic/quadrilateral/2026_0028.png",
+        "true_label": "quadrilateral",
+        "before_prediction": "quadrilateral",
+        "before_confidence": 0.9951817393302917,
+        "after_prediction": "quadrilateral",
+        "after_confidence": 0.9690191745758057
+      },
+      {
+        "name": "synthetic/quadrilateral/2026_0023.png",
+        "true_label": "quadrilateral",
+        "before_prediction": "quadrilateral",
+        "before_confidence": 0.9949555993080139,
+        "after_prediction": "quadrilateral",
+        "after_confidence": 0.9446874260902405
+      },
+      {
+        "name": "synthetic/quadrilateral/2026_0021.png",
+        "true_label": "quadrilateral",
+        "before_prediction": "quadrilateral",
+        "before_confidence": 0.9997238516807556,
+        "after_prediction": "quadrilateral",
+        "after_confidence": 0.9982933402061462
+      },
+      {
+        "name": "synthetic/quadrilateral/2026_0004.png",
+        "true_label": "quadrilateral",
+        "before_prediction": "quadrilateral",
+        "before_confidence": 0.9826374650001526,
+        "after_prediction": "quadrilateral",
+        "after_confidence": 0.9506760835647583
+      },
+      {
+        "name": "synthetic/triangle/2026_0029.png",
+        "true_label": "triangle",
+        "before_prediction": "triangle",
+        "before_confidence": 0.9746444821357727,
+        "after_prediction": "triangle",
+        "after_confidence": 0.973280668258667
+      },
+      {
+        "name": "synthetic/triangle/2026_0012.png",
+        "true_label": "triangle",
+        "before_prediction": "triangle",
+        "before_confidence": 0.9961875081062317,
+        "after_prediction": "triangle",
+        "after_confidence": 0.9959869980812073
+      },
+      {
+        "name": "synthetic/triangle/2026_0021.png",
+        "true_label": "triangle",
+        "before_prediction": "triangle",
+        "before_confidence": 0.9995174407958984,
+        "after_prediction": "triangle",
+        "after_confidence": 0.9995113611221313
+      },
+      {
+        "name": "synthetic/triangle/2026_0022.png",
+        "true_label": "triangle",
+        "before_prediction": "triangle",
+        "before_confidence": 0.9998894929885864,
+        "after_prediction": "triangle",
+        "after_confidence": 0.9998881816864014
+      },
+      {
+        "name": "synthetic/triangle/2026_0018.png",
+        "true_label": "triangle",
+        "before_prediction": "triangle",
+        "before_confidence": 0.999239444732666,
+        "after_prediction": "triangle",
+        "after_confidence": 0.9992339611053467
+      },
+      {
+        "name": "synthetic/triangle/2026_0004.png",
+        "true_label": "triangle",
+        "before_prediction": "triangle",
+        "before_confidence": 0.9965914487838745,
+        "after_prediction": "triangle",
+        "after_confidence": 0.9963884353637695
+      }
+    ],
+    "limitations": [
+      "Synthetic demo images are drawings, not real photographs; use personal photographs for the assignment.",
+      "Softmax probabilities are uncalibrated.",
+      "Head fine-tuning does not guarantee an improvement on unseen photographs.",
+      "Exact duplicate pixels are grouped; independently edited copies must be excluded before import."
+    ],
+    "adapted_model_sha256": "08d81c4eb90282d3bcc88440a71bf0664ff5b08374af6c4e576b2d55d489de4f",
+    "preprocessing_id": "rgr-letterbox-bilinear-linear-tones-normalize48-v1"
+  },
+  "initial": {
+    "before": [
+      {
+        "index": 1,
+        "truth": "circle",
+        "prediction": "circle",
+        "accepted": true,
+        "confidence": 0.9899168610572815,
+        "probabilities": {
+          "circle": 0.9899168610572815,
+          "triangle": 3.7642683992089587e-07,
+          "quadrilateral": 4.4561270442500245e-06,
+          "polygon": 0.010078314691781998
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 34.70120002748445,
+        "correct": true,
+        "image_id": "26a7611ce483d2796eabd1917d65273c8189172707e7707071279f0efcd9d929",
+        "image_name": "synthetic/circle/2026_0026.png"
+      },
+      {
+        "index": 2,
+        "truth": "polygon",
+        "prediction": "polygon",
+        "accepted": true,
+        "confidence": 0.9499790668487549,
+        "probabilities": {
+          "circle": 0.0007547261193394661,
+          "triangle": 0.0006852071383036673,
+          "quadrilateral": 0.04858086630702019,
+          "polygon": 0.9499790668487549
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 7.723200018517673,
+        "correct": true,
+        "image_id": "be05a64087b24f8c02b7f98727f9c683da3b301cccde5e5771afe2c1717961a4",
+        "image_name": "synthetic/polygon/2026_0009.png"
+      },
+      {
+        "index": 3,
+        "truth": "quadrilateral",
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7947641015052795,
+        "probabilities": {
+          "circle": 0.00020376326574478298,
+          "triangle": 0.19599507749080658,
+          "quadrilateral": 0.7947641015052795,
+          "polygon": 0.009036993607878685
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.991899979766458,
+        "correct": true,
+        "image_id": "084bcd17199c15a652ed7cfcfa19ff4af6f833285ccf922236b1ac2f3f45fc36",
+        "image_name": "synthetic/quadrilateral/2026_0000.png"
+      },
+      {
+        "index": 4,
+        "truth": "triangle",
+        "prediction": "triangle",
+        "accepted": true,
+        "confidence": 0.9746446013450623,
+        "probabilities": {
+          "circle": 1.6770061961324245e-07,
+          "triangle": 0.9746446013450623,
+          "quadrilateral": 0.025354331359267235,
+          "polygon": 8.789724574853608e-07
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.613700010348111,
+        "correct": true,
+        "image_id": "8871b9c5c8cd0b30ff923ae7253fdf3cebe8e27c68daa58399a284f0fd449d21",
+        "image_name": "synthetic/triangle/2026_0029.png"
+      },
+      {
+        "index": 5,
+        "truth": "circle",
+        "prediction": "circle",
+        "accepted": true,
+        "confidence": 0.7812557816505432,
+        "probabilities": {
+          "circle": 0.7812557816505432,
+          "triangle": 1.7167335499834735e-06,
+          "quadrilateral": 4.332050957600586e-05,
+          "polygon": 0.21869918704032898
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.524299999000505,
+        "correct": true,
+        "image_id": "6a071b773a97338c8df34654a1456fc5f10593f93e73fed97845d0636423689e",
+        "image_name": "synthetic/circle/2026_0022.png"
+      }
+    ],
+    "metrics_before": {
+      "total": 5,
+      "correct": 5,
+      "errors": 0,
+      "rejected": 0,
+      "accuracy": 1.0,
+      "mean_confidence": 0.8981120824813843,
+      "coverage": 1.0,
+      "raw_accuracy": 1.0,
+      "accepted_accuracy": 1.0
+    },
+    "after": [
+      {
+        "index": 1,
+        "truth": "circle",
+        "prediction": "circle",
+        "accepted": true,
+        "confidence": 0.9926839470863342,
+        "probabilities": {
+          "circle": 0.9926839470863342,
+          "triangle": 1.2531117477010412e-08,
+          "quadrilateral": 1.4681531013138738e-07,
+          "polygon": 0.007315952330827713
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 5.973499995889142,
+        "correct": true,
+        "image_id": "26a7611ce483d2796eabd1917d65273c8189172707e7707071279f0efcd9d929",
+        "image_name": "synthetic/circle/2026_0026.png"
+      },
+      {
+        "index": 2,
+        "truth": "polygon",
+        "prediction": "polygon",
+        "accepted": true,
+        "confidence": 0.9948989748954773,
+        "probabilities": {
+          "circle": 0.0010181834222748876,
+          "triangle": 5.3094066970515996e-05,
+          "quadrilateral": 0.004029749892652035,
+          "polygon": 0.9948989748954773
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.464000005507842,
+        "correct": true,
+        "image_id": "be05a64087b24f8c02b7f98727f9c683da3b301cccde5e5771afe2c1717961a4",
+        "image_name": "synthetic/polygon/2026_0009.png"
+      },
+      {
+        "index": 3,
+        "truth": "quadrilateral",
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.7438374161720276,
+        "probabilities": {
+          "circle": 0.0023163945879787207,
+          "triangle": 0.17142033576965332,
+          "quadrilateral": 0.7438374161720276,
+          "polygon": 0.0824258103966713
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.893100013257936,
+        "correct": true,
+        "image_id": "084bcd17199c15a652ed7cfcfa19ff4af6f833285ccf922236b1ac2f3f45fc36",
+        "image_name": "synthetic/quadrilateral/2026_0000.png"
+      },
+      {
+        "index": 4,
+        "truth": "triangle",
+        "prediction": "triangle",
+        "accepted": true,
+        "confidence": 0.9732807874679565,
+        "probabilities": {
+          "circle": 1.385581754220766e-06,
+          "triangle": 0.9732807874679565,
+          "quadrilateral": 0.02671164646744728,
+          "polygon": 6.158336873340886e-06
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.645099987508729,
+        "correct": true,
+        "image_id": "8871b9c5c8cd0b30ff923ae7253fdf3cebe8e27c68daa58399a284f0fd449d21",
+        "image_name": "synthetic/triangle/2026_0029.png"
+      },
+      {
+        "index": 5,
+        "truth": "circle",
+        "prediction": "circle",
+        "accepted": true,
+        "confidence": 0.8283045291900635,
+        "probabilities": {
+          "circle": 0.8283045291900635,
+          "triangle": 6.458748913473755e-08,
+          "quadrilateral": 1.6093524664029246e-06,
+          "polygon": 0.171693816781044
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.329099996946752,
+        "correct": true,
+        "image_id": "6a071b773a97338c8df34654a1456fc5f10593f93e73fed97845d0636423689e",
+        "image_name": "synthetic/circle/2026_0022.png"
+      }
+    ],
+    "metrics_after": {
+      "total": 5,
+      "correct": 5,
+      "errors": 0,
+      "rejected": 0,
+      "accuracy": 1.0,
+      "mean_confidence": 0.9066011309623718,
+      "coverage": 1.0,
+      "raw_accuracy": 1.0,
+      "accepted_accuracy": 1.0
+    }
+  },
+  "final": {
+    "before": [
+      {
+        "index": 1,
+        "truth": "polygon",
+        "prediction": "polygon",
+        "accepted": true,
+        "confidence": 0.9054360389709473,
+        "probabilities": {
+          "circle": 0.0008005801937542856,
+          "triangle": 9.599905024515465e-05,
+          "quadrilateral": 0.09366736561059952,
+          "polygon": 0.9054360389709473
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.42130000051111,
+        "correct": true,
+        "image_id": "7b77d913905abd91182c719ae140ce6b42cc9e069d13ee72194e0d77450ca447",
+        "image_name": "synthetic/polygon/2026_0026.png"
+      },
+      {
+        "index": 2,
+        "truth": "quadrilateral",
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.9883939027786255,
+        "probabilities": {
+          "circle": 1.811771835491527e-05,
+          "triangle": 0.007519845385104418,
+          "quadrilateral": 0.9883939027786255,
+          "polygon": 0.004068135283887386
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.263699993724003,
+        "correct": true,
+        "image_id": "97c66590f387327156cc5595dd2f1a84ec6e9cbaf1e611b09973a35d31ba62e5",
+        "image_name": "synthetic/quadrilateral/2026_0002.png"
+      },
+      {
+        "index": 3,
+        "truth": "triangle",
+        "prediction": "triangle",
+        "accepted": true,
+        "confidence": 0.9961875081062317,
+        "probabilities": {
+          "circle": 3.526324476865739e-08,
+          "triangle": 0.9961875081062317,
+          "quadrilateral": 0.0038123452104628086,
+          "polygon": 1.3893146899590647e-07
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.196200003614649,
+        "correct": true,
+        "image_id": "b330549d9216c634c1b9a2a9290a1fbb5b8b905072ecd5730066b611b0feae85",
+        "image_name": "synthetic/triangle/2026_0012.png"
+      },
+      {
+        "index": 4,
+        "truth": "circle",
+        "prediction": "circle",
+        "accepted": true,
+        "confidence": 0.8741890788078308,
+        "probabilities": {
+          "circle": 0.8741890788078308,
+          "triangle": 1.5789516965014627e-06,
+          "quadrilateral": 2.4863233193173073e-05,
+          "polygon": 0.12578444182872772
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.3316000159829855,
+        "correct": true,
+        "image_id": "e23123f082e5c7bd0795625a86dd347eb2025f6fc7bf449aecd7ba7f29c9a4ff",
+        "image_name": "synthetic/circle/2026_0003.png"
+      },
+      {
+        "index": 5,
+        "truth": "polygon",
+        "prediction": "polygon",
+        "accepted": true,
+        "confidence": 0.7643917798995972,
+        "probabilities": {
+          "circle": 0.0005912168999202549,
+          "triangle": 0.0002480458642821759,
+          "quadrilateral": 0.23476895689964294,
+          "polygon": 0.7643917798995972
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.134900002507493,
+        "correct": true,
+        "image_id": "ac8dcaa8d3d4dca332da0af7adeea6f06cf39bcea17568e77b290ab7b2653368",
+        "image_name": "synthetic/polygon/2026_0000.png"
+      }
+    ],
+    "metrics_before": {
+      "total": 5,
+      "correct": 5,
+      "errors": 0,
+      "rejected": 0,
+      "accuracy": 1.0,
+      "mean_confidence": 0.9057196617126465,
+      "coverage": 1.0,
+      "raw_accuracy": 1.0,
+      "accepted_accuracy": 1.0
+    },
+    "after": [
+      {
+        "index": 1,
+        "truth": "polygon",
+        "prediction": "polygon",
+        "accepted": true,
+        "confidence": 0.9927950501441956,
+        "probabilities": {
+          "circle": 0.0010816899593919516,
+          "triangle": 6.375413249770645e-06,
+          "quadrilateral": 0.006116884760558605,
+          "polygon": 0.9927950501441956
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.505099998321384,
+        "correct": true,
+        "image_id": "7b77d913905abd91182c719ae140ce6b42cc9e069d13ee72194e0d77450ca447",
+        "image_name": "synthetic/polygon/2026_0026.png"
+      },
+      {
+        "index": 2,
+        "truth": "quadrilateral",
+        "prediction": "quadrilateral",
+        "accepted": true,
+        "confidence": 0.953378438949585,
+        "probabilities": {
+          "circle": 0.0002168313949368894,
+          "triangle": 0.006795697379857302,
+          "quadrilateral": 0.953378438949585,
+          "polygon": 0.03960904851555824
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.252799998037517,
+        "correct": true,
+        "image_id": "97c66590f387327156cc5595dd2f1a84ec6e9cbaf1e611b09973a35d31ba62e5",
+        "image_name": "synthetic/quadrilateral/2026_0002.png"
+      },
+      {
+        "index": 3,
+        "truth": "triangle",
+        "prediction": "triangle",
+        "accepted": true,
+        "confidence": 0.9959869980812073,
+        "probabilities": {
+          "circle": 2.803977849907824e-07,
+          "triangle": 0.9959869980812073,
+          "quadrilateral": 0.004011800978332758,
+          "polygon": 9.389172532792145e-07
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.905499991262332,
+        "correct": true,
+        "image_id": "b330549d9216c634c1b9a2a9290a1fbb5b8b905072ecd5730066b611b0feae85",
+        "image_name": "synthetic/triangle/2026_0012.png"
+      },
+      {
+        "index": 4,
+        "truth": "circle",
+        "prediction": "circle",
+        "accepted": true,
+        "confidence": 0.9043054580688477,
+        "probabilities": {
+          "circle": 0.9043054580688477,
+          "triangle": 5.638669264840246e-08,
+          "quadrilateral": 8.772487376518256e-07,
+          "polygon": 0.09569361805915833
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.271299993386492,
+        "correct": true,
+        "image_id": "e23123f082e5c7bd0795625a86dd347eb2025f6fc7bf449aecd7ba7f29c9a4ff",
+        "image_name": "synthetic/circle/2026_0003.png"
+      },
+      {
+        "index": 5,
+        "truth": "polygon",
+        "prediction": "polygon",
+        "accepted": true,
+        "confidence": 0.980426549911499,
+        "probabilities": {
+          "circle": 0.0009271410526707768,
+          "triangle": 1.999704727495555e-05,
+          "quadrilateral": 0.018626360222697258,
+          "polygon": 0.980426549911499
+        },
+        "model_input_size": [
+          48,
+          48
+        ],
+        "processed_size": 224,
+        "elapsed_ms": 6.263899995246902,
+        "correct": true,
+        "image_id": "ac8dcaa8d3d4dca332da0af7adeea6f06cf39bcea17568e77b290ab7b2653368",
+        "image_name": "synthetic/polygon/2026_0000.png"
+      }
+    ],
+    "metrics_after": {
+      "total": 5,
+      "correct": 5,
+      "errors": 0,
+      "rejected": 0,
+      "accuracy": 1.0,
+      "mean_confidence": 0.9653784990310669,
+      "coverage": 1.0,
+      "raw_accuracy": 1.0,
+      "accepted_accuracy": 1.0
+    }
+  }
+}
