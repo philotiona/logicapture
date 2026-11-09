@@ -30,6 +30,7 @@ MAX_REFERENCE_PIXELS = 30_000_000
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".tif", ".tiff"}
 FORMAT = "logicapture-image-task"
 VERSION = 1
+RELATION_VERSION = 2
 REVIEW_REASONS = {
     "contradictory_support": "The reference groups contain conflicting evidence",
     "insufficient_support_for_validation": "There are too few references to cross-check this distinction",
@@ -40,6 +41,8 @@ REVIEW_REASONS = {
     "unresolved_structural_evidence": "The required drawing features could not be measured",
     "structural_rules_disagree": "The candidate drawing rules disagree on this image",
     "unresolved_measurement_or_program_disagreement": "A required measurement is missing or the candidate rules disagree",
+    "unverified_photo_relation": "No proposed condition matched every reference",
+    "unclear_photo_relation": "The visible evidence for this condition is unclear",
 }
 
 
@@ -75,7 +78,7 @@ def _archive(data):
         raise ValueError("Could not read this ZIP archive.") from error
 
 
-def decode_image(data):
+def decode_image(data, *, max_side=MAX_SIDE):
     if not data or len(data) > MAX_BYTES:
         raise ValueError("Image is empty or exceeds the 100 MB limit.")
     try:
@@ -85,12 +88,29 @@ def decode_image(data):
             if min(original.size) < 3 or getattr(original, "n_frames", 1) != 1:
                 raise ValueError("Use one static image at least 3×3 pixels in size.")
             image = rgb_image(original)
-            image.thumbnail((MAX_SIDE, MAX_SIDE), Image.Resampling.LANCZOS)
+            if max_side is not None:
+                image.thumbnail((max_side, max_side), Image.Resampling.LANCZOS)
             if min(image.size) < 3:
                 raise ValueError("Image is too narrow to analyze after scaling. Crop it or split it into smaller images.")
             return np.array(image)
     except (OSError, Image.DecompressionBombError) as error:
         raise ValueError("Could not decode this image.") from error
+
+
+def read_example_sheet(data):
+    """Read the three parts of a sheet as independent, lossless PNG files."""
+    from src.vision.example_sheet import split_example_sheet
+
+    groups = split_example_sheet(decode_image(data, max_side=None))
+    result = []
+    for prefix, images in zip(("a", "b", "test"), groups):
+        files = []
+        for index, image in enumerate(images, start=1):
+            stream = BytesIO()
+            Image.fromarray(image).save(stream, format="PNG")
+            files.append((f"{prefix}-{index:02d}.png", stream.getvalue()))
+        result.append(tuple(files))
+    return tuple(result)
 
 
 @dataclass
@@ -139,6 +159,7 @@ class ImageTask:
     representation: str
     positive: tuple[np.ndarray, ...]
     negative: tuple[np.ndarray, ...]
+    photo_relation: bool = False
 
     def __post_init__(self):
         if (not isinstance(self.name, str) or not self.name.strip() or len(self.name) > 120
@@ -147,6 +168,8 @@ class ImageTask:
             raise ValueError("Give the task a name and two distinct group names (up to 60 characters each).")
         if self.representation not in ("drawings", "photos"):
             raise ValueError("Choose drawings or photographs.")
+        if type(self.photo_relation) is not bool or (self.photo_relation and self.representation != "photos"):
+            raise ValueError("Relationship checking requires photographs or screenshots.")
         for group in (self.positive, self.negative):
             if not 2 <= len(group) <= MAX_REFERENCES:
                 raise ValueError("Use 2–12 reference images per group; 4–6 varied examples are preferable.")
@@ -163,7 +186,8 @@ class ImageTask:
             raise ValueError("The same reference image is labeled in both groups. Correct its label.")
 
     def manifest(self):
-        return {"format": FORMAT, "version": VERSION, "name": self.name, "groups": list(self.groups),
+        return {"format": FORMAT, "version": RELATION_VERSION if self.photo_relation else VERSION,
+                "name": self.name, "groups": list(self.groups),
                 "representation": self.representation,
                 "references": [{"file": f"references/{'a' if label else 'b'}{index+1:02d}.png",
                                 "label": label, "pixel_sha256": image_digest(image)}
@@ -192,7 +216,7 @@ def load_task(data):
             raise ValueError("The saved task manifest is too large.")
         manifest = json.loads(entries["task.json"])
         if (manifest["format"] != FORMAT or type(manifest["version"]) is not int
-                or manifest["version"] != VERSION):
+                or manifest["version"] not in (VERSION, RELATION_VERSION)):
             raise ValueError("Unsupported image-task format or version.")
         references = manifest["references"]
         if not 4 <= len(references) <= 2*MAX_REFERENCES:
@@ -210,12 +234,17 @@ def load_task(data):
         if set(entries) != {"task.json", *used}:
             raise ValueError("Saved task contains unexpected files.")
         return ImageTask(manifest["name"], tuple(manifest["groups"]), manifest["representation"],
-                         tuple(positive), tuple(negative))
+                         tuple(positive), tuple(negative), photo_relation=manifest["version"] == RELATION_VERSION)
     except (KeyError, TypeError, UnicodeError, json.JSONDecodeError) as error:
         raise ValueError("Invalid image-task archive or manifest.") from error
 
 
-def fit_task(task, *, semantic_encoder=None, progress=None):
+def fit_task(task, *, semantic_encoder=None, photo_backend=None, progress=None):
+    if task.photo_relation:
+        from src.reasoning.photo_relations import fit_photo_relation
+        from src.vision.pretrained import QwenLocalBackend
+        return fit_photo_relation(task, photo_backend if photo_backend is not None else QwenLocalBackend(),
+                                  progress=progress)
     from src.reasoning.general import GeneralVisualSolver
     from src.vision.structural_features import StructuralEncoder
     if task.representation == "photos" and semantic_encoder is None:
@@ -243,7 +272,8 @@ def sort_batch(fitted, items, *, progress=None):
         indices = pending[start:start+8]
         if progress:
             progress(f"Checking new images {start+1}–{start+len(indices)} of {len(pending)}")
-        result = fitted.predict([items[i].image for i in indices], image_ids=[rows[i]["id"] for i in indices])
+        result = fitted.predict([items[i].image for i in indices], image_ids=[rows[i]["id"] for i in indices],
+                                progress=progress)
         for index, prediction in zip(indices, result.predictions):
             rows[index].update(automatic_label=prediction.label, suggested_label=prediction.forced_label, score=prediction.score,
                                reason="; ".join(REVIEW_REASONS.get(reason, reason.replace("_", " ")) for reason in prediction.abstention_reasons)

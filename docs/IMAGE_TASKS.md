@@ -13,9 +13,19 @@ Open **Sort images** in Logicapture. This workspace learns a two-group distincti
 
 Group names label the interface and exports; they never enter visual feature extraction or rule fitting. No new image batch retrains the task. Changing reference pixels, group names, task name or representation invalidates the previous fit in the interface; changing a batch invalidates its previous results. Fitting again clears the earlier batch decisions.
 
+## Import an example sheet
+
+Under **Sort images**, choose **Import an example sheet** and upload an upright PNG, JPG, or WebP with thin, visible panel frames. The supported layout has three rows of four references and a separate row of two test images below. Each reference row contributes its left two panels to Group A and its right two to Group B. Check the previews before learning. Only the panel interiors reach the sorter. Captions, printed labels, and frame colors stay outside the crops, including any test labels encoded in frame color. The sorted download contains the two full-resolution crops as separate PNGs.
+
+For photos, this import defaults to **Action or relationship**. It describes each reference separately, proposes one condition from the descriptions, and checks that condition against every reference before seeing any test image. It uses the optional local Qwen vision model and shows progress through both reference passes. If the reference checks fail or the evidence on a new image is unclear, the image goes to **Needs review**. When a result is available, the review panel shows the local model's visual explanation. This method is available for individual photo uploads too.
+
+```powershell
+.\.venv\Scripts\python.exe -m src.vision.pretrained --download qwen
+```
+
 ## Understand decisions and review
 
-The drawing route first attempts the existing executable rules; otherwise it uses measured drawing features. The photo route uses the installed frozen SigLIP encoder and the existing support-adapted classifier. Missing photo weights produce an installation message instead of triggering an implicit download. The base application remains usable without optional model dependencies.
+The drawing route first attempts the existing executable rules; otherwise it uses measured drawing features. **Visual similarity** for photos uses the installed frozen SigLIP encoder and the existing support-adapted classifier. Missing weights produce an installation message instead of triggering an implicit download. The base application remains usable without optional model dependencies.
 
 Automatic feature decisions require adequate reference cross-validation, a sufficient decision margin, agreement across reference refits and proximity to the reference examples. These checks can abstain and can still accept a wrong answer. Scores are not class probabilities. Closest examples and tentative suggestions are review aids, not proof of membership.
 

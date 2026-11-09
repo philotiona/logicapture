@@ -5,7 +5,7 @@ from uuid import uuid4
 
 import streamlit as st
 
-from src.image_tasks import ImageTask, export_results, fit_task, load_task, read_images, sort_batch
+from src.image_tasks import ImageTask, export_results, fit_task, load_task, read_example_sheet, read_images, sort_batch
 from src.vision.pretrained import model_directory
 from .panels import group_board
 
@@ -34,17 +34,36 @@ def _read_cached(files, key):
     return items
 
 
-def _new_task():
-    name = st.text_input("Name this setup", "My image check", max_chars=120, key="image_task_name")
+def _task_settings(*, sheet=False):
+    suffix = "_sheet" if sheet else ""
+    name = st.text_input("Name this setup", "Example sheet" if sheet else "My image check", max_chars=120,
+                         key="image_task_name"+suffix)
     left, right = st.columns(2)
-    a = left.text_input("First group name", "Keep", max_chars=60, key="image_task_a_name")
-    b = right.text_input("Second group name", "Other", max_chars=60, key="image_task_b_name")
+    a = left.text_input("First group name", "Group A" if sheet else "Keep", max_chars=60, key="image_task_a_name"+suffix)
+    b = right.text_input("Second group name", "Group B" if sheet else "Other", max_chars=60, key="image_task_b_name"+suffix)
     available = model_directory("siglip") is not None
     representation = st.radio("Image type", ["Photographs and screenshots", "Black-and-white drawings"],
-                              index=0 if available else 1, horizontal=True, key="image_task_type")
-    if representation == "Photographs and screenshots" and not available:
-        st.info("Photo tasks need the optional local vision model. It has not been downloaded on this computer.")
-        st.code("python -m pip install -r requirements-general.txt\npython -m src.vision.pretrained --download siglip", language="shell")
+                              index=0 if sheet or available else 1, horizontal=True, key="image_task_type"+suffix)
+    photos = representation == "Photographs and screenshots"
+    relation = False
+    if photos:
+        methods = ["Visual similarity", "Action or relationship"]
+        method = st.radio("What separates the groups?", methods, index=int(sheet), horizontal=True,
+                          key="image_task_photo_method"+suffix)
+        relation = method == methods[1]
+        if relation:
+            st.caption("Find a visible condition, then check it against every reference before sorting. This takes longer than visual similarity.")
+        model = "qwen" if relation else "siglip"
+        if model_directory(model) is None:
+            st.info(f"This method needs the optional local {'Qwen vision' if relation else 'SigLIP'} model.")
+            st.code(f"python -m pip install -r requirements-general.txt\npython -m src.vision.pretrained --download {model}",
+                    language="shell")
+    return {"name": name.strip(), "groups": (a.strip(), b.strip()),
+            "representation": "photos" if photos else "drawings", "photo_relation": relation}
+
+
+def _new_task():
+    settings = _task_settings()
     st.caption("Upload 4–6 varied examples per group (2–12 supported). Include the differences you want ignored, such as angle or background. Names are labels for you; the model receives pixels only.")
     left, right = st.columns(2)
     files_a = left.file_uploader("First group / reference images", type=["png", "jpg", "jpeg", "webp", "zip"],
@@ -60,21 +79,48 @@ def _new_task():
     if min(len(positive), len(negative)) < 2:
         st.info("Add at least two different reference images to each group to fit a task.")
         return None
-    return ImageTask(name.strip(), (a.strip(), b.strip()),
-                     "photos" if representation == "Photographs and screenshots" else "drawings",
-                     tuple(item.image for item in positive), tuple(item.image for item in negative))
+    return ImageTask(**settings, positive=tuple(item.image for item in positive),
+                     negative=tuple(item.image for item in negative))
+
+
+def _sheet_task():
+    st.caption("Use a page with six framed examples on the left, six on the right, and two test images below.")
+    uploaded = st.file_uploader("Example sheet", type=["png", "jpg", "jpeg", "webp"],
+                                key="image_task_sheet", max_upload_size=100)
+    if uploaded is None:
+        return None, ()
+    data = uploaded.getvalue()
+    identity = sha256(data).hexdigest()
+    cached = st.session_state.get("image_task_sheet_crops")
+    if cached is None or cached[0] != identity:
+        cached = identity, read_example_sheet(data)
+        st.session_state.image_task_sheet_crops = cached
+    positive_files, negative_files, test_files = cached[1]
+    positive = _read_cached(positive_files, "image_task_refs_a")
+    negative = _read_cached(negative_files, "image_task_refs_b")
+    tests = _read_cached(test_files, "image_task_batch_input")
+    st.success(f"Found {len(positive)} left references, {len(negative)} right references, and {len(tests)} test images.")
+    with st.expander("Preview the test images", expanded=True):
+        st.image(group_board([item.image for item in tests], ["Test 1", "Test 2"], columns=2), width=335)
+    st.caption("Only the panel interiors are used. The frames, labels, and caption stay outside the analysis.")
+    return ImageTask(**_task_settings(sheet=True), positive=tuple(item.image for item in positive),
+                     negative=tuple(item.image for item in negative)), test_files
 
 
 def image_tasks_workspace():
     st.subheader("Sort images by your examples")
     st.write("Teach a visual check with examples, then sort new images into two named groups.")
-    st.caption("Runs locally. Uncertain images go to review. Original files are preserved in the download.")
+    st.caption("Runs locally. Uncertain images go to review. Downloads preserve individual files or the extracted sheet images.")
     st.markdown("**1. Teach the two groups**")
-    source = st.radio("Start with", ["New sorting setup", "Open saved setup"], horizontal=True, key="image_task_source")
+    source = st.radio("Start with", ["New sorting setup", "Import an example sheet", "Open saved setup"],
+                      horizontal=True, key="image_task_source")
     task = None
+    sheet_files = ()
     try:
         if source == "New sorting setup":
             task = _new_task()
+        elif source == "Import an example sheet":
+            task, sheet_files = _sheet_task()
         else:
             uploaded = st.file_uploader("Saved sorting setup", type=["zip"], key="image_task_saved", max_upload_size=100)
             if uploaded is not None:
@@ -98,7 +144,7 @@ def image_tasks_workspace():
         status = st.empty()
         try:
             encoder = None
-            if task.representation == "photos":
+            if task.representation == "photos" and not task.photo_relation:
                 from .resources import semantic_encoder
                 encoder = semantic_encoder()
             fitted = fit_task(task, semantic_encoder=encoder, progress=status.caption)
@@ -113,7 +159,17 @@ def image_tasks_workspace():
         st.info("Press Learn from these examples to continue. Changing the examples or group names requires a new check.")
         return
     fitted = stored[1]
-    if fitted.diagnostics.get("logical_explanation"):
+    if task.photo_relation:
+        condition = fitted.diagnostics["proposed_condition"]
+        checks = fitted.diagnostics["reference_checks"]
+        if condition:
+            st.write("Proposed condition for " + task.groups[0])
+            st.write(condition)
+            st.caption(f"Matched {sum(check['matches'] for check in checks)} of {len(checks)} references. "
+                       "These same examples helped propose the condition.")
+        if not fitted.diagnostics["condition_verified"]:
+            st.warning("A condition must match all the references before it can assign new images. Results will go to Needs review.")
+    elif fitted.diagnostics.get("logical_explanation"):
         st.write(f"Rule for {task.groups[0]}: {fitted.diagnostics['logical_explanation']}")
         st.caption("The reference checks support this rule; new images can still reveal mistakes.")
     else:
@@ -124,11 +180,16 @@ def image_tasks_workspace():
             st.warning("The references do not yet establish a reliable distinction. Add more varied or more consistent examples; uncertain predictions will need review.")
     with st.expander("Save this setup for later"):
         st.download_button("Save sorting setup", task.export(), "logicapture-task.zip", "application/zip", key="image_task_save")
-    st.markdown("**2. Add the images to sort**")
-    st.caption("Upload individual images or a ZIP: up to 100 files / 100 MB expanded. Analysis uses images scaled to at most 1280 pixels; downloads retain the original bytes. Reference duplicates are sent to review.")
-    uploads = st.file_uploader("New images to sort", type=["png", "jpg", "jpeg", "webp", "zip"],
-                               accept_multiple_files=True, key="image_task_batch", max_upload_size=100)
-    files = _files(uploads)
+    if sheet_files:
+        st.markdown("**2. Sort the test images**")
+        st.caption("The two extracted test images are ready. The download will contain each crop as its own PNG.")
+        files = sheet_files
+    else:
+        st.markdown("**2. Add the images to sort**")
+        st.caption("Upload individual images or a ZIP, up to 100 files and 100 MB expanded. Analysis scales images to at most 1280 pixels. Reference duplicates go to review.")
+        uploads = st.file_uploader("New images to sort", type=["png", "jpg", "jpeg", "webp", "zip"],
+                                   accept_multiple_files=True, key="image_task_batch", max_upload_size=100)
+        files = _files(uploads)
     context = task.fingerprint + ":" + _identity(files)
     try:
         items = _read_cached(files, "image_task_batch_input")
@@ -178,6 +239,8 @@ def image_tasks_workspace():
             neighbors.write("Closest reference examples")
             neighbors.image(group_board([pair[0] for pair in nearest], [pair[1] for pair in nearest], tile=115), width="stretch")
     st.caption(row["reason"])
+    if evidence := row["evidence"].get("visible_evidence"):
+        st.write(evidence)
     if row["automatic_label"] is None and row["suggested_label"] is not None:
         st.write("Suggestion for your review: " + task.groups[0 if row["suggested_label"] else 1])
         st.caption("This suggestion did not pass the automatic checks. It stays in Needs review unless you assign a group.")

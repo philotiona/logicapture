@@ -199,7 +199,7 @@ class EpisodePrediction:
     image_id: str
     label: bool | None
     forced_label: bool | None
-    score: float
+    score: float | None
     probability: float | None
     abstention_reasons: tuple[str,...]
     nearest_support_ids: tuple[str,...]
