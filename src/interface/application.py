@@ -1,4 +1,4 @@
-"""Logicapture's inspection, drawing, rule discovery and coursework."""
+"""Logicapture's rule discovery, drawing, image sorting and coursework."""
 import streamlit as st
 
 from .styles import CSS
@@ -10,7 +10,7 @@ def main():
     st.markdown('<div class="app-header"><div class="app-name">Logicapture</div>'
                 '<div class="app-caption">Learn from visual contrasts and test new drawings.</div></div>',
                 unsafe_allow_html=True)
-    modes = ("Bongard", "Print Inspector", "Local Lab", "Sort images", "РГР coursework")
+    modes = ("Bongard", "Local Lab", "Sort images", "РГР coursework")
     old_mode = st.session_state.get("mode")
     aliases = {"Image tasks": "Sort images", "РГР": "РГР coursework"}
     st.session_state.mode = aliases.get(old_mode, old_mode) if old_mode in (*modes, *aliases) else "Bongard"
@@ -19,13 +19,13 @@ def main():
     for key in list(st.session_state):
         if key == "akinator" or key.startswith(("active_", "akinator_", "examples_akinator")):
             st.session_state.pop(key, None)
-    labels = ("Find a rule", "Print Inspector", "Local Lab", "Sort images", "РГР coursework")
-    help_text = ("Find and check an executable rule.", "Inspect a printed card from a photo.",
+    labels = ("Find a rule", "Local Lab", "Sort images", "РГР coursework")
+    help_text = ("Find and check an executable rule.",
                  "Learn a local contrast and create a new drawing.",
                  "Teach two categories and sort a batch of images.",
                  "Run the separate model-testing coursework.")
-    for column, name, label, key, tip in zip(st.columns(5), modes, labels,
-                                           ("bongard", "inspection", "lab", "image_tasks", "rgr"), help_text):
+    for column, name, label, key, tip in zip(st.columns(len(modes)), modes, labels,
+                                           ("bongard", "lab", "image_tasks", "rgr"), help_text):
         if column.button(label, key=f"nav_{key}", width="stretch", help=tip,
                          type="primary" if st.session_state.mode == name else "secondary"):
             st.session_state.mode = name
@@ -33,9 +33,6 @@ def main():
     if st.session_state.mode == "Bongard":
         from .general_bongard import general_bongard
         general_bongard()
-    elif st.session_state.mode == "Print Inspector":
-        from .print_inspector import print_inspector
-        print_inspector()
     elif st.session_state.mode == "Local Lab":
         from .local_lab import local_lab
         local_lab()

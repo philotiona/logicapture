@@ -34,12 +34,6 @@ Select **Local Lab → Learn and make a drawing** to try the built-in drawings. 
 
 This is a CPU-only experiment with no model service or pretrained weights. Reference checks and a candidate chosen by the classifier give evidence about the learned contrast. Independent drawings are needed to assess generalization. Weak contrasts and scenes that cannot be recombined can yield no suggestion.
 
-## Print Inspector
-
-Select **Print Inspector** in the top bar. Try the simulated photos first, or download the A4 pack and print the good, missing, extra and misplaced examples. Upload a photo or use the camera with all four markers visible. The aligned overlay identifies where the sample differs from the reference, including cases with the same total mark count.
-
-For your own layout, draw separate dark marks inside the blank template and upload a photo as the accepted reference. Photograph subsequent cards with the same corner marker layout. The app runs on the CPU and asks for a retake if it cannot register a usable card. It is a demo for flat cards with separate, high-contrast marks.
-
 ## Sort images
 
 For practical two-group image sorting, use the separate **Sort images** workspace:

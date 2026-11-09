@@ -13,7 +13,6 @@ The product does not claim universal visual reasoning, and a classification boun
 | Workspace | User's goal | Main actions |
 |---|---|---|
 | Bongard, the opening screen | Find and inspect a visual rule | Add problem → check groups → Find the rule |
-| Print Inspector | Find print defects from a camera photo | Select an accepted card → take or upload a photo → inspect the overlay |
 | Local Lab | Generate a drawing from a locally learned contrast | Add examples → learn and make a drawing → test an independent drawing |
 | Sort images | Apply a learned two-group distinction to personal images | Teach groups → Sort these images → review and download |
 | РГР coursework | Complete the separate model-testing assignment | Photo experiments, adaptation and assignment reports |
