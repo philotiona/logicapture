@@ -108,7 +108,8 @@ def generate_checked_examples(diagnostics, *, seed=97, attempts=64):
                     image = np.array(draw_scene(generator.random_scene(int(rng.integers(0,7)))))
                 else:
                     image = np.array(draw_scene(generator.sample(rules[0],label,2000)))
-                evidence = observations(image) if numeric else extract_scene(image)
+                evidence = observations(image) if numeric else extract_scene(
+                    image, remove_panel_ruling=diagnostics.get("remove_panel_ruling", True))
                 votes = [rule.assess(evidence) for rule in rules]
                 if all(v is label for v in votes):
                     examples.append(CheckedExample(image,label,{"pixel_reread":True,"rule_votes":votes,

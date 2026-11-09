@@ -2,7 +2,7 @@
 
 The main Bongard solver now measures simplified-boundary convexity and rotation-independent elongation. These executable observations extend the existing pixel-to-rule route for uploaded pages, separate images and camera analysis.
 
-Try **Bongard → General visual inference → Generated geometry**, then **Convex / concave boundaries** or **Elongated / compact shapes**. The demonstrations vary shape, rotation and fill. Only rendered pixels and A/B membership enter inference; the generator's concept name is not passed to the solver. Five supports per group select the rules and two drawings remain withheld. New matching drawings and counterexamples are rendered and re-read; every frozen program must agree with their labels.
+Try **Bongard → Try an example**, then **Convex and concave shapes** or **Long and compact shapes**, and press **Find the rule**. The demonstrations vary shape, rotation and fill. Only rendered pixels and A/B membership enter inference; the generator's concept name is not passed to the solver. The product now uses all six examples per group; independently uploaded new drawings test the frozen rule afterward. New matching drawings and counterexamples are rendered and re-read; every frozen program must agree with their labels. The saved audit below retains its original held-out protocol.
 
 ## Measurements
 

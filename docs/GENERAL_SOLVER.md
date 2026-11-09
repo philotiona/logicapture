@@ -1,5 +1,7 @@
 # Broader local Bongard inference
 
+> Research/API notes. The application now has [one guided rule-discovery workflow](PROJECT_BRIEF.md); feature-based classification is exposed through **Sort images**. Alternative representations and language hypotheses described here remain research APIs, not Bongard controls.
+
 The general route does not enumerate complete rule sentences or force an unusual
 curve into a circle/triangle/square class. It combines three complementary kinds
 of evidence. It remains a research solver with measurable failures, not a claim

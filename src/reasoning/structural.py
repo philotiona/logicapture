@@ -29,7 +29,7 @@ def _drawing(image):
             and np.mean((gray > 50) & (gray < 220)) < .20)
 
 
-def _read(image):
+def _read(image, *, remove_panel_ruling=True):
     if not _drawing(image):
         return None
     # Bound skeletonization cost on large uploads. Preserve aspect ratio.
@@ -40,14 +40,22 @@ def _read(image):
     # Dense dot fields are handled by measured relations. Avoid tracing
     # hundreds of disconnected marks before discovering the object budget.
     from src.vision.adaptive_perception import ink_mask, remove_ruling
-    mask,_ = remove_ruling(ink_mask(image))
+    mask = ink_mask(image)
+    if remove_panel_ruling:
+        mask, _ = remove_ruling(mask)
     _,_,stats,_ = cv2.connectedComponentsWithStats(mask,8)
     if sum(area >= max(12,.0009*mask.size) for area in stats[1:,4]) > 24:
         return None
-    scene = extract_scene(image, representation="adaptive", remove_panel_ruling=True)
+    scene = extract_scene(image, representation="adaptive", remove_panel_ruling=remove_panel_ruling)
     if (len(scene.objects) > 24
             or any(obj.confidence < EVIDENCE_THRESHOLD or obj.kind == "unknown" for obj in scene.objects)
             or any("touches the panel boundary" in warning for warning in scene.warnings)):
+        return None
+    # Ruling removal has no frame provenance here: a standalone rectangular
+    # outline is indistinguishable from a residual panel frame. When removal
+    # leaves nothing, the erased ink was the only content, so abstain instead
+    # of accepting an empty scene. Numeric measurement reads original pixels.
+    if not scene.objects and any("panel ruling" in warning for warning in scene.warnings):
         return None
     return scene
 
@@ -83,11 +91,14 @@ def _evidence(scene):
 class StructuralFit:
     rules: tuple
     diagnostics: dict
+    remove_panel_ruling: bool = True
 
-    def predict(self, images, image_ids):
+    def predict(self, images, image_ids, *, remove_panel_ruling=None):
+        if remove_panel_ruling is None:
+            remove_panel_ruling = self.remove_panel_ruling
         predictions = []
         for image, image_id in zip(images, image_ids):
-            scene = _read(image)
+            scene = _read(image, remove_panel_ruling=remove_panel_ruling)
             votes = [-1 if (v := rule.assess(scene)) is None else int(v)
                      for rule in self.rules] if scene is not None else [-1]*len(self.rules)
             label = _consensus(votes)
@@ -99,7 +110,7 @@ class StructuralFit:
         return predictions
 
 
-def fit_structural_support(positive, negative, *, progress=None):
+def fit_structural_support(positive, negative, *, progress=None, remove_panel_ruling=True):
     """Return a validated frozen fit, or an explicit reason to try features.
 
     All equally simple, perfectly fitting programs must agree on every omitted
@@ -115,7 +126,7 @@ def fit_structural_support(positive, negative, *, progress=None):
         return None, {**attempt, "reason": "outside_monochrome_drawing_domain"}
     if progress:
         progress("Tracing drawing structure and validating executable rules on support images")
-    scenes = [_read(image) for image in list(positive)+list(negative)]
+    scenes = [_read(image, remove_panel_ruling=remove_panel_ruling) for image in list(positive)+list(negative)]
     if any(scene is None for scene in scenes):
         return None, {**attempt, "reason": "unresolved_support_perception"}
     rules = enumerate_rules(depth=2, paths=True)
@@ -145,4 +156,4 @@ def fit_structural_support(positive, negative, *, progress=None):
                    support_total=len(scenes), candidate_count=len(chosen),
                    candidates=[{"text": verbalize(rule), "program": asdict(rule)} for rule in chosen],
                    support_evidence=[_evidence(scene) for scene in scenes])
-    return StructuralFit(chosen, attempt), attempt
+    return StructuralFit(chosen, attempt, remove_panel_ruling), attempt

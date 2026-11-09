@@ -1,7 +1,6 @@
-"""Compact local broad-concept workspace, separate from executable DSL proofs."""
-from __future__ import annotations
-
+"""One guided Bongard workflow; model selection stays inside the solver."""
 from hashlib import sha256
+from html import escape
 from io import BytesIO
 import json
 from pathlib import Path
@@ -10,307 +9,246 @@ import numpy as np
 from PIL import Image
 import streamlit as st
 
+from src.reasoning.bongard import infer_problem
+from src.vision.pretrained import image_digest, rgb_image
 from .panels import group_board
 
 
-@st.cache_resource
-def semantic_encoder():
-    from src.vision.pretrained import SiglipEncoder
-    return SiglipEncoder()
-
-
-@st.cache_resource
-def language_backend(model="qwen"):
-    from src.vision.pretrained import QwenLocalBackend
-    return QwenLocalBackend(model=model)
-
-
 def _load_upload(file):
-    from src.vision.pretrained import rgb_image
     with Image.open(BytesIO(file.getvalue())) as image:
-        if image.width*image.height > 80_000_000: raise ValueError("Image exceeds the 80-megapixel limit.")
-        if getattr(image,"n_frames",1) != 1: raise ValueError("This image is animated. A single-frame reading cannot establish its temporal rule.")
+        if image.width*image.height > 24_000_000:
+            raise ValueError("Image exceeds the 24-megapixel limit. Upload a smaller image.")
+        if getattr(image, "n_frames", 1) != 1:
+            raise ValueError("Animated problems are not supported. Upload a single static page.")
         return np.array(rgb_image(image))
 
 
-def _label(value): return "A" if value is True else "B" if value is False else "Unresolved"
+def _example(name):
+    if name == "Arrow directions":
+        folder = Path(__file__).resolve().parents[2]/"data/fixtures/arrow_paths"
+        return tuple([np.array(Image.open(folder/f"{letter}{i:02d}.png").convert("RGB"))
+                      for i in range(1, 7)] for letter in "AB")
+    from src.reasoning.examples import geometric_demo
+    return tuple(map(list, geometric_demo("convexity" if name == "Convex and concave shapes" else "elongation")))
+
+
+def _inputs(*, prefix="bongard", demo=None):
+    source = st.radio("Problem input", ["Upload a page", "Separate images", "Try an example"],
+                      horizontal=True, index=2 if demo else 0, key=f"{prefix}_source")
+    if source == "Try an example":
+        if demo:
+            return (*demo(), False)
+        name = st.selectbox("Example problem", ["Arrow directions", "Convex and concave shapes", "Long and compact shapes"], key=f"{prefix}_example")
+        return (*_example(name), name == "Arrow directions")
+    if source == "Separate images":
+        st.caption("Upload one drawing per file. A follows the rule. B breaks it.")
+        left, right = st.columns(2)
+        positive = left.file_uploader("Group A drawings", type=["png", "jpg", "jpeg", "webp"],
+                                      accept_multiple_files=True, key=f"{prefix}_a", max_upload_size=100)
+        negative = right.file_uploader("Group B drawings", type=["png", "jpg", "jpeg", "webp"],
+                                       accept_multiple_files=True, key=f"{prefix}_b", max_upload_size=100)
+        framed = False
+        if positive or negative:
+            framed = st.checkbox("Drawings include printed panel borders", key=f"{prefix}_framed",
+                                 help="Turn this on only for cropped puzzle panels with printed frames. Leave it off when rectangles are part of the drawings.")
+        return ([_load_upload(file) for file in positive or []],
+                [_load_upload(file) for file in negative or []], framed)
+    st.caption("Upload the whole page. Logicapture separates the drawings on the left (A) from those on the right (B).")
+    uploaded = st.file_uploader("Bongard problem page", type=["png", "jpg", "jpeg", "webp", "gif"],
+                                key=f"{prefix}_page", max_upload_size=100)
+    if not uploaded:
+        st.info("Upload your problem, or choose Try an example above to see how it works.")
+        return [], [], True
+    image = _load_upload(uploaded)
+    page_id = image_digest(image)
+    if st.session_state.get(f"{prefix}_layout_image") != page_id:
+        st.session_state[f"{prefix}_layout_image"] = page_id
+        st.session_state[f"{prefix}_divider"] = .5
+        st.session_state[f"{prefix}_count"] = "Detect automatically"
+    from src.vision.panel_detection import split_problem_page, panel_overlay
+    layout = st.expander("Check or fix page splitting")
+    with layout:
+        divider = st.slider("Boundary between groups", .2, .8, .5, .01, key=f"{prefix}_divider")
+        count = st.selectbox("Drawings per group", ["Detect automatically", 3, 4, 5, 6, 7, 8], key=f"{prefix}_count")
+    try:
+        page, panels, _ = split_problem_page(image, divider=divider,
+                                             expected_per_group=None if isinstance(count, str) else count)
+    except ValueError as error:
+        st.image(image, caption="Your original page", width="stretch")
+        raise ValueError("The page could not be split into groups. Open Check or fix page splitting, or upload the drawings using Separate images.") from error
+    layout.image(panel_overlay(page, panels), width="stretch")
+    return [p.image for p in panels if p.label], [p.image for p in panels if not p.label], True
+
+
+def _explain_failure(attempt):
+    reason = attempt.get("reason", "")
+    if "domain" in reason or "drawing" in reason:
+        return "This rule finder currently needs clear black-and-white drawings. For photo categories, use Sort images."
+    if "perception" in reason or "evidence" in reason:
+        return "Some paths or shapes could not be read reliably. Try a sharper image with a white margin around each shape."
+    return "No supported rule passed the checks across both groups. Check the groups or add varied examples of the same distinction."
+
+
+def _test_images(saved):
+    st.markdown("#### Test the rule")
+    files = st.file_uploader("New drawings / optional", type=["png", "jpg", "jpeg", "webp"],
+                            accept_multiple_files=True, key="bongard_queries", max_upload_size=100)
+    if not files:
+        st.caption("Optional. Add drawings that were not used to find the rule.")
+        return []
+    if len(files) > 24:
+        st.warning("Test at most 24 drawings at a time.")
+        return []
+    framed = None
+    if saved["result"].diagnostics.get("selected_pipeline") == "executable_structural_rules":
+        framed = st.checkbox("Test drawings include printed panel borders", key="bongard_query_framed",
+                             help="Leave this off when rectangles are part of the drawings.")
+    # Every row shown in the table is also exported, so a report's record count
+    # equals the number of attempted queries. Non-predictions carry label None.
+    rows, predictions = [], []
+    for file in files:
+        try:
+            image = _load_upload(file)
+            identity = image_digest(image)
+            if identity in saved["result"].model.support_digests:
+                rows.append({"Image": file.name, "Result": "Given example", "Why": "This repeats a drawing used to find the rule."})
+                predictions.append({"filename": file.name, "status": "given_example", "label": None,
+                                    "reason": "duplicate_of_support_image", "pixel_hash": identity})
+                continue
+            cache = saved.setdefault("query_cache", {})
+            cache_key = (identity, framed)
+            if cache_key not in cache:
+                cache[cache_key] = saved["result"].model.predict([image], remove_panel_ruling=framed).predictions[0]
+            prediction = cache[cache_key]
+            decided = prediction.label is not None
+            predictions.append({"filename": file.name, "status": "predicted" if decided else "abstained",
+                                "reason": "recovered_rules_agree" if decided else
+                                          "; ".join(prediction.abstention_reasons) or "no_rule_consensus",
+                                "pixel_hash": identity, "remove_panel_ruling": framed, **prediction.to_dict()})
+            rows.append({"Image": file.name, "Result": "Group A" if prediction.label is True else "Group B" if prediction.label is False else "Cannot decide",
+                         "Why": "The recovered rules agree" if prediction.label is not None else "The rules disagree or required visual evidence is missing"})
+        except (ValueError, OSError, Image.DecompressionBombError) as error:
+            rows.append({"Image": file.name, "Result": "Unreadable", "Why": str(error)})
+            predictions.append({"filename": file.name, "status": "unreadable", "label": None,
+                                "reason": str(error)})
+    st.dataframe(rows, hide_index=True, width="stretch")
+    st.caption("Test drawings use the rule you already found. To revise it, change the examples in Group A or B.")
+    return predictions
+
+
+def _report_payload(result, positive, negative, predictions):
+    return {**result.to_dict(), "predictions": predictions,
+            "support_pixel_hashes": [image_digest(image) for image in list(positive)+list(negative)]}
+
+
+def _report_download(result, positive, negative, predictions=()):
+    """Offer the JSON report for solved and unsolved attempts alike."""
+    with st.expander("Save the explanation and evidence"):
+        st.download_button("Download rule report",
+                           json.dumps(_report_payload(result, positive, negative, list(predictions)),
+                                      indent=2, default=str),
+                           "logicapture-rule.json", "application/json", key="bongard_export")
+
+
+def _evidence(saved, positive, negative):
+    result = saved["result"]
+    attempt = result.diagnostics["structural_attempt"]
+    with st.expander("Why this rule? / evidence and alternatives"):
+        st.write(f"It matches {attempt['support_correct']} of the {attempt['support_total']} given drawings and passed the internal checks with examples temporarily omitted.")
+        st.caption("Agreement with given examples is not independent test accuracy. Another rule may fit them too.")
+        texts = list(dict.fromkeys(item["text"] for item in attempt["candidates"]))
+        if len(texts) > 1:
+            st.write("Other equally simple rules that fit:")
+            for text in texts[1:6]:
+                st.write("• "+text)
+        images = list(positive)+list(negative)
+        ids = result.model.support_ids
+        selected = st.selectbox("Inspect a given drawing", range(len(images)), format_func=lambda i: ids[i],
+                                key="bongard_inspect_"+saved["fingerprint"][:12])
+        left, right = st.columns([1, 2])
+        left.image(images[selected], width=min(250, images[selected].shape[1]))
+        evidence = attempt["support_evidence"][selected]
+        objects = evidence.get("objects")
+        if objects is not None:
+            right.dataframe([{"Object": obj["id"], "Type": obj["kind"],
+                              "Shape": obj["shape"],
+                              "Arrow marks": obj.get("arrow_count", "—"),
+                              "Direction along the path": {"opposed": "Opposite directions", "same": "Same direction"}.get(obj.get("along_path_flow"), "—")}
+                             for obj in objects], hide_index=True, width="stretch")
+        else:
+            from src.vision.observations import DESCRIPTIONS
+            used = {item["program"]["feature"] for item in attempt["candidates"]}
+            right.dataframe([{"Measurement": DESCRIPTIONS.get(name, name), "Value": value}
+                             for name, value in evidence.items() if name in used], hide_index=True, width="stretch")
 
 
 def general_bongard():
-    from src.vision.pretrained import model_directory, image_digest, MODELS
-    from src.reasoning.general import GeneralVisualSolver
-    from src.vision.structural_features import StructuralEncoder
-
-    st.write("Find a property separating A from B, then test it on unseen images.")
-    st.caption("Executable drawing rules first · local visual classification for broader concepts")
-    positive, negative, queries, truth = [], [], [], None
-    options = ["Page image", "Live camera", "Separate images", "Generated geometry", "Supplied path example", "Supplied dotted page"]
-    if Path("data/external/classic_bongard/episodes.json").is_file(): options.append("Classic problems / local data")
-    if Path("data/external/foundalis/manifest.json").is_file(): options.append("Foundalis collection / local data")
-    source = st.radio("Input source", options, horizontal=True, key="general_source")
-    if source == "Separate images":
-        left, right = st.columns(2)
-        a = left.file_uploader("A / examples with the property", type=["png", "jpg", "jpeg", "webp"], accept_multiple_files=True, key="general_a")
-        b = right.file_uploader("B / examples without the property", type=["png", "jpg", "jpeg", "webp"], accept_multiple_files=True, key="general_b")
-        q = st.file_uploader("Unseen images / optional", type=["png", "jpg", "jpeg", "webp"], accept_multiple_files=True, key="general_q")
-        try:
-            positive, negative, queries = [_load_upload(f) for f in a], [_load_upload(f) for f in b], [_load_upload(f) for f in q]
-        except (ValueError, Image.UnidentifiedImageError) as error: st.error(str(error)); return
-        if not a and not b:
-            st.info("Add four to six images to each group, or choose an example above.")
-    elif source == "Page image":
-        st.caption("Upload the whole page. Panel frames are found automatically; the left group becomes positive and the right group negative.")
-        uploaded = st.file_uploader("Complete problem image", type=["png", "jpg", "jpeg", "webp", "gif"], key="general_page")
-        with st.expander("Page layout"):
-            divider = st.slider("Vertical divider", .2, .8, .5, .01, key="general_divider")
-            automatic = st.checkbox("Detect panel count automatically",value=True,key="general_auto_panels")
-            count = None if automatic else st.number_input("Panels per group", 2, 20, 6, key="general_panel_count")
-        if uploaded:
-            try:
-                from src.vision.panel_detection import split_problem_page, panel_overlay
-                image = _load_upload(uploaded)
-                page,panels,layout = split_problem_page(image, divider=divider, expected_per_group=None if count is None else int(count))
-                positive = [p.image for p in panels if p.label]
-                negative = [p.image for p in panels if not p.label]
-                st.caption(f"Automatically separated {len(positive)} positive and {len(negative)} negative panels. Review the crops below before solving.")
-                if layout["inferred_panels"]:
-                    st.info("One panel had an incomplete frame; its crop was inferred from the other eleven aligned panels. Review that boundary before solving.")
-                with st.expander("Detected page boundaries"):
-                    st.image(panel_overlay(page,panels),width="stretch")
-            except (ValueError, Image.UnidentifiedImageError) as error: st.error(str(error)); return
-    elif source == "Live camera":
-        from .live_camera import live_camera_workspace
-        positive,negative = live_camera_workspace()
-    elif source == "Generated geometry":
-        from src.reasoning.examples import geometric_demo
-        example = st.selectbox("Geometry problem", ["Convex / concave boundaries", "Elongated / compact shapes"], key="general_geometry")
-        positive, negative = map(list, geometric_demo("convexity" if example.startswith("Convex") else "elongation"))
-        st.caption("Generated demonstrations vary rotation, fill and polygon shape. The solver receives only pixels and the A/B groups; the last drawing on each side is reserved by default.")
-    elif source == "Supplied dotted page":
-        from src.vision.panel_detection import split_problem_page
-        image = np.array(Image.open("data/fixtures/dotted_page.png").convert("RGB"))
-        st.image(image,caption="Original complete page / automatically split below",width=min(700,image.shape[1]))
-        _,panels,_ = split_problem_page(image)
-        positive,negative = [p.image for p in panels if p.label],[p.image for p in panels if not p.label]
-    elif source == "Supplied path example":
-        folder = Path("data/fixtures/arrow_paths")
-        positive = [np.array(Image.open(folder/f"A{i:02d}.png").convert("RGB")) for i in range(1, 7)]
-        negative = [np.array(Image.open(folder/f"B{i:02d}.png").convert("RGB")) for i in range(1, 7)]
-        st.caption("Arrow directions are measured along each curve. The automatic route checks executable rules before trying image features.")
-    elif source == "Foundalis collection / local data":
-        from src.vision.panel_detection import split_problem_page
-        root = Path("data/external/foundalis")
-        manifest = json.loads((root/"manifest.json").read_text(encoding="utf-8"))
-        records = manifest["items"]
-        index = st.selectbox("Problem",range(len(records)),format_func=lambda i: records[i]["id"],key="general_foundalis")
-        record = records[index]
-        if record["status"] != "available":
-            st.warning("Source image is unavailable: "+record.get("error","retrieval failed")); return
-        if len(record["images"]) != 1:
-            if all(media["frames"]>1 for media in record["images"]):
-                from base64 import b64encode
-                st.warning("This entry uses animated panels. Temporal rule inference is not implemented; a static-frame answer would be incomplete.")
-                columns = st.columns(2)
-                for i,media in enumerate(record["images"]):
-                    with columns[0 if i<len(record["images"])/2 else 1]:
-                        data = b64encode((root/media["file"]).read_bytes()).decode()
-                        st.markdown(f'<img alt="Animated problem panel" src="data:image/gif;base64,{data}" width="160">',unsafe_allow_html=True)
-            else:
-                st.warning("This entry contains multiple images and needs layout review; no page was silently discarded.")
-            return
-        item = record["images"][0]
-        if item["frames"] != 1:
-            st.warning("This problem uses animation; a static-frame rule would be incomplete."); return
-        with Image.open(root/item["file"]) as source_image:
-            from src.vision.pretrained import rgb_image
-            image = np.array(rgb_image(source_image))
-        st.image(image,width="stretch")
-        try:
-            _,panels,_ = split_problem_page(image)
-            positive,negative = [p.image for p in panels if p.label],[p.image for p in panels if not p.label]
-        except ValueError as error:
-            st.warning(str(error)); return
-        st.caption("Only the displayed image pixels and left/right groups enter inference. Source concepts and solutions are not loaded.")
-    else:
-        from src.datasets import load_classic, DatasetError
-        episodes = load_classic("data/external/classic_bongard")
-        index = st.selectbox("Problem", range(len(episodes)), format_func=lambda i: episodes[i].episode_id, key="general_classic")
-        try:
-            prepared = episodes[index].prepare()
-            positive, negative, queries = map(list, (prepared.input.positive, prepared.input.negative, prepared.input.queries))
-            truth = prepared.query_labels
-        except DatasetError as error:
-            st.warning(f"Strict independent evaluation excludes this problem: {error}"); return
-        st.caption("Five examples per group; the sixth is hidden for evaluation. Task names and solutions do not enter inference.")
-    if positive and negative and not queries:
-        per_group = min(len(positive), len(negative))
-        can_reserve = per_group >= 3
-        executable_first = st.session_state.get("general_structural_first", True)
-        default_reserve = per_group >= (4 if executable_first else 3)
-        holdout_context = (source, len(positive), len(negative), executable_first)
-        # Reset before creating the widget when its support budget changes.
-        # A checked six-panel default must not silently leave only two supports
-        # after switching to a three-panel upload. Ordinary reruns retain an
-        # explicit user choice for the same input counts and reasoning mode.
-        if ("general_holdout" not in st.session_state
-                or st.session_state.get("general_holdout_context") != holdout_context):
-            st.session_state.general_holdout = default_reserve
-            st.session_state.general_holdout_context = holdout_context
-        reserve = st.checkbox("Withhold the last image in each group for a test",
-                              disabled=not can_reserve, key="general_holdout")
-        if not can_reserve: st.caption("A reserved test needs at least three images per group, leaving two supports each. You can also upload unseen images separately.")
-        if executable_first and per_group == 3:
-            st.caption("Executable drawing rules need at least three support images per group. "
-                       "Leave the test unchecked to use all three; checking it leaves two supports "
-                       "and uses visual feature classification instead.")
-        if reserve and can_reserve:
-            # Interleave hidden queries in a deterministic pixel-based order.
-            pairs = [(positive[-1], True), (negative[-1], False)]
-            pairs.sort(key=lambda item: sha256(item[0].tobytes()).hexdigest())
-            queries, truth = [p[0] for p in pairs], tuple(p[1] for p in pairs)
-            positive, negative = positive[:-1], negative[:-1]
-    if positive or negative:
-        left, right = st.columns(2)
-        for column, images, name in ((left, positive, "A / positive support"), (right, negative, "B / negative support")):
+    st.subheader("Find a visual rule")
+    st.write("What do the drawings in Group A have in common that Group B does not?")
+    st.markdown('<div class="workflow-step">1 · Choose your input</div>', unsafe_allow_html=True)
+    try:
+        positive, negative, framed = _inputs()
+    except (ValueError, OSError, Image.DecompressionBombError) as error:
+        st.error(str(error))
+        return
+    if not positive and not negative:
+        return
+    fingerprint = sha256((f"bongard-product-v2:{framed}:{len(positive)}:{len(negative)}:"+
+                          ":".join(image_digest(image) for image in list(positive)+list(negative))).encode()).hexdigest()
+    stored = st.session_state.get("bongard_analysis")
+    saved = stored if stored and stored["fingerprint"] == fingerprint else None
+    if saved is None:
+        st.markdown('<div class="workflow-step">2 · Check the two groups</div>', unsafe_allow_html=True)
+        if stored is not None:
+            st.caption("The input changed. Find the rule again to update the result.")
+    with st.expander("Check the groups" if saved is None else "2 · Review the given drawings", expanded=saved is None):
+        for column, images, label, description in zip(st.columns(2), (positive, negative),
+                                                       ("Group A", "Group B"), ("Follows the rule", "Breaks the rule")):
             with column:
-                st.markdown(f"**{name}** · {len(images)} images")
-                if images: st.image(group_board(images, [f"{name[0]}{i+1:02d}" for i in range(len(images))]), width="stretch")
-        if queries:
-            with st.expander(f"Unseen test images / {len(queries)}", expanded=True):
-                st.image(group_board(queries, [f"Q{i+1:02d}" for i in range(len(queries))], tile=160), width=min(900, 172*min(3, len(queries))))
-    have_semantic = model_directory("siglip") is not None
-    language_models = [key for key in ("qwen8b", "qwen") if model_directory(key) is not None]
-    have_language = bool(language_models)
-    language_model = language_models[0] if language_models else "qwen"
-    rounds = 2
-    with st.expander("Local inference settings", expanded=not have_semantic):
-        structural_first = st.checkbox("Try executable drawing rules first", value=True, key="general_structural_first")
-        st.caption("For monochrome drawings, trace paths and regions and refit rules while withholding one support from each group. Use feature classification if this check fails. Disable to reproduce the feature-only baseline.")
-        choices = ["Hybrid / learned + measured", "Learned semantic features", "Measured drawing features"] if have_semantic else ["Measured drawing features"]
-        representation = st.selectbox("Representation", choices, key="general_representation")
-        language = st.checkbox("Propose and check an open-language concept", value=False, disabled=not have_language, key="general_language")
-        generate = st.checkbox("Draw a checked new positive and negative",value=True,key="general_generate")
-        st.caption("Learned features handle natural images; measured features retain count, topology, boundaries, arrangement and symmetry. Representation selection uses support-only validation.")
-        if not have_semantic or not have_language:
-            st.code("python -m pip install -r requirements-general.txt\npython -m src.vision.pretrained --download siglip --download qwen", language="shell")
-            st.caption("Downloads several GB of official model weights once. Inference then runs offline. No API key or usage charges.")
-        if language:
-            language_model = st.selectbox("Local concept model", language_models, format_func=lambda v: "Qwen3 VL 8B / NF4" if v == "qwen8b" else "Qwen3 VL 2B", key="general_language_model")
-            rounds = st.slider("Concept search rounds", 1, 4, 2, key="general_concept_rounds")
-            st.caption("The local model proposes concepts from support only, checks each image independently, and revises failed hypotheses. This can take several minutes. Its self-checks can still be wrong.")
-    identities = tuple((key, spec.revision) for key, spec in MODELS.items())
-    fingerprint = sha256(repr((5, identities, structural_first, representation, language, language_model, rounds,generate,
-                               len(positive), len(negative), len(queries))).encode()+
-                         "".join(image_digest(i) for i in positive+negative+queries).encode()).hexdigest()
-    if st.button("Solve locally", type="primary", disabled=min(len(positive), len(negative)) < 2, key="general_solve"):
-        st.session_state.pop("general_analysis", None)
+                st.markdown(f"**{label} · {description}**")
+                st.caption(f"{len(images)} drawing{'s' if len(images) != 1 else ''}")
+                if images:
+                    st.image(group_board(images, [f"{label[-1]}{i+1:02d}" for i in range(len(images))]), width="stretch")
+        st.caption("Check that each drawing is complete and in the correct group.")
+    ready = 3 <= min(len(positive), len(negative)) and max(len(positive), len(negative)) <= 8
+    if not ready:
+        st.info(f"Add 3–8 distinct drawings per group. You have {len(positive)} in A and {len(negative)} in B.")
+    if saved is None and st.button("Find the rule", type="primary", disabled=not ready, key="bongard_solve"):
+        st.session_state.pop("bongard_analysis", None)
         status = st.empty()
         try:
-            encoder = semantic_encoder() if representation != "Measured drawing features" else None
-            measured = StructuralEncoder() if representation != "Learned semantic features" else None
-            result = GeneralVisualSolver(encoder, measured, structural_first=structural_first).solve(positive, negative, queries, progress=status.caption)
-            saved_analysis = {"fingerprint": fingerprint, "features": result, "concepts": None, "concept_error": None,
-                              "generated":None,"generation_error":None}
-            st.session_state.general_analysis = saved_analysis
-            if generate and result.diagnostics.get("logical_explanation"):
-                from src.reasoning.examples import generate_checked_examples
-                from src.active import GenerationError
-                status.caption("Drawing new examples and checking their rendered pixels against the frozen programs")
-                try:
-                    saved_analysis["generated"] = generate_checked_examples(result.diagnostics)
-                except GenerationError as error:
-                    saved_analysis["generation_error"] = str(error)
-            if language and not result.diagnostics.get("logical_explanation"):
-                if encoder: encoder.unload()
-                from src.reasoning.concepts import ConceptInducer
-                status.caption("Proposing an open-language concept from support examples")
-                backend = language_backend(language_model)
-                try:
-                    saved_analysis["concepts"] = ConceptInducer(backend, max_rounds=rounds, measured_grounding=True).solve(positive, negative, queries, progress=status.caption)
-                except (ValueError, RuntimeError, ImportError, OSError) as error:
-                    saved_analysis["concept_error"] = str(error)
-                finally:
-                    backend.unload()
-        except (ValueError, RuntimeError, ImportError, OSError) as error: st.error(str(error))
-        finally: status.empty()
-    saved = st.session_state.get("general_analysis")
-    if not saved or saved["fingerprint"] != fingerprint: return
-    result, concepts = saved["features"], saved["concepts"]
-    if saved.get("concept_error"):
-        st.warning("The optional concept search failed; the visual decisions below are retained. " + saved["concept_error"])
-    structural = result.diagnostics.get("selected_pipeline") in ("executable_structural_rules","executable_measurement_rules")
-    if structural:
-        st.markdown("**Inferred structural rule / group A**")
-        st.write(result.diagnostics["logical_explanation"])
-        attempt = result.diagnostics["structural_attempt"]
-        st.caption(f"Support fit: {attempt['support_correct']}/{attempt['support_total']}. "
-                   f"Leave-one-per-group validation: {attempt['validation_correct']}/{attempt['validation_total']} "
-                   f"assessments across {attempt['validation_folds']} refits. Queries were not used to choose the rule.")
-        st.caption(f"{attempt['candidate_count']} equally simple support-consistent programs; a query is answered only when they agree and its required evidence is available. This does not prove the intended rule is unique.")
-        if attempt.get("validation_is_independent_accuracy") is False:
-            st.caption("The measurement was selected using these support refits. This is a support-selection check, not independent test accuracy; withheld images below are separate.")
-    else:
-        st.markdown("**Visual classification / no executable rule recovered**")
-        cv = result.diagnostics["nested_cv_accuracy"]
-        learner = result.diagnostics["selected_candidate"]
-        st.caption(f"Nested support validation: {cv:.0%}" if cv is not None else "Insufficient independent support for validation")
-        st.caption(f"Selected view: {learner['view']} · learner: {learner['learner']} · scores are uncalibrated")
-        if cv is not None and cv <= .5:
-            st.warning("The classifier did not establish a reliable separating pattern on the supports. Its unresolved outputs are failures to solve this problem.")
-        attempt = result.diagnostics.get("structural_attempt", {})
-        if structural_first and attempt.get("reason"):
-            st.caption("Drawing-rule check: " + attempt["reason"].replace("_", " "))
-    rows = []
-    for i, prediction in enumerate(result.predictions):
-        row = {"Image": prediction.image_id, "Rule decision" if structural else "Feature decision": _label(prediction.label)}
-        if structural and result.diagnostics["selected_pipeline"] == "executable_structural_rules":
-            measured_objects = prediction.diagnostics["measured_evidence"].get("objects", [])
-            row["Measured path flow"] = ", ".join(obj["along_path_flow"] for obj in measured_objects if "along_path_flow" in obj) or "—"
-        elif structural:
-            row["Measured values"] = ", ".join(f"{name}: {value:.3g}" if value is not None else f"{name}: unknown"
-                                               for name,value in prediction.diagnostics["measured_evidence"].items())
-        else:
-            row["Evidence score"] = round(prediction.score, 3)
-        row["Reason"] = ", ".join(prediction.abstention_reasons) or ("Executable rules agree" if structural else "Stable support fits agree")
-        if concepts: row["Concept decision"] = _label(concepts.predictions[i].label)
-        if truth is not None: row["Held-out truth"] = _label(truth[i])
-        rows.append(row)
-    if rows: st.dataframe(rows, hide_index=True, width="stretch")
-    else: st.info("Add unseen images to test the decision. Support agreement alone does not establish the intended rule.")
-    if truth is not None:
-        from src.reasoning.evaluation import prediction_metrics
-        metric = prediction_metrics(result.predictions, truth)
-        st.caption(f"Held-out: {sum(p.label is y for p,y in zip(result.predictions,truth))}/{len(truth)} correct, {metric['abstained']} unresolved. Ground truth is used only here, after prediction.")
-    if saved.get("generated"):
-        st.markdown("**New drawings / checked against the recovered programs**")
+            result = infer_problem(positive, negative, progress=status.caption, remove_panel_ruling=framed)
+            saved = {"fingerprint": fingerprint, "result": result}
+            st.session_state.bongard_analysis = saved
+            st.rerun()
+        except (ValueError, RuntimeError, OSError) as error:
+            saved = None
+            st.error(str(error))
+        finally:
+            status.empty()
+    if saved is None:
+        return
+    result = saved["result"]
+    st.markdown('<div class="workflow-step">3 · Review the result</div>', unsafe_allow_html=True)
+    if result.model is None:
+        st.warning("No verified rule found for this problem.")
+        st.write(_explain_failure(result.diagnostics["structural_attempt"]))
+        _report_download(result, positive, negative)
+        return
+    st.markdown('<div class="rule-output">'+escape(result.diagnostics["logical_explanation"])+"</div>", unsafe_allow_html=True)
+    st.caption(f"Fits all {len(positive) + len(negative)} example drawings. Test it on new drawings to see where it holds.")
+    if result.examples:
         from src.scene.renderer import png_bytes
-        for column,example in zip(st.columns(2),saved["generated"]):
+        for column, example in zip(st.columns(2), result.examples):
             with column:
-                st.image(example.image,caption="A / new positive" if example.label else "B / new negative",width="stretch")
-                st.download_button("Download drawing",png_bytes(Image.fromarray(example.image)),
-                    "new_positive.png" if example.label else "new_negative.png","image/png",key=f"general_example_{example.label}")
-        st.caption("The drawings are generated, then re-read from pixels. Every frozen program must agree with their labels. This checks the recovered programs, not an independent proof of the intended rule.")
-    elif saved.get("generation_error"):
-        st.info("New example generation was not verified: "+saved["generation_error"])
-    if concepts:
-        st.markdown("**Open-language hypotheses**")
-        for checked in concepts.candidates:
-            st.write(f"A: {checked.concept.positive}")
-            st.write(f"B: {checked.concept.negative}")
-            st.caption(f"Group-blind checks on the same supports: {checked.support_correct}/{checked.support_total}; {checked.support_unknown} unresolved. " +
-                       ("Support-consistent candidate." if checked.consistent else "Rejected as a complete explanation."))
-        st.caption("A model-generated explanation is a hypothesis. Support consistency and a visual classification are separate from an executable proof.")
-    with st.expander("Evidence and reproducibility"):
-        for prediction in result.predictions:
-            if structural:
-                st.write(prediction.image_id)
-                st.json(prediction.diagnostics, expanded=False)
-            else:
-                st.write(f"{prediction.image_id}: nearest supports {', '.join(prediction.nearest_support_ids)}")
-        st.json({k: v for k, v in result.diagnostics.items() if k != "selection_cv"}, expanded=False)
-        export = {"features": result.to_dict(), "concepts": concepts.to_dict() if concepts else None,
-                  "concept_error": saved.get("concept_error"),
-                  "generated_verification":[example.verification for example in saved.get("generated") or []],
-                  "generation_error":saved.get("generation_error"),
-                  "evaluation_truth": truth, "all_inference_local": True}
-        st.download_button("Download analysis JSON", json.dumps(export, indent=2), "general_bongard.json", "application/json", key="general_export")
+                st.write("New Group A example" if example.label else "New Group B counterexample")
+                st.image(example.image, width=min(320, example.image.shape[1]))
+                st.download_button("Save Group A drawing" if example.label else "Save Group B drawing",
+                                   png_bytes(Image.fromarray(example.image)), "group-a.png" if example.label else "group-b.png",
+                                   "image/png", key=f"bongard_drawing_{example.label}")
+        st.caption("These are new drawings. Their rendered pixels were checked against every retained rule.")
+    else:
+        st.info("A rule was found, but new drawings could not be verified for it.")
+    _evidence(saved, positive, negative)
+    predictions = _test_images(saved)
+    _report_download(result, positive, negative, predictions)

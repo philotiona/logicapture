@@ -1,6 +1,6 @@
 # РГР №1 model testing
 
-The РГР workspace implements the supplied **Есептік-графикалық жұмыс №1 — Объектілерді тану моделін таңдау, бейімдеу және оқыту** assignment inside Rule Lab. Start the existing application and select **РГР** in the navigation bar:
+The РГР workspace implements the supplied **Есептік-графикалық жұмыс №1 — Объектілерді тану моделін таңдау, бейімдеу және оқыту** assignment inside Logicapture. Start the existing application and select **РГР coursework** in the navigation bar:
 
 ```powershell
 .\.venv\Scripts\python.exe -m streamlit run app.py
@@ -8,7 +8,7 @@ The РГР workspace implements the supplied **Есептік-графикалы
 
 It reuses `src/vision/attribute_cnn.py` and the project's existing `data/models/attributes.keras` checkpoint. No Gradio or scikit-learn installation is needed. TensorFlow is loaded only when entering the РГР workspace. Install `requirements-neural.txt` if it is missing.
 
-The model recognizes one tightly cropped circle, triangle, quadrilateral, or polygon on a light background. The polygon training class is based on pentagons; it does not imply recognition of arbitrary visual concepts. Akinator and Bongard continue to use their existing workflows.
+The model recognizes one tightly cropped circle, triangle, quadrilateral, or polygon on a light background. The polygon training class is based on pentagons; it does not imply recognition of arbitrary visual concepts. Coursework is separate from the main Bongard and image-sorting workflows.
 
 ## Assignment workflow
 

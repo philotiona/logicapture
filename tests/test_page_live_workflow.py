@@ -189,16 +189,16 @@ def test_foundalis_discovery_uses_numeric_links_and_never_follows_solution_pages
 
 
 def test_default_fullpage_flow_and_dotted_sample_generate_checked_drawings(monkeypatch):
-    from src.vision import pretrained
-    monkeypatch.setattr(pretrained,"model_directory",lambda *args:None)
+    from io import BytesIO
+    from src.interface import general_bongard as interface
+    uploaded = BytesIO((ROOT/"data/fixtures/dotted_page.png").read_bytes())
+    monkeypatch.setattr(interface.st, "file_uploader", lambda *args, key=None, **kwargs:
+                        uploaded if key == "bongard_page" else [])
     app = AppTest.from_file(ROOT/"app.py",default_timeout=45).run()
-    app.button(key="nav_bongard").click().run()
-    source = next(r for r in app.radio if r.label == "Input source")
-    assert source.value == "Page image"
-    source.set_value("Supplied dotted page").run()
-    app.button(key="general_solve").click().run()
+    assert app.radio(key="bongard_source").value == "Upload a page"
+    app.button(key="bongard_solve").click().run()
     assert not app.exception and not app.error
-    saved = app.session_state.general_analysis
-    assert saved["features"].diagnostics["selected_pipeline"] == "executable_measurement_rules"
-    assert len(saved["generated"]) == 2
-    assert any("2/2 correct, 0 unresolved" in c.value for c in app.caption)
+    result = app.session_state.bongard_analysis["result"]
+    assert result.diagnostics["selected_pipeline"] == "executable_measurement_rules"
+    assert result.diagnostics["structural_attempt"]["support_total"] == 12
+    assert len(result.examples) == 2

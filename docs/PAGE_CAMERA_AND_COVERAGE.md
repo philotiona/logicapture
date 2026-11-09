@@ -1,5 +1,7 @@
 # Complete pages, local camera, and measured rule coverage
 
+> Historical implementation and audit notes. The current product uses **Bongard → Upload a page → Find the rule**, described in [the product brief](PROJECT_BRIEF.md). Continuous-camera and alternative inference controls are no longer application entry points; the tested camera engine remains available to research code. The saved audit below is unchanged.
+
 The default Bongard input is now **Page image**. Upload a complete image with
 positive examples on the left and negative examples on the right. The app finds
 observed panel frames, determines equal group counts, orders the crops by row,

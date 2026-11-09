@@ -1,149 +1,70 @@
-# Visual Rule Akinator & Bongard Solver
+# Logicapture
 
-A local Bongard research application with complementary approaches. The default **General visual inference** screen first tries executable rules on traced monochrome drawings. If support-only validation fails, it falls back to frozen image features and a support-adapted classifier. The optional local vision-language model can propose and check open-language concepts. **Executable structural rules** provides the detailed path, topology, arrow, region and geometric inspector. **Akinator** remains symbolic. The original contour/CNN baselines are preserved.
+**Find a visual rule, explain it, and draw new examples.**
 
-This is not a universal Bongard solver. A classification boundary, a model-generated explanation and an executable symbolic rule are different results. The app exposes support validation, abstention, failed hypotheses and withheld-image evaluation rather than claiming every output is the intended rule. See [general inference](docs/GENERAL_SOLVER.md), [episodic reasoning](docs/EPISODE_REASONING.md) and [dataset protocols](docs/DATASETS.md).
-
-**Complete-page upload is now the default:** frames are detected and positive/negative crops are reviewed automatically. Optional local live camera processing adds detected boundaries and pixel-checked new examples to the returned video. Install `requirements-camera.txt` for live video. See [page/camera instructions and the whole-index coverage audit](docs/PAGE_CAMERA_AND_COVERAGE.md).
-
-The latest [Foundalis boundary-geometry audit](docs/BOUNDARY_RULES.md) accounts for all 409 indexed problems. It splits all 408 static pages and finds executable candidates on 36; their 72 answered query decisions include 62 correct and 10 wrong. Before the new measurements, the same procedure found 33 candidates with 57 correct and 9 wrong decisions. Recovering every rule remains unachieved. The animated problem is explicitly unsupported by static inference. These development coverage numbers must not be confused with parsing coverage or the separate feature-classifier benchmarks below.
-
-The [external evaluation report](data/benchmarks/REPORT.md) includes 80 classic test problems and 37 available natural-image test problems. Forced classification reached 71.9% with measured features on the classic set and 64.9% with learned features on the natural-image subset. Many decisions remain unresolved; the report includes answer coverage, errors, prototype baselines and unsuccessful language hypotheses. Combining the representations did not consistently improve results.
-
-Those published numbers evaluate the feature classifiers, not the newer automatic structural routing. A default-screen regression now checks the original arrow problem: ten supports recover the along-path opposition rule and both withheld drawings are classified correctly. This targeted repair is not evidence of universal solving ability.
-
-![Supplied arrow-path problem and its inferred rule](docs/screenshots/bongard-paths.jpg)
+Logicapture reads the two groups in a Bongard problem and looks for an executable rule separating them. Its distinguishing workflow goes beyond labeling the supplied images: it constructs a new matching drawing and a counterexample, then re-reads their pixels to check them against the retained rules.
 
 ## Run
 
-The project environment is already installed in `.venv` on this machine. From this folder in PowerShell:
-
 ```powershell
 .\.venv\Scripts\python.exe -m streamlit run app.py
 ```
 
-Open <http://127.0.0.1:8501>. A convenience launcher is also supplied as `run.ps1`.
+Open <http://127.0.0.1:8501>. `run.ps1` also starts the app.
 
-The **РГР** tab adds the model-testing assignment to the same app: single-photo upload or camera capture with manual cropping, confidence/brightness/contrast sliders, resolution and augmentation experiments, labeled-photo ZIP upload, local adaptation of the existing shape CNN, and before/after reports. A working synthetic demo is included; personal photographs are still required for the assignment's photo tests. Saved reports verify checkpoint hashes and use the original training split. See [РГР instructions](docs/RGR.md). This tab needs `requirements-neural.txt`; the other non-neural screens retain the base requirements.
+For a fresh environment, use Python 3.11 or later and install `requirements.txt`. Bongard rule discovery requires only these base dependencies; it does not download a vision or language model.
 
-For a fresh installation with Python 3.11 or later:
+## Find a rule
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m streamlit run app.py
-```
+**Find a rule** is the opening screen for two-group Bongard puzzles:
 
-TensorFlow is optional for the app. To train and compare the fresh neural baseline, install `requirements-neural.txt`.
+1. **Choose your input.** Upload the complete page, supply separate A/B drawings, or choose **Try an example**. For separate drawings, turn on **Drawings include printed panel borders** only when the border is part of the printed puzzle layout. Leave it off when an outline is part of the drawing.
+2. **Check the groups.** Make sure the displayed crops belong to the correct group. For an incorrectly split page, open **Check or fix page splitting**.
+3. Press **Find the rule**. The explanation and a new Group A drawing and Group B counterexample appear together. New drawings are checked from their rendered pixels against every retained rule.
 
-For the optional broader local models:
+Open **Why this rule?** to inspect a given drawing's measured evidence and alternative explanations. Upload new drawings under **Test the rule** to check them against the same fit. When a test-border setting is available, it applies only to test drawings. A copy of a given example is marked as such. You can download the evidence as a JSON report even when the solver cannot verify a rule.
 
-```powershell
-python -m pip install -r requirements-general.txt
-python -m src.vision.pretrained --download siglip --download qwen
-# Optional stronger concept model, approximately 17 GB of weights:
-python -m src.vision.pretrained --download qwen8b
-```
+Use **Arrow directions** under **Try an example** to see reasoning along a curve rather than a closed-set shape classifier. The other two examples demonstrate convexity and elongation. Example names are not passed to the solver.
 
-For this Windows RTX 5060 machine, PyTorch was installed from the official CUDA 12.8 wheel index. Use a build appropriate for your hardware; the base app and measured-feature route require neither PyTorch nor model weights. All model revisions are pinned. Weight downloads are explicit; normal inference reads only local files. No API key, paid API, or hosted inference is used. Weights and external image datasets stay out of Git.
+All supplied examples are used for inference. The app automatically tries the traced path/region rule engine and then validated numeric drawing rules. It no longer asks users to choose an algorithm, representation, search depth, CNN configuration, language model or benchmark protocol. A failure remains **No verified rule found**; an image-similarity score is not substituted for a rule.
 
-## Try both modes
+## Local Lab
 
-1. In **Akinator**, secretly choose a supported rule such as “exactly four filled triangles,” “at least four filled triangles,” “four objects, all filled triangles,” or a positional rule. Press **Start session** and answer yes/no. An empty panel is an intentional query. Undo can correct a mistaken answer.
-2. Observe the surviving program count and its history. When the available drawings no longer distinguish survivors, inspect the alternatives or request fresh drawings. A finite-pool agreement is not a logical-equivalence proof.
-3. In **Bongard**, **General visual inference** accepts separate support/query images, a page, the supplied paths, or locally downloaded classic problems. Use **Solve locally**. Reserve test images to check generalization. Enable **Propose and check an open-language concept** for bounded local hypothesis search. For the existing executable-rule flow, choose **Executable structural rules**, select Demo, Upload page, Separate groups or Camera, then **Read drawings** and **Infer rule**. Targets never enter inference.
-4. **Show detected objects** adds traced paths and arrow evidence. **Inspect one drawing** shows topology, arrows, along-path flow, region attributes, and unresolved evidence. **Generate examples** draws a checked matching example and counterexample. All panels are used by default; reserve panels through the evaluation setting.
-5. Try your own clean page using `data/bongard_template.png`, or upload one tightly cropped image per panel into **Separate groups**. Black marker, white paper, closed shapes, and no overlapping ink are the safest starting conditions.
-6. Try **Arrow directions / supplied drawing** for the user's original screenshot regression. The solver receives the original drawing pixels, not the expected direction annotations. Arrows are compared along each curve, not by their screen angle.
-7. **Structural graph + symbolic** is the default. **Structural graph + neural regions** retains CNN distributions while guarding incompatible geometric labels. The original **OpenCV + symbolic** and **Neural perception + hard symbolic** modes reproduce the geometric baselines; they do not support path-flow reasoning.
+Select **Local Lab → Learn and make a drawing** to try the built-in drawings. You can also upload a full page or 3–8 drawings for each group. Logicapture fits a local visual classifier from the two groups, then joins whole portions of two Group A drawings at a blank seam. It checks the rendered candidate with the frozen classifier and rejects near-copies. **Test an independent drawing** uses the same fit.
 
-For the new boundary reasoning, choose **Bongard → General visual inference → Generated geometry**, then **Convex / concave boundaries** or **Elongated / compact shapes**. **Solve locally** infers from support pixels, checks two withheld drawings, and generates a pixel-verified matching example and counterexample.
+This is a CPU-only experiment with no model service or pretrained weights. Reference checks and a candidate chosen by the classifier give evidence about the learned contrast. Independent drawings are needed to assess generalization. Weak contrasts and scenes that cannot be recombined can yield no suggestion.
 
-The general workspace supports continuous local camera processing and an optional single-frame capture. Browser/OS camera permission and hardware are required. The video processor and real local WebRTC round trip have automated tests; physical webcam behavior must still be verified on the user's device. The detailed structural workspace retains its single-frame camera input. Arbitrary page parsing, temporal rule inference and universal concept recovery are not supported.
+## Print Inspector
 
-After six negative Akinator answers without a positive, a question may display up to four **independent** test drawings. Answer Yes if **any one** matches your rule, and No if **none** match. Positive batch answers are followed by individual probes to determine which drawing matched. This avoids exhaustive one-at-a-time tests of rare, specific rules. The current regression reports both question counts and drawings inspected, so it does not silently treat a batch as one visual example.
+Select **Print Inspector** in the top bar. Try the simulated photos first, or download the A4 pack and print the good, missing, extra and misplaced examples. Upload a photo or use the camera with all four markers visible. The aligned overlay identifies where the sample differs from the reference, including cases with the same total mark count.
 
-## Architecture
+For your own layout, draw separate dark marks inside the blank template and upload a photo as the accepted reference. Photograph subsequent cards with the same corner marker layout. The app runs on the CPU and asks for a retake if it cannot register a usable card. It is a demo for flat cards with separate, high-contrast marks.
 
-```text
-Default Bongard: monochrome support pixels -> traced paths/regions -> executable DSL
-                -> refit minimum-cost rules in every leave-one-per-group fold
-                -> if all held-out support assessments agree: freeze rules
-                   and classify queries, retaining unknown/disagreement
-                -> otherwise: feature inference below
+## Sort images
 
-Feature baseline: support/query pixels -> frozen semantic global/dense features
-                                     + numeric structural observations
-                -> support-only nested validation and feature/learner selection
-                -> unseen-image decisions, diagnostics, and abstention
-Optional: support pixels + support-selected measurements -> local concept proposal
-          -> group-blind single-image support checks -> bounded support-only repair
-          -> freeze consistent concepts -> unseen-image checks / disagreement
+For practical two-group image sorting, use the separate **Sort images** workspace:
 
-Akinator: generated Scene + human yes/no labels
-Bongard: pixels → panels → isolated ink
-                  → skeleton graph + paths + region boundaries
-                  → topology / arrows / optional guarded CNN attributes
-                  → Scene with explicit unavailable evidence
-Both: Scene → typed DSL → search / version space → executable rule
-      executable rule → validated scene generation → deterministic drawing
-```
+1. Name the groups, upload labeled examples, and press **Learn from these examples**.
+2. Add the new images or a ZIP and press **Sort these images**.
+3. Review individual labels and **Download sorted images + report**.
 
-- `src/scene`: validated region/path dataclasses, ordered centerlines, graph topology, arrow evidence, hard attributes and optional distributions, normalized geometry, and deterministic rendering. It has no OpenCV or TensorFlow dependency.
-- `src/dsl`: compositional object/path predicates and executable rule ASTs. `Rule.assess(scene)` returns True, False, or None for unresolved evidence; missing arrow direction is never silently counted as a negative. Geometric/Akinator Boolean evaluation remains available.
-- `src/synthesis`: exact or noisy ranking, cached predictions, ambiguity counts and semantic signatures. A beam of distinct prediction signatures expands promising pairs when the initial grammar has no perfect explanation.
-- `src/active`: reproducible and constructive scene generation, deliberate selector/count coverage and near counterexamples, a persistent version space, queries balanced over distinct behaviors with grammar priors, optional union queries after repeated negatives, undo and checked answer generation.
-- `src/vision`: image/page normalization, panel detection, contour hierarchy, stroke skeletonization and graph tracing, localized arrowhead measurement, arbitrary closed contours, guarded neural attributes, and evidence overlays. Segmentation and measurements never receive the group labels.
-- `src/baselines`: raw-pixel prototypes and optional TensorFlow/Keras episodic prototypical training.
-- `src/reasoning`: visual feature interfaces, support-only nested validation, feature weighting, episodic learners, abstention and bounded local language-concept search.
-- `src/datasets`: strict pixel-only classic, HOI, LOGO and OpenWorld adapters, explicit public-data retrieval and frozen support/query cohorts.
-- `src/evaluation`: withheld panels, exact-program and sampled-semantic recovery, active/random comparison, clean/rotation/noise conditions, object/relation metrics and failure recording.
-- `src/interface`: black/white/Klein-blue interface, compact Akinator workspace, staged Bongard input/review/inference, aligned contact sheets, evidence inspectors and exports. `app.py` is the launch entry point.
+The download preserves original file bytes and contains CSV/JSON evidence and the reusable sorting setup. Uncertain images stay in review; corrections never silently change the learned model. Photo sorting needs the optional local model from `requirements-general.txt`; drawing tasks also work with the base dependencies. See [sorting instructions](docs/IMAGE_TASKS.md).
 
-The application uses deterministic rendering, not a generative image model. Search composes primitives rather than looking up whole rule sentences.
+**РГР coursework** is a separate assignment workspace for model testing, photo controls, local CNN adaptation and reports. It needs `requirements-neural.txt`. See [assignment instructions](docs/RGR.md).
 
-## Rule example
+## Scope and evidence
 
-```python
-from src.dsl.nodes import Predicate, Exists, Count, And
-from src.active import SceneGenerator
-from src.synthesis import search
+Rule discovery is bounded: use 3–8 clear black-and-white drawings per group. It handles supported geometric, topological and path/arrow distinctions. Arbitrary semantic concepts and animated problems remain unsupported. Multiple explanations can fit the same examples, and support checks do not prove the human-intended rule.
 
-target = And(Exists(Predicate("shape", "circle")), Count(2))
-examples = SceneGenerator(seed=42).balanced_examples(target, per_group=6)
-result = search(examples)
-best = result.ranked[0].rule
-assert all(best.evaluate(scene) == label for scene, label in examples)
-```
+The saved Foundalis development audit found executable candidates on 36 of 408 static problems; 62 of 72 answered queries were correct and 10 were wrong. Most problems remain unresolved. These are development coverage figures, not universal rule recovery. Read [the full comparison and its failures](docs/BOUNDARY_RULES.md).
 
-ForAll follows classical **vacuous truth**: every selected filled object is inside an outline object also holds when no filled objects exist. Combine it with `Exists(Predicate("filled"))` to require an actual filled object. Pair relations use distinct objects. Coordinates and areas are normalized to the panel; the actual shape outline is used for containment.
+[The current product brief](docs/PROJECT_BRIEF.md) defines the scope. [The interface revision](docs/PRODUCT_REVISION.md) explains the simplified workflows. Existing baselines, historical experiments and benchmark records remain available through Python modules and documentation rather than product controls.
 
-## Verify and reproduce results
-
-The commands and training description below concern the original synthetic pipelines. The new external protocols and reproduction commands are documented separately in [GENERAL_SOLVER.md](docs/GENERAL_SOLVER.md) and [the measured report](data/benchmarks/REPORT.md).
+## Development
 
 ```powershell
+.\.venv\Scripts\python.exe -m compileall -q src app.py
 .\.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
-.\.venv\Scripts\python.exe -m src.evaluation.structural_regression
-.\.venv\Scripts\python.exe -m src.evaluation.experiments --episodes 10
-.\.venv\Scripts\python.exe -m src.vision.attribute_cnn --epochs 12 --per-class 90
-.\.venv\Scripts\python.exe -m src.evaluation.experiments --episodes 10 --neural --train-episodes 500 --attributes-model data/models/attributes.keras
 ```
 
-The measured small pilot, its raw JSON/CSV, generated problem pages and trained whole-image encoder are in `data/pilot`. The trained object CNN and its independent synthetic validation are in `data/models`. Read `data/pilot/REPORT.md` before interpreting the numbers. The test suite covers DSL semantics, typing, canonicalization, containment, active querying/undo, ambiguous and contradictory support, generation timeouts, pixels-to-objects, panel labeling, color, rectification, probability validation/round trips, segmentation isolation, argmax reasoning, the uncertainty trigger and both UI flows.
-
-The included pilot predates the expanded count grammar, constructive query coverage and batch protocol. It is preserved as a historical run and is labeled accordingly in the interface. Current four-filled-triangle regressions are in `data/regressions/akinator_counts.json`. Reproduce them with `python -m src.evaluation.akinator_regression`. The main experiment runner now records drawings seen as well as questions; rerun it before claiming current active/random performance.
-
-Training uses six support examples and four query examples per class. Evaluation hides one example from each six-panel group and fits on the remaining ten panels. The first three target families train the fresh CNN; relational and composed targets are evaluation-only. Rotation and noise are tested separately on the same symbolic problems. Basic existence problems match object-count distributions across labels; conjunction negatives violate each clause separately. All remaining ambiguity is reported.
-
-## What is complete and what remains
-
-The application and synthetic experiment pipeline are implemented and runnable. See `docs/ACCEPTANCE.md` for evidence against each criterion. The current compared systems are whole-image pixel/CNN prototypes, OpenCV + symbolic reasoning, and neural object perception + hard symbolic reasoning. **A soft/probabilistic symbolic evaluator is planned, not implemented or measured.** Its required perception inputs are already preserved in `VisualObject`; implementing it will not require replacing the OpenCV segmentation, Akinator or hard evaluator.
-
-**Broader real hand-drawn evaluation is pending.** One real arrow-path problem is available as crops of the user's screenshot in `data/fixtures/arrow_paths`. Fixed-rule image transforms, six leave-one-pair-out folds, group inversion, ordering, and negative controls are recorded in `data/regressions/structural_regression.json`. These are dependent regression cases, not an arbitrary-Bongard benchmark. Synthetic path generalization is recorded separately in `data/regressions/path_generalization.json`. `data/hand_drawn/manifest.example.json` and `docs/HAND_DRAWN_PROTOCOL.md` describe collection of independent problems. The original TensorFlow files and saved run were restored from the selected GitHub repository and are preserved unchanged; see `docs/BASELINE_PROVENANCE.md`.
-
-Bounded search cannot recover every visual concept. Semantic drawings, ambiguous crossings, disconnected/broken arrowheads, high object counts, severely skewed pages and merged touching shapes can fail. Free-form boundaries retain their contours instead of being forced into triangle/circle labels. Optional ruling removal can confuse a large edge-aligned L drawing with a panel frame; disable it in Extraction settings when needed. Search reports unresolved coverage separately from wrong classifications, and it reports failure when no available rule explains all examples. See `docs/BONGARD_REDESIGN.md` for the implemented structural boundary and remaining extensions.
-
-## References
-
-The implementation follows the project's supplied `VISUAL_RULE_AKINATOR_BONGARD_FINAL.md` brief. API behavior was checked against [OpenCV contour hierarchy](https://docs.opencv.org/4.x/d9/d8b/tutorial_py_contours_hierarchy.html), [Streamlit camera input](https://docs.streamlit.io/develop/api-reference/widgets/st.camera_input) and [Keras models](https://www.tensorflow.org/api_docs/python/tf/keras/Model).
+`src/reasoning/bongard.py` defines the product's rule-discovery policy. `src/reasoning/drawing.py` routes between structural programs and numeric measurements. `src/dsl`, `src/scene`, `src/synthesis` and the constructive drawing generators provide executable semantics and rendering. `src/image_tasks.py` supplies reusable classification tasks and lossless exports. The interface is in `src/interface`.

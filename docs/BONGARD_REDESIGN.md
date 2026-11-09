@@ -1,5 +1,7 @@
 # Bongard reasoning from structure, with unknown evidence
 
+> This records the perception redesign and its historical experiments. The [current product](PROJECT_BRIEF.md) uses the validated structural/measurement route automatically; historical baselines are no longer selectable application modes.
+
 The supplied arrow problem reveals a representation failure. A bent ink line is
 not a malformed triangle. The arrows describe motion along a shared path; their
 screen directions alone do not determine whether that motion agrees. A shape

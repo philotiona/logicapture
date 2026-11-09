@@ -3,8 +3,9 @@ from .structural import fit_structural_support
 from .measurement_rules import fit_measurement_rules
 
 
-def fit_drawing_rules(positive, negative, *, progress=None):
-    fit, attempt = fit_structural_support(positive,negative,progress=progress)
+def fit_drawing_rules(positive, negative, *, progress=None, remove_panel_ruling=True):
+    fit, attempt = fit_structural_support(positive, negative, progress=progress,
+                                          remove_panel_ruling=remove_panel_ruling)
     if fit is not None:
         return fit, attempt, "executable_structural_rules"
     measured, diagnostic = fit_measurement_rules(positive,negative,progress=progress)

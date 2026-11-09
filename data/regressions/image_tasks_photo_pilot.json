@@ -1,0 +1,511 @@
+{
+  "scope": "Photo-task workflow development smoke test, not a new generalization benchmark.",
+  "selection": "First five available episodes in the existing frozen development cohort; selected before this run.",
+  "planned_ids": [
+    "0448",
+    "0371",
+    "0114",
+    "0625",
+    "0248"
+  ],
+  "cohort_sha256": "71c3af3d1196a1bfe83cbc264d7675e5645072b17e5d869a9145fc7f6f74c3fe",
+  "source_hashes": {
+    "src/image_tasks.py": "2c8b7e84420c72b0d2f493f1a7d176fb2ea9a36a5fe4a9a4c4a6c00ed958e4f8",
+    "src/reasoning/general.py": "8c1440dba81182f68063fe1946f3949f9431c0bad5928148d99dfa30faa6200c",
+    "src/reasoning/episode.py": "e3dd25576ea5d8769308fc5ae2dcf927efc07a4470b42e488ff5ad84ba9e7569",
+    "src/vision/pretrained.py": "5a9867da81ebc8d5168437b85bac21cb2b5ab0407c86f1574372a93d58e4e29c"
+  },
+  "query_labels_used_for_fit": false,
+  "results": [
+    {
+      "id": "0448",
+      "task_fingerprint": "6a15cf652ed359aaa90f354f4eb23d2d3556ab4e3ca2de2089cee617aa1e3bdf",
+      "encoder_id": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2:vision224:v2",
+      "originals_preserved": true,
+      "queries": [
+        {
+          "id": "Q0001",
+          "filename": "e56a54754936dd2ebee6403867c4ecea546434d9880f7db90844a05c3cdd075d.jpg",
+          "original_sha256": "f2a734d610d68be074f60fc2739423c78d33bbe4a973ec53de087b7af4dd8eb3",
+          "input_sha256": "6f5bcaddbc7e33a6a2a070e01c6f42f46b53b13c0608bab08cc6a09f92813adf",
+          "automatic_label": null,
+          "suggested_label": true,
+          "score": 0.31239495055060695,
+          "reason": "The references do not separate reliably when cross-checked; The decision changes when some references are withheld; This image looks unlike the reference examples",
+          "error": false,
+          "evidence": {
+            "fit_agreement": 0.5,
+            "nearest_support_distance": 1.1816353990958093,
+            "nearest_cosine_distance": null,
+            "novelty_cutoff": 0.7755182226249757,
+            "distance_metric": "support_standardized_euclidean",
+            "distance_feature_view": "global",
+            "support_cv_accuracy": 0.5,
+            "score_is_probability": false,
+            "rule_recovered": false
+          },
+          "nearest_reference_ids": [
+            "A02",
+            "A01",
+            "A03"
+          ],
+          "truth": false
+        },
+        {
+          "id": "Q0002",
+          "filename": "f4c5acd38c5bac88e415081c5416307a0e8f62ab7fb226d59e3179c70c37ec19.jpg",
+          "original_sha256": "82c1eafc8be448043a15d55e07237bc2e6632fa08243618e0d53c28cf0f1ddba",
+          "input_sha256": "26568afb4d79b84769224cf465ba656d1d412b7942aff3c0612d41f850dbd86a",
+          "automatic_label": null,
+          "suggested_label": true,
+          "score": 0.23495824261741521,
+          "reason": "The references do not separate reliably when cross-checked; This image looks unlike the reference examples",
+          "error": false,
+          "evidence": {
+            "fit_agreement": 1.0,
+            "nearest_support_distance": 1.370793924672638,
+            "nearest_cosine_distance": null,
+            "novelty_cutoff": 0.7755182226249757,
+            "distance_metric": "support_standardized_euclidean",
+            "distance_feature_view": "global",
+            "support_cv_accuracy": 0.5,
+            "score_is_probability": false,
+            "rule_recovered": false
+          },
+          "nearest_reference_ids": [
+            "A03",
+            "A01",
+            "A02"
+          ],
+          "truth": true
+        }
+      ]
+    },
+    {
+      "id": "0371",
+      "task_fingerprint": "f49d911dc453d278a8c5a17dde34063f6a783a47d01c69b514086d5d55d71da3",
+      "encoder_id": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2:vision224:v2",
+      "originals_preserved": true,
+      "queries": [
+        {
+          "id": "Q0001",
+          "filename": "e11e449d63e7f872922a6bb295d8861a058856e8fef895569015199e32929179.jpg",
+          "original_sha256": "ff7b86b4558998ad3aa3e0cde93826b85d593b43692657ee0dc50c9cedc45394",
+          "input_sha256": "ba7f546f7198ec81c60193214a5c0d6347100f691f0bf6570719da69b19110d2",
+          "automatic_label": null,
+          "suggested_label": false,
+          "score": -0.029526022295781097,
+          "reason": "This image is close to the boundary between the two groups; The decision changes when some references are withheld",
+          "error": false,
+          "evidence": {
+            "fit_agreement": 0.5,
+            "nearest_support_distance": 0.3659564529506095,
+            "nearest_cosine_distance": 0.3659564529506095,
+            "novelty_cutoff": 0.5922938723093756,
+            "distance_metric": "cosine",
+            "distance_feature_view": "global",
+            "support_cv_accuracy": 0.6666666666666666,
+            "score_is_probability": false,
+            "rule_recovered": false
+          },
+          "nearest_reference_ids": [
+            "A01",
+            "A03",
+            "A02"
+          ],
+          "truth": true
+        },
+        {
+          "id": "Q0002",
+          "filename": "c8d9aaaacde3677bfc767235b40e3bc42c1469c5eec3f17abeb117ea7441f267.jpg",
+          "original_sha256": "9af28bb7f8db5f73b058c164c30a3d50c0deb9e32856899f7d2d1d4e722dffab",
+          "input_sha256": "9790d640c895d0903fb8f0b8a3fe784d76739fb3e3a236fcebe11ea1ccf8892a",
+          "automatic_label": null,
+          "suggested_label": false,
+          "score": -0.07393125747657825,
+          "reason": "This image is close to the boundary between the two groups; The decision changes when some references are withheld",
+          "error": false,
+          "evidence": {
+            "fit_agreement": 0.3333333333333333,
+            "nearest_support_distance": 0.29931169204245744,
+            "nearest_cosine_distance": 0.29931169204245744,
+            "novelty_cutoff": 0.5922938723093756,
+            "distance_metric": "cosine",
+            "distance_feature_view": "global",
+            "support_cv_accuracy": 0.6666666666666666,
+            "score_is_probability": false,
+            "rule_recovered": false
+          },
+          "nearest_reference_ids": [
+            "A01",
+            "B03",
+            "A02"
+          ],
+          "truth": false
+        }
+      ]
+    },
+    {
+      "id": "0114",
+      "task_fingerprint": "8dc20b1138e53f27dfc860ada74dfefa6b7cb0ce2bf0e982d6dabdafe48b95ca",
+      "encoder_id": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2:vision224:v2",
+      "originals_preserved": true,
+      "queries": [
+        {
+          "id": "Q0001",
+          "filename": "ceaf8e3d318c8dc3b2d145bb37ab0457f94e408834025a3141bc1799168dc162.jpg",
+          "original_sha256": "257b79abf09d5fb3f68b945eb2c899515ca1332bfc053ffb9d570aecae8cb42e",
+          "input_sha256": "adedec8001163e3ea25d167f312e189dd09e3441c263f94ccfce418a56b1cdd5",
+          "automatic_label": null,
+          "suggested_label": false,
+          "score": -0.011065134225774953,
+          "reason": "This image is close to the boundary between the two groups; This image looks unlike the reference examples",
+          "error": false,
+          "evidence": {
+            "fit_agreement": 0.8333333333333334,
+            "nearest_support_distance": 1.195849266687954,
+            "nearest_cosine_distance": null,
+            "novelty_cutoff": 0.4,
+            "distance_metric": "support_standardized_euclidean",
+            "distance_feature_view": "patch_spatial",
+            "support_cv_accuracy": 1.0,
+            "score_is_probability": false,
+            "rule_recovered": false
+          },
+          "nearest_reference_ids": [
+            "B01",
+            "A02",
+            "B03"
+          ],
+          "truth": false
+        },
+        {
+          "id": "Q0002",
+          "filename": "24b814fde9c13029375a22f46b586d842e88780e41f47c8f431720d82fab6219.jpg",
+          "original_sha256": "1ec93d253ae74d01b3a2974d27a97c8dd65ec82ab37b8565db4110fec280ef59",
+          "input_sha256": "40d4f0bec23805d6c38d96e392f630af8d71263205806fda043e137df3b9d69f",
+          "automatic_label": null,
+          "suggested_label": false,
+          "score": -0.18571147898516474,
+          "reason": "This image looks unlike the reference examples",
+          "error": false,
+          "evidence": {
+            "fit_agreement": 0.8333333333333334,
+            "nearest_support_distance": 1.0443678625316195,
+            "nearest_cosine_distance": null,
+            "novelty_cutoff": 0.4,
+            "distance_metric": "support_standardized_euclidean",
+            "distance_feature_view": "patch_spatial",
+            "support_cv_accuracy": 1.0,
+            "score_is_probability": false,
+            "rule_recovered": false
+          },
+          "nearest_reference_ids": [
+            "B01",
+            "B03",
+            "B02"
+          ],
+          "truth": true
+        }
+      ]
+    },
+    {
+      "id": "0625",
+      "task_fingerprint": "a20d29265c6a3c5cd70dda457bb4a64346c6abffcf2ba7456bd573b475d130b6",
+      "encoder_id": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2:vision224:v2",
+      "originals_preserved": true,
+      "queries": [
+        {
+          "id": "Q0001",
+          "filename": "bccc7c5c4f581bf1d753ba38cc7e8862b8527e28fa7211366e8aebabbea67b6b.jpg",
+          "original_sha256": "c5435270610ce4fcb1fe681717e3bd084dd7ae059fb112192bb8ac82b4150f83",
+          "input_sha256": "dacad47a4ccb35926ab1872b52aa27218a4a2380e578d1871be6ffe97067f870",
+          "automatic_label": null,
+          "suggested_label": false,
+          "score": -0.40654499489050683,
+          "reason": "The decision changes when some references are withheld; This image looks unlike the reference examples",
+          "error": false,
+          "evidence": {
+            "fit_agreement": 0.5,
+            "nearest_support_distance": 1.2784944120839477,
+            "nearest_cosine_distance": null,
+            "novelty_cutoff": 0.863729159034615,
+            "distance_metric": "support_standardized_euclidean",
+            "distance_feature_view": "global",
+            "support_cv_accuracy": 1.0,
+            "score_is_probability": false,
+            "rule_recovered": false
+          },
+          "nearest_reference_ids": [
+            "B03",
+            "B02",
+            "B01"
+          ],
+          "truth": false
+        },
+        {
+          "id": "Q0002",
+          "filename": "feee8e42e616edbcf006c58927add1a6ed4d9b5d5964baf11d961de83232b568.jpg",
+          "original_sha256": "33079ce839a16340e117743eca7c7a7e1c3e18d13e3ed23b7fcd3d9458a5a9a9",
+          "input_sha256": "d55f05c143b3aa1d3ce4b5f5caf09b01d895dec593aa13e52dcb781c2dd509ba",
+          "automatic_label": null,
+          "suggested_label": false,
+          "score": -0.4492304929611477,
+          "reason": "The decision changes when some references are withheld; This image looks unlike the reference examples",
+          "error": false,
+          "evidence": {
+            "fit_agreement": 0.5,
+            "nearest_support_distance": 1.6284015564994203,
+            "nearest_cosine_distance": null,
+            "novelty_cutoff": 0.863729159034615,
+            "distance_metric": "support_standardized_euclidean",
+            "distance_feature_view": "global",
+            "support_cv_accuracy": 1.0,
+            "score_is_probability": false,
+            "rule_recovered": false
+          },
+          "nearest_reference_ids": [
+            "B02",
+            "B03",
+            "B01"
+          ],
+          "truth": true
+        }
+      ]
+    },
+    {
+      "id": "0248",
+      "task_fingerprint": "7c4e2ba0cec2555cfa60286dea0b644f6e3b7b63c1a07b28a870f1565fc2d8c6",
+      "encoder_id": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2:vision224:v2",
+      "originals_preserved": true,
+      "queries": [
+        {
+          "id": "Q0001",
+          "filename": "d9b4a77b45f05451e524608c2824ceddfb3f56f4c26e1fc2f05a115482ef2f2d.jpg",
+          "original_sha256": "45faa592aae8518c8aaf7c647cfae3f20cf9165815c5601b12b8d6b40cc03b94",
+          "input_sha256": "0290f4b8ae36ebc00540080baf6bfc0ad3a27af66ca49f9b8c901f0a5347fcc6",
+          "automatic_label": null,
+          "suggested_label": true,
+          "score": 0.06725251134009394,
+          "reason": "This image is close to the boundary between the two groups; The decision changes when some references are withheld",
+          "error": false,
+          "evidence": {
+            "fit_agreement": 0.6666666666666666,
+            "nearest_support_distance": 0.16727619179635478,
+            "nearest_cosine_distance": 0.16727619179635478,
+            "novelty_cutoff": 0.24076929553771542,
+            "distance_metric": "cosine",
+            "distance_feature_view": "patch_mean",
+            "support_cv_accuracy": 0.6666666666666666,
+            "score_is_probability": false,
+            "rule_recovered": false
+          },
+          "nearest_reference_ids": [
+            "A03",
+            "A02",
+            "B03"
+          ],
+          "truth": false
+        },
+        {
+          "id": "Q0002",
+          "filename": "c86a79a536dd4b70edaf95a3b1f47c9665ca33eaf06b8fd09914dc6a5da70635.jpg",
+          "original_sha256": "69921db7e92f4b0fe36b80fdf244df1482d65bc2b0c8b61a7185e48fc1309819",
+          "input_sha256": "1046c2b9251593f73e7b0074f1b45baac6ba54681418ac034af4b36fdc9163cc",
+          "automatic_label": true,
+          "suggested_label": true,
+          "score": 0.48532839243621134,
+          "reason": "The fitted task accepted this decision.",
+          "error": false,
+          "evidence": {
+            "fit_agreement": 1.0,
+            "nearest_support_distance": 0.13782694371675386,
+            "nearest_cosine_distance": 0.13782694371675386,
+            "novelty_cutoff": 0.24076929553771542,
+            "distance_metric": "cosine",
+            "distance_feature_view": "patch_mean",
+            "support_cv_accuracy": 0.6666666666666666,
+            "score_is_probability": false,
+            "rule_recovered": false
+          },
+          "nearest_reference_ids": [
+            "A03",
+            "A02",
+            "B03"
+          ],
+          "truth": true
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "tasks": 5,
+    "queries": 10,
+    "answered": 1,
+    "correct": 1,
+    "wrong": 0,
+    "needs_review": 9,
+    "all_originals_preserved": true
+  },
+  "limitations": [
+    "These are existing development images, not the user's personal collection.",
+    "Three references per group; query labels are used only after decisions for reporting.",
+    "No accuracy gain is claimed from this workflow change. Wrong automatic answers and abstentions are retained."
+  ],
+  "category_sorting": {
+    "scope": "Small practical category-sorting development check; not an independent accuracy benchmark.",
+    "selection": "Penguins and tortoises selected by category names before category inference. First four available annotated positive images per category are references; remaining sources are withheld.",
+    "source_episode_ids": [
+      "0371",
+      "0179"
+    ],
+    "task": {
+      "format": "logicapture-image-task",
+      "version": 1,
+      "name": "Penguins or tortoises",
+      "groups": [
+        "Penguins",
+        "Tortoises"
+      ],
+      "representation": "photos",
+      "references": [
+        {
+          "file": "references/a01.png",
+          "label": true,
+          "pixel_sha256": "59aa8f96fcc5a00abb7614a21d8074e03a7aaddc7982bab4c8fcc7449a59077e"
+        },
+        {
+          "file": "references/a02.png",
+          "label": true,
+          "pixel_sha256": "2620123d7ee216802726b8aadb973a639428b9d86647edbcddace811f8965b73"
+        },
+        {
+          "file": "references/a03.png",
+          "label": true,
+          "pixel_sha256": "e96b3a99532a44d18f12ac016e0e54bfcdce285a580bd3090dde96c9c5e385d9"
+        },
+        {
+          "file": "references/a04.png",
+          "label": true,
+          "pixel_sha256": "075f527efe5406aa1e4861e2b26e74c9193f1719417ce0687d2fb421f9e5628a"
+        },
+        {
+          "file": "references/b01.png",
+          "label": false,
+          "pixel_sha256": "b1539711150dbd3a3db5e9bf687ee6d72385e8289d7246d059ddf65bc8e48d5d"
+        },
+        {
+          "file": "references/b02.png",
+          "label": false,
+          "pixel_sha256": "054b774f9d33bf4fb77350feaa4b6a0721a5789ea22f0b890ea4026357097257"
+        },
+        {
+          "file": "references/b03.png",
+          "label": false,
+          "pixel_sha256": "2d519adc7edc646b7411a95d4d04bc71a50b0a6b6ebf394b8da162f6886f38ad"
+        },
+        {
+          "file": "references/b04.png",
+          "label": false,
+          "pixel_sha256": "f5e76621e82ddedcc343bc873f9c57955b4859e058a80887e6c0cdd9f41b45b3"
+        }
+      ]
+    },
+    "encoder_id": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2:vision224:v2",
+    "queries": [
+      {
+        "id": "Q0001",
+        "filename": "a7f96fbacf8271a99960b8a654405e744ae976c0a37b26d40ddc48c9ef485d92.jpg",
+        "original_sha256": "849a57054551ff862fbaf97c236ef99ac83df68b2dce687c269a1878e6b39104",
+        "input_sha256": "ee459fdfad808926c5870177621d8c228a326ebc7c3ddbc0e9819d5ed7a816af",
+        "automatic_label": false,
+        "suggested_label": false,
+        "score": -0.2910130105042716,
+        "reason": "The fitted task accepted this decision.",
+        "error": false,
+        "evidence": {
+          "fit_agreement": 0.875,
+          "nearest_support_distance": 1.49818861965039,
+          "nearest_cosine_distance": null,
+          "novelty_cutoff": 2.030141329479647,
+          "distance_metric": "support_standardized_euclidean",
+          "distance_feature_view": "patch_mean",
+          "support_cv_accuracy": 1.0,
+          "score_is_probability": false,
+          "rule_recovered": false
+        },
+        "nearest_reference_ids": [
+          "B02",
+          "B01",
+          "B03"
+        ],
+        "truth": false
+      },
+      {
+        "id": "Q0002",
+        "filename": "26e2af8fc8b0be5dfe5b879dd54629a18594f659e7516b681147b5d6ca4291bf.jpg",
+        "original_sha256": "afdbfd37c137d1e408dc91d758ecae39652c2bcbfbef6cc0fc8c89ca4703435b",
+        "input_sha256": "425f02b4bf24c2bb803e0595842c291ceee0b08f5dec5751cb6663755b7b14ed",
+        "automatic_label": false,
+        "suggested_label": false,
+        "score": -0.6326815553888562,
+        "reason": "The fitted task accepted this decision.",
+        "error": false,
+        "evidence": {
+          "fit_agreement": 1.0,
+          "nearest_support_distance": 1.713668670301345,
+          "nearest_cosine_distance": null,
+          "novelty_cutoff": 2.030141329479647,
+          "distance_metric": "support_standardized_euclidean",
+          "distance_feature_view": "patch_mean",
+          "support_cv_accuracy": 1.0,
+          "score_is_probability": false,
+          "rule_recovered": false
+        },
+        "nearest_reference_ids": [
+          "B02",
+          "B03",
+          "B01"
+        ],
+        "truth": false
+      },
+      {
+        "id": "Q0003",
+        "filename": "e11e449d63e7f872922a6bb295d8861a058856e8fef895569015199e32929179.jpg",
+        "original_sha256": "ff7b86b4558998ad3aa3e0cde93826b85d593b43692657ee0dc50c9cedc45394",
+        "input_sha256": "ba7f546f7198ec81c60193214a5c0d6347100f691f0bf6570719da69b19110d2",
+        "automatic_label": true,
+        "suggested_label": true,
+        "score": 0.4153930982741368,
+        "reason": "The fitted task accepted this decision.",
+        "error": false,
+        "evidence": {
+          "fit_agreement": 1.0,
+          "nearest_support_distance": 1.5108293507262454,
+          "nearest_cosine_distance": null,
+          "novelty_cutoff": 2.030141329479647,
+          "distance_metric": "support_standardized_euclidean",
+          "distance_feature_view": "patch_mean",
+          "support_cv_accuracy": 1.0,
+          "score_is_probability": false,
+          "rule_recovered": false
+        },
+        "nearest_reference_ids": [
+          "A01",
+          "A04",
+          "A02"
+        ],
+        "truth": true
+      }
+    ],
+    "summary": {
+      "queries": 3,
+      "answered": 3,
+      "correct": 3,
+      "wrong": 0,
+      "needs_review": 0,
+      "originals_preserved": true
+    },
+    "limitations": "Only three withheld images in two existing development categories. Contexts and pretrained-data overlap may help; this does not establish performance on other categories or personal photos."
+  }
+}
